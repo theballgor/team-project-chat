@@ -11,16 +11,17 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public enum FriendshipStatus
     {
-        pending,
-        confirmed,
-        blocked
+        Pending,
+        Confirmed,
+        Blocked
     }
     [Table("FriendShips")]
     [Serializable]
-    class FriendShip
+    class Friendship
     {
-        public int FirstUser_id;
-        public string SecondUser_id;
-        public FriendshipStatus FriendshipStatus;
+        public int Inviter_id { get; }
+        public string Friend_id { get; }
+        public DateTime InviteTime { get; }
+        public FriendshipStatus FriendshipStatus { get; set; }
     }
 }

@@ -8,18 +8,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClientServerLibrary.DbClasses
 {
+    [Serializable]
+    public enum MessageType
+    {
+        Text,
+        Audio,
+        File,
+        Image
+    }
     [Table("Messages")]
     [Serializable]
     class Message
     {
         [Key]
-        public int Id;
-        public string Body;
-        public string Time;
-        public string IsRead;
-        // user_id in tz
-        public string Sender_id;
-
-        public string conversation_id;
+        public int Id { get; }
+        public string Content { get; set; }
+        public DateTime SendTime { get; }
+        public bool IsRead { get; set; }
+        public string Sender_id { get; set; }
+        public string Conversation_id { get; set; }
+        public MessageType MessageType { get; set; }
     }
 }
