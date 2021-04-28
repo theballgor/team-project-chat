@@ -17,7 +17,7 @@ namespace ClientServerLibrary.DbClasses
     }
     [Table("Users")]
     [Serializable]
-    class User
+    public class User
     {
         [Key]
         public int Id { get;}

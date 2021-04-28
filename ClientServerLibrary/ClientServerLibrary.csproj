@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbClasses\Conversation.cs" />
+    <Compile Include="DbClasses\ConversationConnection.cs" />
     <Compile Include="DbClasses\Friendship.cs" />
     <Compile Include="DbClasses\Message.cs" />
     <Compile Include="DbClasses\User.cs" />

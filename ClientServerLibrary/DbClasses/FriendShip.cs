@@ -17,7 +17,7 @@ namespace ClientServerLibrary.DbClasses
     }
     [Table("FriendShips")]
     [Serializable]
-    class Friendship
+    public class Friendship
     {
         public int Inviter_id { get; }
         public string Friend_id { get; }
