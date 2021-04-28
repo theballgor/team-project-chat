@@ -9,23 +9,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ClientServerLibrary.DbClasses
 {
     [Serializable]
-    public enum ConversationStatus
+    public enum ConversationAccessibility
     {
-        pending,
-        confirmed,
-        blocked
+        Public,
+        Private
     }
+
     [Table("Conversations")]
     [Serializable]
     class Conversation
     {
         [Key]
-        public int Id;
-        public string Theme;
-        public string Avatart;
-        public ConversationStatus ConversationStatus;
-        public string StreamingPort;
-        // user_id in tz
-        public string host_id;
+        public int Id { get; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Avatar { get; private set; }
+        public ConversationAccessibility ConversationAccessibility { get; set; }
+        public string Creator_id { get; set; }
     }
 }
