@@ -24,5 +24,40 @@ namespace Client
         {
             InitializeComponent();
         }
+
+        private void mainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // ToDo send and resive message 
+            // Listenet server
+
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                DragMove();
+            }
+        }
+        private void buttonMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+        private void buttonMaximaze_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+            {
+                WindowState = WindowState.Maximized;
+            }
+            else WindowState = WindowState.Normal;
+        }
+        private void buttonClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+        private void OpenContactInfoWindow_Click(object sender, RoutedEventArgs e)
+        {
+            //ContactInfoScreen.Visibility = Visibility.Visible;
+        }
     }
 }
