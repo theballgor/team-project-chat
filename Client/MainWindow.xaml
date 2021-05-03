@@ -19,7 +19,6 @@
         WindowStartupLocation="CenterScreen"
         Loaded="mainWindow_Loaded">
 
-
     <Window.Resources>
         <ControlTemplate x:Key="contactInfoButtonTemplate" TargetType="{x:Type Button}">
             <Grid>
@@ -56,8 +55,7 @@
 
                     <TextBlock
                         Foreground="#9E9E9E"
-                        FontFamily="Fonts/#Gudea" Grid.RowSpan="2"
-                        >
+                        FontFamily="Fonts/#Gudea" Grid.RowSpan="2">
                         <!--name-->
                         <Run 
                             Text="{Binding ContactName, FallbackValue='Djon Travolta', TargetNullValue='Contact Name' ,UpdateSourceTrigger=PropertyChanged}"
@@ -73,11 +71,8 @@
                         <LineBreak></LineBreak>
                     </TextBlock>
                 </Grid>
-
             </Grid>
         </ControlTemplate>
-
-
     </Window.Resources>
 
     <!--Structuring MainWindow-->
@@ -98,14 +93,12 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-
                 <!--Title Bar-->
                 <Border
                     Background="#272727"
                     CornerRadius="5.5 5.5 0 0"
                     Grid.ColumnSpan="3"
-                    Height="36"
-                    >
+                    Height="36">
 
                     <Grid>
                         <!--Window Title-->
@@ -183,17 +176,16 @@
                         <TextBox Margin="20 10" 
                                  Padding="-3"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="SEARCH CHATS" 
-                             Foreground="#1976D2">
+                             Foreground="#81D4FA">
                         </TextBox>
 
                         <!--Search button-->
                         <Button Grid.Column="1"
                             x:Name="buttonChatSearchButton"
-                                Width="35"
-                                Height="35"
+                            Width="35"
+                            Height="35"
                             Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                             Background="{x:Null}">
-
                             <materialDesign:PackIcon Kind="Search" Foreground="{StaticResource PrimaryHueDarkBrush}" />
                         </Button>
 
@@ -258,7 +250,6 @@
                             <Button.Effect>
                                 <DropShadowEffect />
                             </Button.Effect>
-
                             <materialDesign:PackIcon Kind="Video" ></materialDesign:PackIcon>
                         </Button>
 
@@ -272,10 +263,9 @@
                             <Button.Effect>
                                 <DropShadowEffect />
                             </Button.Effect>
-                            
                             <materialDesign:PackIcon Kind="Call" ></materialDesign:PackIcon>
                         </Button>
-                        
+
                         <!--More options Button-->
                         <ToggleButton
                             Grid.Column="3"
@@ -287,7 +277,6 @@
                             <ToggleButton.Effect>
                                 <DropShadowEffect />
                             </ToggleButton.Effect>
-
                             <materialDesign:PackIcon Kind="MoreVert"></materialDesign:PackIcon>
                         </ToggleButton>
                     </Grid>
@@ -324,7 +313,6 @@
                                     HorizontalContentAlignment="Center"
                                     Style="{StaticResource MaterialDesignTextBox}"
                                     TextChanged="messageBox_TextChanged">
-                                    
                                 </TextBox>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
@@ -337,7 +325,6 @@
                                         Height="35"
                                         Click="sendMessage_Click"
                                         Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
-
                                         <materialDesign:PackIcon Kind="Send"></materialDesign:PackIcon>
                                         <Button.Effect>
                                             <DropShadowEffect />
@@ -387,18 +374,27 @@
                                                 Foreground="WhiteSmoke"
                                                 Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
                                                 <materialDesign:PackIcon Kind="Contact"></materialDesign:PackIcon>
-                                            </Button> 
+                                            </Button>
                                         </StackPanel>
-
                                     </materialDesign:PopupBox>
                                 </StackPanel>
                             </Grid>
-                            
-                            
+
+
                         </Border>
-                        <!--<customcontrols:GlowFrame Foreground="#F50057" CornerRadius="10" Margin="0"/>-->
+
                     </Grid>
                     <!--#endregion-->
+
+                    <!--#region contact info-->
+                    <customcontrols:ContactInfo
+                        x:Name="ContactInfoScreen"
+                        Visibility="Collapsed"
+                        FontFamily="Fonts/#Audiowide"
+                        Grid.RowSpan="2" RenderTransformOrigin="0.493,0.493"
+                        />
+                    <!--#endregion-->
+
                 </Grid>
                 <!--#endregion-->
             </Grid>

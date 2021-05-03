@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.CustomerControls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,7 +63,16 @@ namespace Client
         }
         private void OpenContactInfoWindow_Click(object sender, RoutedEventArgs e)
         {
-            //ContactInfoScreen.Visibility = Visibility.Visible;
+            ContactInfoScreen.Visibility = Visibility.Visible;
+
+            //Window window = new Window
+            //{
+            //    Content = new ContactInfo(),
+            //    SizeToContent = SizeToContent.WidthAndHeight,
+            //    ResizeMode = ResizeMode.NoResize
+            //};
+
+            //window.ShowDialog();
         }
 
         private void sendMessage_Click(object sender, RoutedEventArgs e)
