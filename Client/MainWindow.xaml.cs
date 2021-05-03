@@ -31,6 +31,11 @@ namespace Client
             // Listenet server
 
         }
+        private void messageBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -58,6 +63,20 @@ namespace Client
         private void OpenContactInfoWindow_Click(object sender, RoutedEventArgs e)
         {
             //ContactInfoScreen.Visibility = Visibility.Visible;
+        }
+
+        private void sendMessage_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void PopupBox_Opened(object sender, RoutedEventArgs e)
+        {
+            PopupBox.IsPopupOpen = true;
+        }
+        private void PopupBox_Closed(object sender, RoutedEventArgs e)
+        {
+            PopupBox.IsPopupOpen = false;
         }
     }
 }
