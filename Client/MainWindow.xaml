@@ -172,7 +172,7 @@
                             <!--Search button-->
                             <ColumnDefinition Width="Auto" ></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-
+                        
                         <!--Search field-->
                         <TextBox Margin="20 10" 
                                  Padding="-3"
@@ -194,12 +194,16 @@
                         <!--<customcontrols:StatusThumbs Grid.Row="2"></customcontrols:StatusThumbs>-->
                         <!--#end region-->
 
-                        <!--region ChatsList-->
-                        <!--<customcontrols:ChatList Grid.Row="3"></customcontrols:ChatList>-->
-                        <!--#endregion-->
-
                     </Grid>
                     <customcontrols:GlowFrame Foreground="white" CornerRadius="8" Margin="0"/>
+                    
+                    <!--<Border Grid.Row="2"
+                            Background="#1D1D1D">-->
+                            <!--region ChatsList-->
+                            <!--<customcontrols:ChatList Grid.Row="3"></customcontrols:ChatList>-->
+                            <!--#endregion-->
+                    <!--</Border>-->
+                    
                 </Grid>
                 <!--#end region-->
 

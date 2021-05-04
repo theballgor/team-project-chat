@@ -1,0 +1,150 @@
+﻿<UserControl x:Class="Client.CustomerControls.ChatList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Client.CustomerControls"
+             mc:Ignorable="d" 
+             x:Name="_Chats"
+             MinWidth="320">
+
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="ChatButtonItemTemplate">
+            <RadioButton GroupName="ChatButton">
+                <RadioButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}">
+                        <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                        <Setter Property="MinHeight" Value="80"></Setter>
+                        <Setter Property="Padding" Value="6"></Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                        <Setter Property="Background" Value="Transparent"></Setter>
+                        <Setter Property="Command" Value="{Binding DataContext.GetSelectedChatCommand, ElementName=_Chats, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                        <Setter Property="CommandParameter" Value="{Binding}"></Setter>
+                        <Setter Property="Content" Value="{Binding ContactName}"></Setter>
+
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            Padding="{TemplateBinding Padding}"
+                                            SnapsToDevicePixels="True"
+                                            CornerRadius="8"
+                                            x:Name="border">
+
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <!--Contain contact name, photo, message, message time-->
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <!--Contain options: arhive chat, pin chat, delete, etc.-->
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+
+                                            <!--#region Contact details-->
+                                            <Grid Grid.Row="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <!--Profile photo-->
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                    <!--Contact name & message-->
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                    <!--Last message time-->
+                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Width="40"
+                                                        Height="40"
+                                                        CornerRadius="6"
+                                                        BorderBrush="Gray"
+                                                        BorderThickness="0.6">
+                                                    <Border.Background>
+                                                        <ImageBrush Stretch="UniformToFill"
+                                                                    ImageSource="{Binding Avatar, FallbackValue=/Assets/DefaultAvatar.png, UpdateSourceTrigger=PropertyChanged}">
+                                                        </ImageBrush>
+                                                    </Border.Background>
+                                                </Border>
+
+                                                <!--Contact name & massage-->
+                                                <Grid Grid.Column="1"
+                                                      Margin="15 0"
+                                                      VerticalAlignment="Center">
+                                                    <Grid.RowDefinitions>
+                                                        <!--Name-->
+                                                        <RowDefinition></RowDefinition>
+                                                        <!--Message-->
+                                                        <RowDefinition></RowDefinition>
+                                                    </Grid.RowDefinitions>
+
+                                                    <TextBlock Text="{Binding ContactName}"
+                                                               FontSize="13">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                                                                                 Value="true">
+                                                                        <Setter Property="FontWeight" Value="Bold"></Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+
+                                                    <TextBlock Text="{Binding Message}"
+                                                               FontSize="11"
+                                                               Grid.Row="1">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="{x:Type TextBlock}">
+                                                                <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                                                                                 Value="true">
+                                                                        <Setter Property="FontWeight" Value="SemiBold"></Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Grid>
+
+                                                <!--Last massage time-->
+                                                <Grid Grid.Column="2">
+                                                    <TextBlock Text="{Binding LastMessageTime}"
+                                                               FontSize="9"
+                                                               HorizontalAlignment="Right">
+                                                    </TextBlock>
+                                                </Grid>
+                                            </Grid>
+                                            <!--#endregion-->
+                                            
+                                            <!--#region Option-->
+                                                <!-- TODO  this --> 
+                                            <!--#endregion-->
+                                            
+                                            
+
+
+
+
+
+
+
+
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </RadioButton.Style>
+            </RadioButton>
+            
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Grid>
+            
+    </Grid>
+</UserControl>
