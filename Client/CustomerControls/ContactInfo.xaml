@@ -63,7 +63,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <!--Title-->
-                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="34"></RowDefinition>
                 <!--Contact Info-->
                 <RowDefinition Height="120"></RowDefinition>
                 <!--Button Bur-->

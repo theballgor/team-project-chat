@@ -77,7 +77,7 @@
 
     <!--Structuring MainWindow-->
     <Border CornerRadius="8" Background="#2A292B" MouseDown="Border_MouseDown">
-        <Border CornerRadius="5.5" Background="#212121" Margin="6">
+        <Border CornerRadius="5.5" Background="#212121" Margin="8">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -86,7 +86,8 @@
 
                 <Grid.ColumnDefinitions>
                     <!--Column for contact chat list-->
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="0"></ColumnDefinition>
+                    <ColumnDefinition Width="320"/>
                     <!--Conversation-->
                     <ColumnDefinition></ColumnDefinition>
                     <!--Profile info-->
@@ -154,7 +155,7 @@
                 </Border>
 
                 <!--#region Chat list-->
-                <Grid Grid.Row="1" MinWidth="320" Margin="0 4 0 0">
+                <Grid Grid.Row="1" MinWidth="320" Margin="0 4 0 0" Grid.ColumnSpan="2">
                     <Grid.RowDefinitions>
                         <!--Title & search option-->
                         <RowDefinition Height="Auto"></RowDefinition>
@@ -204,7 +205,7 @@
 
                 <!--#region Conversation Screen-->
                 <Grid 
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Grid.Row="1">
 
                     <Grid.RowDefinitions>
@@ -218,80 +219,105 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <Grid 
-                        Height="70"
-                        Margin="15 5 15 0"
-                        VerticalAlignment="Center">
+                    <Border Background="#1D1D1D" 
+                            Margin="15 8 15 0"
+                            CornerRadius="8 8 0 0">
+                        <Grid 
+                            Height="70"
+                            Margin="15 0 3 0"
+                            VerticalAlignment="Center">
 
-                        <Grid.ColumnDefinitions>
-                            <!--Contact header name& Online Status-->
-                            <ColumnDefinition ></ColumnDefinition>
-                            <!--Video call button-->
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                            <!--CallButton-->
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                            <!--More options-->
-                            <ColumnDefinition Width="50"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <!--Contact header name& Online Status-->
+                                <ColumnDefinition ></ColumnDefinition>
+                                <!--Video call button-->
+                                <ColumnDefinition Width="40"></ColumnDefinition>
+                                <!--CallButton-->
+                                <ColumnDefinition Width="40"></ColumnDefinition>
+                                <!--More options-->
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
 
-                        <!--Contact Info Button-->
-                        <Button
-                            Template="{StaticResource contactInfoButtonTemplate}"
-                            Height="Auto">
-                        </Button>
+                            <!--Contact Info Button-->
+                            <Button
+                                Template="{StaticResource contactInfoButtonTemplate}"
+                                Height="Auto">
+                            </Button>
 
-                        <!--Video call Button-->
-                        <Button
-                            Grid.Column="1"
-                            Background="Black"
-                            BorderBrush="#E91E63"
-                            Foreground="Snow"
-                            Style="{StaticResource  MaterialDesignFloatingActionMiniDarkButton}">
-                            <Button.Effect>
-                                <DropShadowEffect />
-                            </Button.Effect>
-                            <materialDesign:PackIcon Kind="Video" ></materialDesign:PackIcon>
-                        </Button>
+                            <!--Video call Button-->
+                            <Button
+                                Grid.Column="1"
+                                Background="Black"
+                                BorderBrush="#E91E63"
+                                Foreground="Snow"
+                                Width="35"
+                                Height="35"
+                                Style="{StaticResource  MaterialDesignFloatingActionMiniDarkButton}">
+                                <Button.Effect>
+                                    <DropShadowEffect />
+                                </Button.Effect>
+                                <materialDesign:PackIcon Kind="Video" ></materialDesign:PackIcon>
+                            </Button>
 
-                        <!--Call Button-->
-                        <Button
-                            Grid.Column="2"
-                            Background="Black"
-                            BorderBrush="#E91E63"
-                            Foreground="Snow"
-                            Style="{StaticResource  MaterialDesignFloatingActionMiniDarkButton}">
-                            <Button.Effect>
-                                <DropShadowEffect />
-                            </Button.Effect>
-                            <materialDesign:PackIcon Kind="Call" ></materialDesign:PackIcon>
-                        </Button>
+                            <!--Call Button-->
+                            <Button
+                                Grid.Column="2"
+                                Background="Black"
+                                BorderBrush="#E91E63"
+                                Foreground="Snow"
+                                Width="35"
+                                Height="35"
+                                Style="{StaticResource  MaterialDesignFloatingActionMiniDarkButton}">
+                                <Button.Effect>
+                                    <DropShadowEffect />
+                                </Button.Effect>
+                                <materialDesign:PackIcon Kind="Call" ></materialDesign:PackIcon>
+                            </Button>
 
-                        <!--More options Button-->
-                        <ToggleButton
-                            Grid.Column="3"
-                            Background="Black"
-                            BorderBrush="#E91E63"
-                            x:Name="OpenContactInfoWindow"
-                            Click="OpenContactInfoWindow_Click"
-                            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
-                            <ToggleButton.Effect>
-                                <DropShadowEffect />
-                            </ToggleButton.Effect>
-                            <materialDesign:PackIcon Kind="MoreVert"></materialDesign:PackIcon>
-                        </ToggleButton>
-                    </Grid>
+                            <!--More options Button-->
+                            <ToggleButton
+                                Grid.Column="3"
+                                Background="Black"
+                                BorderBrush="#E91E63"
+                                Width="35"
+                                Height="35"
+                                x:Name="OpenContactInfoWindow"
+                                Click="OpenContactInfoWindow_Click"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+                                <ToggleButton.Effect>
+                                    <DropShadowEffect />
+                                </ToggleButton.Effect>
+                                <materialDesign:PackIcon Kind="MoreVert"></materialDesign:PackIcon>
+                            </ToggleButton>
+                        </Grid>
+                    </Border>
 
                     <!--Conversation Messages Body-->
-                    <!--<customcontrols:Conversation Grid.Row="1"></customcontrols:Conversation>-->
+                    <customcontrols:Conversation Grid.Row="1"
+                                                 Margin="15 8 15 0">
+                    </customcontrols:Conversation>
+
+                    <!--D label-->
+                    <Label Grid.Row="1" 
+                           Background="Transparent" 
+                           Foreground="#232323" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center"
+                           Content="D"
+                           FontSize="140"
+                           FontWeight="Thin"
+                           FontFamily="Fonts/#Audiowide">
+                    </Label>
 
                     <!--#region TextBox to send message-->
                     <Grid Grid.Row="3">
                         <Border
                             Height="48"
-                            Margin="15 8"
+                            Margin="13 8"
                             BorderThickness="1"
-                            BorderBrush="#607D8B"
-                            CornerRadius="8">
+                            Background="#1D1D1D"
+                            CornerRadius="0 0 8 8">
+                            <!--BorderBrush="#607D8B"-->
 
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -312,6 +338,7 @@
                                     VerticalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     Style="{StaticResource MaterialDesignTextBox}"
+                                    materialDesign:HintAssist.Hint="Message"
                                     TextChanged="messageBox_TextChanged">
                                 </TextBox>
 
@@ -391,8 +418,8 @@
                         x:Name="ContactInfoScreen"
                         Visibility="Collapsed"
                         FontFamily="Fonts/#Audiowide"
-                        Grid.RowSpan="2" RenderTransformOrigin="0.493,0.493"
-                        />
+                        Grid.RowSpan="2"
+                    />
                     <!--#endregion-->
 
                 </Grid>
@@ -401,11 +428,3 @@
         </Border>
     </Border>
 </Window>
-
-
-<!--<Button.Background>
-                                    <RadialGradientBrush GradientOrigin="0,0">
-                                        <GradientStop Color="Black" Offset="1" />
-                                        <GradientStop Color="White" Offset="0.0" />
-                                    </RadialGradientBrush>
-                                </Button.Background>-->

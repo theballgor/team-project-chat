@@ -75,6 +75,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CustomerControls\Conversation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CustomerControls\GlowFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -89,6 +93,9 @@
     </Compile>
     <Compile Include="CustomerControls\ContactInfo.xaml.cs">
       <DependentUpon>ContactInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerControls\Conversation.xaml.cs">
+      <DependentUpon>Conversation.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomerControls\GlowFrame.xaml.cs">
       <DependentUpon>GlowFrame.xaml</DependentUpon>
