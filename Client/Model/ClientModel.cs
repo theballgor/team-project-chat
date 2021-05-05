@@ -10,6 +10,10 @@ using ClientServer;
 
 namespace Client.Model
 {
+    /// <summary>
+    /// LOGIC
+    /// зв'язок клієнта з сервером
+    /// </summary>
     class ClientModel
     {
         private TcpClient client = new TcpClient();
