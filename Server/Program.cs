@@ -10,6 +10,9 @@ namespace Server
     {
         static void Main(string[] args)
         {
+            DbManager database = new DbManager();
+            Console.WriteLine("Started");
+            Console.ReadKey();
         }
     }
 }
