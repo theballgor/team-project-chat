@@ -171,6 +171,13 @@
                                                         <materialDesign:PackIcon Kind="Trash" ></materialDesign:PackIcon>
                                                         <!--TODO Binding-->
                                                     </Button>
+                                                    
+                                                    <Button Width="25"
+                                                            Height="25"
+                                                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                                                        <materialDesign:PackIcon Kind="Dele" ></materialDesign:PackIcon>
+                                                        <!--TODO Binding-->
+                                                    </Button>
 
                                                 </UniformGrid>
                                             </Grid>

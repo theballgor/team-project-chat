@@ -98,6 +98,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\CommandViewModel.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="CustomerControls\ChatList.xaml.cs">
     <Compile Include="ViewsModel\DataManageVM.cs" />
     <Compile Include="Views\CustomerControls\ChatList.xaml.cs">
       <DependentUpon>ChatList.xaml</DependentUpon>
