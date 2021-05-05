@@ -12,7 +12,13 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public class ConversationConnection
     {
-        public int User_id { get; }
-        public string Conversation_id { get; }
+        [Key]
+        public int Id { get; set; }
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+        public virtual UserModel User { get; set; }
+        [ForeignKey("Conversation")]
+        public int ConversationId { get; set; }
+        public virtual ConversationModel Conversation { get; set; }
     }
 }

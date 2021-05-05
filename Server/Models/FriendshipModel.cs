@@ -19,9 +19,15 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public class Friendship
     {
-        public int Inviter_id { get; }
-        public string Friend_id { get; }
-        public DateTime InviteTime { get; }
+        [Key]
+        public int Id { get; set; }
+        [ForeignKey("Requester")]
+        public int RequesterId { get; set; }
+        public virtual UserModel Requester { get; set; }
+        [ForeignKey("Inviter")]
+        public int InviterId { get; set; }
+        public virtual UserModel Inviter { get; set; }
+        public DateTime InviteTime { get; set; }
         public FriendshipStatus FriendshipStatus { get; set; }
     }
 }

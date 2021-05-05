@@ -17,14 +17,22 @@ namespace ClientServerLibrary.DbClasses
 
     [Table("Conversations")]
     [Serializable]
-    public class Conversation
+    public class ConversationModel
     {
+
         [Key]
-        public int Id { get; }
+        public int Id { get; set; }
+        [Required]
+        [StringLength(32)]
         public string Name { get; set; }
+        [StringLength(256)]
         public string Description { get; set; }
-        public string Avatar { get; private set; }
+        public string Avatar { get; set; }
         public ConversationAccessibility ConversationAccessibility { get; set; }
-        public string Creator_id { get; set; }
+        [ForeignKey("Creator")]
+        public int CreatorId { get; set; }
+        public virtual UserModel Creator { get; set; }
+        public virtual ObservableListSource<ConversationConnection> ConversationConnections { get; set; }
+        public virtual ObservableListSource<MessageModel> Messages { get; set; }
     }
 }
