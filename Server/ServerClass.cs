@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using ClientServer;
 
 namespace Server
 {
@@ -12,7 +13,6 @@ namespace Server
     {
         private TcpListener server;
         private List<TcpClient> clients;
-
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
