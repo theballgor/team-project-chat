@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Client.CustomerControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              x:Name="_Chats"
              MinWidth="320">
@@ -54,6 +55,7 @@
                                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
 
+                                                <!--Profile photo-->
                                                 <Border Width="40"
                                                         Height="40"
                                                         CornerRadius="6"
@@ -118,20 +120,61 @@
                                                 </Grid>
                                             </Grid>
                                             <!--#endregion-->
-                                            
+
                                             <!--#region Option-->
-                                                <!-- TODO  this --> 
+                                            <Grid Grid.Row="1"
+                                                  Height="Auto">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="130"></ColumnDefinition>
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+
+                                                <UniformGrid Grid.Column="1" 
+                                                             Columns="4" 
+                                                             Margin="5">
+
+                                                    <!--Pin/unPin chat Button-->
+                                                    <Button Width="25"
+                                                            Height="25"
+                                                            CommandParameter="{Binding}">
+
+                                                        <Button.Style>
+                                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+                                                                <Setter Property="Content">
+                                                                    <!--Style when chat isn't pinned-->
+                                                                    <Setter.Value>
+                                                                        <materialDesign:PackIcon Kind="Pin"></materialDesign:PackIcon>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                <Setter Property="Command" Value="{Binding DataContext.PinChatCommand, ElementName=_Chats}"></Setter>
+
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding ChatIsPinned}" Value="True">
+                                                                        <Setter Property="Content">
+                                                                            <!--Style when chat is pinned-->
+                                                                            <Setter.Value>
+                                                                                <materialDesign:PackIcon Kind="PinOff"></materialDesign:PackIcon>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                        <Setter Property="Command" Value="{Binding DataContext.UnPinChatCommand, ElementName=_Chats}"></Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+
+                                                    <!--Delete chat Button-->
+                                                    <Button Width="25"
+                                                            Height="25"
+                                                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                                                        <materialDesign:PackIcon Kind="Trash" ></materialDesign:PackIcon>
+                                                        <!--TODO Binding-->
+                                                    </Button>
+
+                                                </UniformGrid>
+                                            </Grid>
                                             <!--#endregion-->
-                                            
-                                            
-
-
-
-
-
-
-
-
                                         </Grid>
                                     </Border>
                                 </ControlTemplate>
@@ -140,11 +183,55 @@
                     </Style>
                 </RadioButton.Style>
             </RadioButton>
-            
         </DataTemplate>
     </UserControl.Resources>
-    
-    <Grid>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+            <!--Our contact chats list-->
+            <StackPanel Margin="5 0 0 0">
+
+                <!--Pinned Chat-->
+                <StackPanel Orientation="Horizontal">
+                    <Label Style="{StaticResource MaterialDesignLabel}">
+                        <materialDesign:PackIcon Kind="Pin" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
+                    </Label>
+                    <TextBlock Text="Pinned"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Foreground="#828282">
+                    </TextBlock>
+                </StackPanel>
+
+                <!--ChatList-->
+                <ItemsControl
+                    ItemsSource="{Binding FilteredPinnedChats}"
+                    ItemTemplate="{StaticResource ChatButtonItemTemplate}"
+                    Padding="0 10">
+                </ItemsControl>
+
+                <!--All Chats-->
+                <StackPanel Orientation="Horizontal">
+                    <Label Style="{StaticResource MaterialDesignLabel}">
+                        <materialDesign:PackIcon Kind="Chat" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
+                    </Label>
+                    <TextBlock Text="Chats"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Foreground="#828282">
+                    </TextBlock>
+                </StackPanel>
+
+                <ItemsControl 
+                        ItemsSource="{Binding Chats}"
+                        ItemTemplate="{StaticResource ChatButtonItemTemplate}"
+                        Padding="0 10">
+                    <!--<ItemsControl.DataContext>
+                            <viewmodels:ViewModel></viewmodels:ViewModel>
+                        </ItemsControl.DataContext>-->
+                </ItemsControl>
+            </StackPanel>
             
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

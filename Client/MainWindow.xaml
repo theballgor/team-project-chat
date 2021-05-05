@@ -196,13 +196,11 @@
 
                     </Grid>
                     <customcontrols:GlowFrame Foreground="white" CornerRadius="8" Margin="0"/>
-                    
-                    <!--<Border Grid.Row="2"
-                            Background="#1D1D1D">-->
-                            <!--region ChatsList-->
-                            <!--<customcontrols:ChatList Grid.Row="3"></customcontrols:ChatList>-->
-                            <!--#endregion-->
-                    <!--</Border>-->
+
+                    <!--Background="#1D1D1D"-->
+                    <Border Grid.Row="2">
+                        <customcontrols:ChatList></customcontrols:ChatList>
+                    </Border>
                     
                 </Grid>
                 <!--#end region-->
