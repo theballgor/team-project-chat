@@ -10,7 +10,7 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            DbManager database = new DbManager();
+            ChatContext database = new ChatContext();
             Console.WriteLine("Started");
             Console.ReadKey();
         }

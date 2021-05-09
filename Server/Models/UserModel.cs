@@ -37,7 +37,7 @@ namespace ClientServerLibrary.DbClasses
         public UserStatus UserStatus { get; set; }
 
         public virtual ObservableListSource<MessageModel> Messages { get; set; }
-        public virtual ObservableListSource<Friendship> Friendships { get; set; }
-        public virtual ObservableListSource<ConversationConnection> ConversationConnections { get; set; }
+        public virtual ObservableListSource<FriendshipModel> Friendships { get; set; }
+        public virtual ObservableListSource<ConversationConnectionModel> ConversationConnections { get; set; }
     }
 }

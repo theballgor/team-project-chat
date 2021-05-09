@@ -15,15 +15,8 @@ namespace Server
 
         public virtual DbSet<UserModel> Users { get; set; }
         public virtual DbSet<ConversationModel> Conversations { get; set; }
-        public virtual DbSet<ConversationConnection> ConversationConnections { get; set; }
+        public virtual DbSet<ConversationConnectionModel> ConversationConnections { get; set; }
         public virtual DbSet<MessageModel> Messages { get; set; }
-        public virtual DbSet<Friendship> Friendships { get; set; }
-        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Conversation>()
-        //        .HasOptional<Conversation>(s => s.)
-        //        .WithMany()
-        //        .WillCascadeOnDelete(false);
-        //}
+        public virtual DbSet<FriendshipModel> Friendships { get; set; }
     }
 }

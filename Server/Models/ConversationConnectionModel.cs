@@ -10,7 +10,7 @@ namespace ClientServerLibrary.DbClasses
 {
     [Table("ConversationConnections")]
     [Serializable]
-    public class ConversationConnection
+    public class ConversationConnectionModel
     {
         [Key]
         public int Id { get; set; }

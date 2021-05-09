@@ -32,7 +32,7 @@ namespace ClientServerLibrary.DbClasses
         [ForeignKey("Creator")]
         public int CreatorId { get; set; }
         public virtual UserModel Creator { get; set; }
-        public virtual ObservableListSource<ConversationConnection> ConversationConnections { get; set; }
+        public virtual ObservableListSource<ConversationConnectionModel> ConversationConnections { get; set; }
         public virtual ObservableListSource<MessageModel> Messages { get; set; }
     }
 }
