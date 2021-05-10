@@ -101,6 +101,7 @@
     <Compile Include="ViewsModel\Commands\CommandViewModel.cs" />
     <Compile Include="ViewsModel\Commands\RelayCommand.cs" />
     <Compile Include="ViewsModel\DataManageVM.cs" />
+    <Compile Include="ViewsModel\LoginViewModel.cs" />
     <Compile Include="Views\CustomerControls\ChatList.xaml.cs">
       <DependentUpon>ChatList.xaml</DependentUpon>
     </Compile>
