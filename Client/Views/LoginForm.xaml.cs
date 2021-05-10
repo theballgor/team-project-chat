@@ -17,9 +17,9 @@ namespace Client.Views
     /// <summary>
     /// Логика взаимодействия для RegistrationForm.xaml
     /// </summary>
-    public partial class RegistrationForm : Window
+    public partial class LoginForm : Window
     {
-        public RegistrationForm()
+        public LoginForm()
         {
             InitializeComponent();
         }
