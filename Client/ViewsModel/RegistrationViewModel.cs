@@ -94,11 +94,8 @@ namespace Client.ViewsModel
 
         private void Validate()
         {
-            if (!ValidateString(nickname, 4, 25))
-                throw new ArgumentException("Invalid Nickname");
-
-            if (!ValidateString(password, 8, 16))
-                throw new ArgumentException("Invalid Password");
+            ValidateString(nickname, 4, 25, "Invalid Nickname");
+            ValidateString(password, 8, 16, "Invalid Password");
 
             if (password != verifyPassword)
                 throw new ArgumentException("Verify the password");
@@ -107,10 +104,10 @@ namespace Client.ViewsModel
                 throw new ArgumentException("Invalid Email");
         }
 
-        private bool ValidateString(string str, int from, int to)
+        private bool ValidateString(string str, int from, int to, string errorMessage)
         {
             if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-                return false;
+                throw new ArgumentException(errorMessage);
             return true;
         }
 
