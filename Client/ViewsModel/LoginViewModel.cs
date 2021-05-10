@@ -59,15 +59,33 @@ namespace Client.ViewsModel
             }
         }
 
-        private void Validate()
-        {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-                throw new ArgumentException("Incorrect data");
-        }
-
         private void Send()
         {
             MessageBox.Show("Ok");
+        }
+
+        private void Validate()
+        {
+            ValidateString(password, "Invalid data", 8, 16);
+            ValidateEmail("Invalid data");
+        }
+
+        private void ValidateString(string str, string exceptionMessage, int from, int to)
+        {
+            if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
+                throw new ArgumentException(exceptionMessage);
+        }
+
+        private void ValidateEmail(string exceptionMessage)
+        {
+            try
+            {
+                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException(exceptionMessage);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
