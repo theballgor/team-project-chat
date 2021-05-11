@@ -13,25 +13,43 @@ namespace Server
 {
     class DbManager
     {
-        public static void CreateUser(string userName,string email,string avatar,int status, string password)
+        private GenericUnitOfWork work;
+
+        public DbManager()
+        {
+            work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
+        }
+
+        public void CreateUser(string userName,string email, string password, string description, string phoneNumber, string avatar)
         {
             try
             {
-                GenericUnitOfWork work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
                 IGenericRepository<User> userRepo = work.Repository<User>();
-                userRepo.Add(new User() { Username = userName, Email = email, Avatar = avatar, Status = status, Password = password });
+                userRepo.Add(new User() { Username = userName, Email = email, Password = password, Description = description, PhoneNumber = phoneNumber, Status = UserStatus.Ofline, Avatar = avatar });
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed");
-                throw;
             }
         }
-        public static void UpdateUser(string avatar, string status, string password)
+        public void CreateUser(string userName, string email, string password, string description, string phoneNumber)
+        {
+            try
+            {
+                IGenericRepository<User> userRepo = work.Repository<User>();
+                userRepo.Add(new User() { Username = userName, Email = email, Password=password, Description= description,PhoneNumber= phoneNumber,Status=UserStatus.Ofline, Avatar = null });
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed");
+            }
+        }
+        public void CreateConversation()
         {
 
         }
-        public static void CreateConversation()
+
+        public void CreateMessage()
         {
 
         }
