@@ -7,12 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ClientServer;
 
+
 namespace Server
 {
     class ServerClass
     {
         private TcpListener server;
         private List<TcpClient> clients;
+
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
@@ -80,7 +82,6 @@ namespace Server
             }
         }
 
-
         private byte[] ByteReader(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
@@ -93,6 +94,11 @@ namespace Server
             } while (stream.DataAvailable);
 
             return messageInBytes.ToArray();
+        }
+
+        private void DBConnect()
+        {
+
         }
     }
 }
