@@ -1,8 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClientServerLibrary.DbClasses
 {
-    public class UserConversation : INotifyPropertyChanged
+    [Table("ConversationConnections")]
+    [Serializable]
+    public class ConversationConnection : INotifyPropertyChanged
     {
         public int Id { get; set; }
         public virtual Conversation Conversation { get; set; }

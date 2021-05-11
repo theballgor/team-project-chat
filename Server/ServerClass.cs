@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using ClientServer;
+using ClientServerLibrary;
 
 namespace Server
 {
@@ -46,8 +46,28 @@ namespace Server
             while (true)
             {
                 byte[] data = GetMethod(client);
-                if (data.Length > 0)
-                    SendMethod(client, data);
+                ClientServerMessage message = ClientServerMessageFormatter.Deserialize(data);
+                switch (message.MessageType)
+                {
+                    case MessageType.SendText:
+                        
+                        break;
+                    case MessageType.SendAudio:
+
+                        break;
+                    case MessageType.SendFile:
+
+                        break;
+                    case MessageType.RegisterUser:
+
+                        break;
+                    case MessageType.LogInUser:
+
+                        break;
+                    case MessageType.CreateConversation:
+
+                        break;
+                }
             }
         }
 
@@ -79,7 +99,6 @@ namespace Server
                 }
             }
         }
-
 
         private byte[] ByteReader(TcpClient client)
         {

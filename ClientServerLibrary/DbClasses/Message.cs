@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClientServerLibrary.DbClasses
 {
-    /*[Serializable]
+    [Serializable]
     public enum MessageType
     {
         Text,
@@ -14,22 +15,11 @@ namespace ClientServerLibrary.DbClasses
     }
     [Table("Messages")]
     [Serializable]
-    class Message
-    {
-        [Key]
-        public int Id { get; }
-        public string Content { get; set; }
-        public DateTime SendTime { get; }
-        public bool IsRead { get; set; }
-        public string Sender_id { get; set; }
-        public string Conversation_id { get; set; }
-        public MessageType MessageType { get; set; }
-    }*/
-
     public class Message : INotifyPropertyChanged
     {
         public int Id { get; set; }
-
+        [StringLength(4000)]
+        [Required]
         public string Content { get { return content; } set { content = value; OnPropertyChanged("Content"); } }
         [NotMapped]
         private string content;
@@ -41,15 +31,13 @@ namespace ClientServerLibrary.DbClasses
         public bool IsRead { get { return isRead; } set { isRead = value; OnPropertyChanged("IsRead"); } }
         [NotMapped]
         private bool isRead;
-
+        public MessageType MessageType { get { return messageType; } set { messageType = value; OnPropertyChanged("MessageType"); } }
+        [NotMapped]
+        private MessageType messageType;
         [Column("sender_id")]
-        public virtual User User { get; set; }
+        public virtual User Sender { get; set; }
         [Column("conversation_id")]
         public virtual Conversation Conversation { get; set; }
-
-        public int MessageType { get { return messageType; } set { messageType = value; OnPropertyChanged("MessageType"); } }
-        [NotMapped]
-        private int messageType;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)

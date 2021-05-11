@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientServerLibrary.DbClasses
+namespace Server.Database
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientServerLibrary.DbClasses
+namespace Server.Database
 {
     public class GenericUnitOfWork : IDisposable
     {
