@@ -13,6 +13,7 @@ namespace Server
     {
         private TcpListener server;
         private List<TcpClient> clients;
+
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
@@ -42,7 +43,6 @@ namespace Server
 
         private void ConversationHandler(TcpClient client)
         {
-
             while (true)
             {
                 byte[] data = GetMethod(client);

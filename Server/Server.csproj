@@ -67,10 +67,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\ChatDBContext.cs" />
+    <Compile Include="Database\Conversation.cs" />
+    <Compile Include="Database\ConversationConnection.cs" />
     <Compile Include="Database\EFGenericRepository.cs" />
+    <Compile Include="Database\FriendShip.cs" />
     <Compile Include="Database\GenericUnitOfWork.cs" />
     <Compile Include="Database\IGenericRepository.cs" />
+    <Compile Include="Database\Message.cs" />
     <Compile Include="Database\Repositories.cs" />
+    <Compile Include="Database\User.cs" />
     <Compile Include="DbManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
