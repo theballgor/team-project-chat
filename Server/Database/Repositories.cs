@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
+using ClientServerLibrary.DbClasses;
 
-
-namespace ClientServerLibrary.DbClasses
+namespace Server.Database
 {
     public static class Repositories
     {

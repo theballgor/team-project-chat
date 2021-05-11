@@ -4,27 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClientServerLibrary.DbClasses
 {
-    /*[Serializable]
-    public enum UserStatus
-    {
-        Online,
-        Ofline,
-        DoNotDisturb
-    }
-    [Table("Users")]
-    [Serializable]
-    class User
-    {
-        public int Id { get;}
-        public string Username { get;private set; }
-        public string Email { get; private set;}
-        public string Password { get; private set; }
-        public string Avatar { get; private set; }
-        public string Description { get;  set; }
-        public string PhoneNumber { get; set; }
-        public UserStatus UserStatus { get; set; }
-    }*/
-
     public class User : INotifyPropertyChanged
     {
         public int Id { get; set; }

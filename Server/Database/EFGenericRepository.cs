@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace ClientServerLibrary.DbClasses
+namespace Server.Database
 {
     public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {

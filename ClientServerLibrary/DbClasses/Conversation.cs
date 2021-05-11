@@ -4,26 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClientServerLibrary.DbClasses
 {
-    /*[Serializable]
-    public enum ConversationAccessibility
-    {
-        Public,
-        Private
-    }
-
-    [Table("Conversations")]
-    [Serializable]
-    class Conversation
-    {
-        [Key]
-        public int Id { get; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Avatar { get; private set; }
-        public ConversationAccessibility ConversationAccessibility { get; set; }
-        public string Creator_id { get; set; }
-    }*/
-
     public class Conversation : INotifyPropertyChanged
     {
         public int Id { get; set; }

@@ -4,23 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClientServerLibrary.DbClasses
 {
-    /*[Serializable]
-    public enum FriendshipStatus
-    {
-        Pending,
-        Confirmed,
-        Blocked
-    }
-    [Table("FriendShips")]
-    [Serializable]
-    class Friendship
-    {
-        public int Inviter_id { get; }
-        public string Friend_id { get; }
-        public DateTime InviteTime { get; }
-        public FriendshipStatus FriendshipStatus { get; set; }
-    }*/
-
     public class Friendship : INotifyPropertyChanged
     {
         public int Id { get; set; }
