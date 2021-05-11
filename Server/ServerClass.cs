@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ClientServer;
 
-
 namespace Server
 {
     class ServerClass
@@ -82,6 +81,7 @@ namespace Server
             }
         }
 
+
         private byte[] ByteReader(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
@@ -95,10 +95,41 @@ namespace Server
 
             return messageInBytes.ToArray();
         }
+            //IGenericRepository<User> userRepo = work.Repository<User>();
 
-        private void DBConnect()
-        {
-
+            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
         }
+
+
+            //IGenericRepository<User> userRepo = work.Repository<User>();
+
+            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
+        }
+
+
+            //IGenericRepository<User> userRepo = work.Repository<User>();
+
+            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
+        }
+
+
+            //IGenericRepository<User> userRepo = work.Repository<User>();
+
+            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
+        }
+
+
+            //IGenericRepository<User> userRepo = work.Repository<User>();
+
+            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
+        }
+
+
+            //IGenericRepository<User> userRepo = work.Repository<User>();
+
+            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
+        }
+
+
     }
 }
