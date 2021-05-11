@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8f7a47e22d334f8999bfc4175762e869" Name="Diagram1">
+        <EntityTypeShape EntityType="ChatModel.Conversation" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.ConversationConnection" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.Friendship" Width="1.5" PointX="3" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.Message" Width="1.5" PointX="8.25" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ChatModel.User" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="ChatModel.FK__Conversat__Conve__31EC6D26" ManuallyRouted="false" />
+        <AssociationConnector Association="ChatModel.FK__Conversat__Creat__30F848ED" ManuallyRouted="false" />
+        <AssociationConnector Association="ChatModel.FK__Message__Convers__35BCFE0A" ManuallyRouted="false" />
+        <AssociationConnector Association="ChatModel.FK__Conversat__UserI__32E0915F" ManuallyRouted="false" />
+        <AssociationConnector Association="ChatModel.FK__Friendshi__Invit__33D4B598" ManuallyRouted="false" />
+        <AssociationConnector Association="ChatModel.FK__Friendshi__Recie__34C8D9D1" ManuallyRouted="false" />
+        <AssociationConnector Association="ChatModel.FK__Message__SenderI__36B12243" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
