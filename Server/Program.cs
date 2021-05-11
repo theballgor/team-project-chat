@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ClientServerLibrary.DbClasses;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -17,6 +19,12 @@ namespace Server
 
             while (Console.ReadKey().Key != ConsoleKey.Escape)
                 Console.ReadLine();
+            GenericUnitOfWork work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
+
+            IGenericRepository<User> userRepo = work.Repository<User>();
+
+            userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0,  Password = "qwerty123"});
+
         }
     }
 }
