@@ -95,41 +95,5 @@ namespace Server
 
             return messageInBytes.ToArray();
         }
-            //IGenericRepository<User> userRepo = work.Repository<User>();
-
-            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
-        }
-
-
-            //IGenericRepository<User> userRepo = work.Repository<User>();
-
-            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
-        }
-
-
-            //IGenericRepository<User> userRepo = work.Repository<User>();
-
-            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
-        }
-
-
-            //IGenericRepository<User> userRepo = work.Repository<User>();
-
-            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
-        }
-
-
-            //IGenericRepository<User> userRepo = work.Repository<User>();
-
-            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
-        }
-
-
-            //IGenericRepository<User> userRepo = work.Repository<User>();
-
-            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
-        }
-
-
     }
 }
