@@ -59,11 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbClasses\Conversation.cs" />
-    <Compile Include="DbClasses\Friendship.cs" />
-    <Compile Include="DbClasses\Message.cs" />
-    <Compile Include="DbClasses\User.cs" />
-    <Compile Include="ObservableListSource.cs" />
+    <Compile Include="ClientServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,4 +67,4 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
- </Project>
+</Project>
