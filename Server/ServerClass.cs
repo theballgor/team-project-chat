@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClientServer;
 
+
 namespace Server
 {
     class ServerClass
@@ -80,7 +81,6 @@ namespace Server
             }
         }
 
-
         private byte[] ByteReader(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
@@ -94,5 +94,16 @@ namespace Server
 
             return messageInBytes.ToArray();
         }
+
+        private void DBConnect()
+        {
+            //GenericUnitOfWork work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
+
+            //IGenericRepository<User> userRepo = work.Repository<User>();
+
+            //userRepo.Add(new User() { Username = "Akio", Email = "akio.emal@i.com", Avatar = "test", Status = 0, Password = "qwerty123" });
+        }
+
+
     }
 }
