@@ -4,8 +4,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClientServerLibrary.DbClasses;
 
-namespace ClientServerLibrary.DbClasses
+namespace Server.Database
 {
     public class ChatDBContext : DbContext
     {
