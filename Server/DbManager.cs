@@ -13,43 +13,25 @@ namespace Server
 {
     class DbManager
     {
-        private GenericUnitOfWork work;
-
-        public DbManager()
-        {
-            work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
-        }
-
-        public void CreateUser(string userName,string email, string password, string description, string phoneNumber, string avatar)
+        public static void CreateUser(string userName,string email,string avatar,int status, string password)
         {
             try
             {
+                GenericUnitOfWork work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
                 IGenericRepository<User> userRepo = work.Repository<User>();
-                userRepo.Add(new User() { Username = userName, Email = email, Password = password, Description = description, PhoneNumber = phoneNumber, Status = UserStatus.Ofline, Avatar = avatar });
+                userRepo.Add(new User() { Username = userName, Email = email, Avatar = avatar, Status = status, Password = password });
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed");
+                throw;
             }
         }
-        public void CreateUser(string userName, string email, string password, string description, string phoneNumber)
-        {
-            try
-            {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                userRepo.Add(new User() { Username = userName, Email = email, Password=password, Description= description,PhoneNumber= phoneNumber,Status=UserStatus.Ofline, Avatar = null });
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Failed");
-            }
-        }
-        public void CreateConversation()
+        public static void UpdateUser(string avatar, string status, string password)
         {
 
         }
-
-        public void CreateMessage()
+        public static void CreateConversation()
         {
 
         }
