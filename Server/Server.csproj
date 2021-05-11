@@ -60,16 +60,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbClasses\ChatDBContext.cs" />
-    <Compile Include="DbClasses\Conversation.cs" />
-    <Compile Include="DbClasses\EFGenericRepository.cs" />
-    <Compile Include="DbClasses\FriendShip.cs" />
-    <Compile Include="DbClasses\GenericUnitOfWork.cs" />
-    <Compile Include="DbClasses\IGenericRepository.cs" />
-    <Compile Include="DbClasses\Message.cs" />
-    <Compile Include="DbClasses\Repositories.cs" />
-    <Compile Include="DbClasses\User.cs" />
-    <Compile Include="DbClasses\UserConversation.cs" />
+    <Compile Include="Database\ChatDBContext.cs" />
+    <Compile Include="Database\EFGenericRepository.cs" />
+    <Compile Include="Database\GenericUnitOfWork.cs" />
+    <Compile Include="Database\IGenericRepository.cs" />
+    <Compile Include="Database\Repositories.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerClass.cs" />
