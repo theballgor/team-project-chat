@@ -21,7 +21,7 @@ namespace Server
      
             DbManager dbManager = new DbManager();
             dbManager.CreateUser("Roman", "roman1273232@gmail.com", "1","description","+30675621670");
-
+            User user=new User() { }
             while (Console.ReadKey().Key != ConsoleKey.Escape)
                 Console.ReadLine();
         }

@@ -15,6 +15,7 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public class Conversation : INotifyPropertyChanged
     {
+
         public int Id { get; set; }
         [Required]
         [StringLength(32)]
