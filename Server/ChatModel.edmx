@@ -1,0 +1,461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ChatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Avatar" Type="nvarchar" MaxLength="256" />
+          <Property Name="ConversationAccessibility" Type="tinyint" Nullable="false" />
+          <Property Name="CreatorId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ConversationConnection">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="ConversationId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Friendship">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InviteDate" Type="datetime" Nullable="false" />
+          <Property Name="FrienshipStatus" Type="tinyint" Nullable="false" />
+          <Property Name="InviterId" Type="bigint" Nullable="false" />
+          <Property Name="RecieverId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SendTime" Type="datetime" Nullable="false" />
+          <Property Name="IsRead" Type="bit" Nullable="false" />
+          <Property Name="SenderId" Type="bigint" Nullable="false" />
+          <Property Name="ConversationId" Type="bigint" Nullable="false" />
+          <Property Name="MessageType" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="Avatar" Type="nvarchar" MaxLength="256" />
+          <Property Name="Description" Type="nvarchar" MaxLength="128" />
+          <Property Name="PhoneNumber" Type="char" MaxLength="13" />
+          <Property Name="UserStatus" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Conversat__Conve__31EC6D26">
+          <End Role="Conversation" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="ConversationConnection" Type="Self.ConversationConnection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationConnection">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conversat__Creat__30F848ED">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Conversation" Type="Self.Conversation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversation">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conversat__UserI__32E0915F">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="ConversationConnection" Type="Self.ConversationConnection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationConnection">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Friendshi__Invit__33D4B598">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="InviterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Friendshi__Recie__34C8D9D1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="RecieverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Message__Convers__35BCFE0A">
+          <End Role="Conversation" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Message__SenderI__36B12243">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ChatModelStoreContainer">
+          <EntitySet Name="Conversation" EntityType="Self.Conversation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConversationConnection" EntityType="Self.ConversationConnection" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Friendship" EntityType="Self.Friendship" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Conversat__Conve__31EC6D26" Association="Self.FK__Conversat__Conve__31EC6D26">
+            <End Role="Conversation" EntitySet="Conversation" />
+            <End Role="ConversationConnection" EntitySet="ConversationConnection" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conversat__Creat__30F848ED" Association="Self.FK__Conversat__Creat__30F848ED">
+            <End Role="User" EntitySet="User" />
+            <End Role="Conversation" EntitySet="Conversation" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conversat__UserI__32E0915F" Association="Self.FK__Conversat__UserI__32E0915F">
+            <End Role="User" EntitySet="User" />
+            <End Role="ConversationConnection" EntitySet="ConversationConnection" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Friendshi__Invit__33D4B598" Association="Self.FK__Friendshi__Invit__33D4B598">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Friendshi__Recie__34C8D9D1" Association="Self.FK__Friendshi__Recie__34C8D9D1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Friendship" EntitySet="Friendship" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Message__Convers__35BCFE0A" Association="Self.FK__Message__Convers__35BCFE0A">
+            <End Role="Conversation" EntitySet="Conversation" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Message__SenderI__36B12243" Association="Self.FK__Message__SenderI__36B12243">
+            <End Role="User" EntitySet="User" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ChatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Avatar" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ConversationAccessibility" Type="Byte" Nullable="false" />
+          <Property Name="CreatorId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="ConversationConnections" Relationship="Self.FK__Conversat__Conve__31EC6D26" FromRole="Conversation" ToRole="ConversationConnection" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Conversat__Creat__30F848ED" FromRole="Conversation" ToRole="User" />
+          <NavigationProperty Name="Messages" Relationship="Self.FK__Message__Convers__35BCFE0A" FromRole="Conversation" ToRole="Message" />
+        </EntityType>
+        <EntityType Name="ConversationConnection">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="ConversationId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Conversation" Relationship="Self.FK__Conversat__Conve__31EC6D26" FromRole="ConversationConnection" ToRole="Conversation" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Conversat__UserI__32E0915F" FromRole="ConversationConnection" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Friendship">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InviteDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FrienshipStatus" Type="Byte" Nullable="false" />
+          <Property Name="InviterId" Type="Int64" Nullable="false" />
+          <Property Name="RecieverId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Friendshi__Invit__33D4B598" FromRole="Friendship" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="Self.FK__Friendshi__Recie__34C8D9D1" FromRole="Friendship" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SendTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
+          <Property Name="SenderId" Type="Int64" Nullable="false" />
+          <Property Name="ConversationId" Type="Int64" Nullable="false" />
+          <Property Name="MessageType" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Conversation" Relationship="Self.FK__Message__Convers__35BCFE0A" FromRole="Message" ToRole="Conversation" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Message__SenderI__36B12243" FromRole="Message" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Avatar" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="13" FixedLength="true" Unicode="false" />
+          <Property Name="UserStatus" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Conversations" Relationship="Self.FK__Conversat__Creat__30F848ED" FromRole="User" ToRole="Conversation" />
+          <NavigationProperty Name="ConversationConnections" Relationship="Self.FK__Conversat__UserI__32E0915F" FromRole="User" ToRole="ConversationConnection" />
+          <NavigationProperty Name="Friendships" Relationship="Self.FK__Friendshi__Invit__33D4B598" FromRole="User" ToRole="Friendship" />
+          <NavigationProperty Name="Friendships1" Relationship="Self.FK__Friendshi__Recie__34C8D9D1" FromRole="User" ToRole="Friendship" />
+          <NavigationProperty Name="Messages" Relationship="Self.FK__Message__SenderI__36B12243" FromRole="User" ToRole="Message" />
+        </EntityType>
+        <Association Name="FK__Conversat__Conve__31EC6D26">
+          <End Role="Conversation" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="ConversationConnection" Type="Self.ConversationConnection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationConnection">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conversat__Creat__30F848ED">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Conversation" Type="Self.Conversation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Conversation">
+              <PropertyRef Name="CreatorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Message__Convers__35BCFE0A">
+          <End Role="Conversation" Type="Self.Conversation" Multiplicity="1" />
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conversation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="ConversationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conversat__UserI__32E0915F">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="ConversationConnection" Type="Self.ConversationConnection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ConversationConnection">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Friendshi__Invit__33D4B598">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="InviterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Friendshi__Recie__34C8D9D1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Friendship" Type="Self.Friendship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Friendship">
+              <PropertyRef Name="RecieverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Message__SenderI__36B12243">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ChatEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Conversations" EntityType="Self.Conversation" />
+          <EntitySet Name="ConversationConnections" EntityType="Self.ConversationConnection" />
+          <EntitySet Name="Friendships" EntityType="Self.Friendship" />
+          <EntitySet Name="Messages" EntityType="Self.Message" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK__Conversat__Conve__31EC6D26" Association="Self.FK__Conversat__Conve__31EC6D26">
+            <End Role="Conversation" EntitySet="Conversations" />
+            <End Role="ConversationConnection" EntitySet="ConversationConnections" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conversat__Creat__30F848ED" Association="Self.FK__Conversat__Creat__30F848ED">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Conversation" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Message__Convers__35BCFE0A" Association="Self.FK__Message__Convers__35BCFE0A">
+            <End Role="Conversation" EntitySet="Conversations" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conversat__UserI__32E0915F" Association="Self.FK__Conversat__UserI__32E0915F">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ConversationConnection" EntitySet="ConversationConnections" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Friendshi__Invit__33D4B598" Association="Self.FK__Friendshi__Invit__33D4B598">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Friendship" EntitySet="Friendships" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Friendshi__Recie__34C8D9D1" Association="Self.FK__Friendshi__Recie__34C8D9D1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Friendship" EntitySet="Friendships" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Message__SenderI__36B12243" Association="Self.FK__Message__SenderI__36B12243">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ChatModelStoreContainer" CdmEntityContainer="ChatEntities">
+          <EntitySetMapping Name="Conversations">
+            <EntityTypeMapping TypeName="ChatModel.Conversation">
+              <MappingFragment StoreEntitySet="Conversation">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="ConversationAccessibility" ColumnName="ConversationAccessibility" />
+                <ScalarProperty Name="CreatorId" ColumnName="CreatorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConversationConnections">
+            <EntityTypeMapping TypeName="ChatModel.ConversationConnection">
+              <MappingFragment StoreEntitySet="ConversationConnection">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Friendships">
+            <EntityTypeMapping TypeName="ChatModel.Friendship">
+              <MappingFragment StoreEntitySet="Friendship">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InviteDate" ColumnName="InviteDate" />
+                <ScalarProperty Name="FrienshipStatus" ColumnName="FrienshipStatus" />
+                <ScalarProperty Name="InviterId" ColumnName="InviterId" />
+                <ScalarProperty Name="RecieverId" ColumnName="RecieverId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Messages">
+            <EntityTypeMapping TypeName="ChatModel.Message">
+              <MappingFragment StoreEntitySet="Message">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="SendTime" ColumnName="SendTime" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="ConversationId" ColumnName="ConversationId" />
+                <ScalarProperty Name="MessageType" ColumnName="MessageType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ChatModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Avatar" ColumnName="Avatar" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="UserStatus" ColumnName="UserStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

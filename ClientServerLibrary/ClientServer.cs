@@ -12,14 +12,10 @@ namespace ClientServerLibrary
     [Serializable]
     public enum MessageType
     {
-        SendText,
-        SendAudio,
-        SendFile,
-        RegisterUser,
-        LogInUser,
-        CreateConversation,
-        GetConversationMessages,
-        Error,
+        Text,
+        Audio,
+        File,
+        RegistrationRequest
     }
 
     [Serializable]

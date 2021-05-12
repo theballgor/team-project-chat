@@ -16,7 +16,7 @@ namespace Client.Model
     /// </summary>
     class ClientModel
     {
-        private TcpClient client = new TcpClient();
+        private  TcpClient client = new TcpClient();
 
         public ClientModel(IPEndPoint clientIEP)
         {
@@ -95,7 +95,6 @@ namespace Client.Model
                 }
             }));
         }
-
 
         //Get free tcp port
         public static int GetFreeTcpPort()
