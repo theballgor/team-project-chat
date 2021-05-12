@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClientServerLibrary.DbClasses;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,22 +9,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ClientServerLibrary
 {
-    [Serializable]
-    public enum ActionType
-    {
-        SendText,
-        SendAudio,
-        SendFile,
-        RegisterUser,
-        LogInUser,
-        CreateConversation,
-        GetConversationMessages,
-        Error,
-        Success,
-    }
-
     [Serializable]
     public struct ClientServerMessage
     {
