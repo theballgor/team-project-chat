@@ -15,7 +15,7 @@ namespace Server
     {
         private void RegisterUser(User user)
         {
-            dbManager.CreateUser(user);
+            Console.WriteLine(dbManager.CreateUser(user));
         }
         private void LoginUser(User user)
         {

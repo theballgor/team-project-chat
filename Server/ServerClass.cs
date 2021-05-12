@@ -19,10 +19,11 @@ namespace Server
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
+            locker = new object();
             lock (locker)
                 connectedClients = new List<KeyValuePair<string, TcpClient>>();
             dbManager = new DbManager();
-            locker = new object();
+   
         }
 
         public void Connect()
