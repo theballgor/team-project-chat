@@ -78,9 +78,6 @@
       <DependentUpon>LoginForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewsModel\RegistrationViewModel.cs" />
-    <Compile Include="Views\RegistrationForm.xaml.cs">
-      <DependentUpon>RegistrationForm.xaml</DependentUpon>
-    </Compile>
     <Page Include="Views\CustomerControls\ChatList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

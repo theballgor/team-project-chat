@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ClientServer;
+using ClientServerLibrary;
 
 namespace Client.Model
 {

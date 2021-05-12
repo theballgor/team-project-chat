@@ -7,14 +7,19 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClientServer
+namespace ClientServerLibrary
 {
     [Serializable]
     public enum MessageType
     {
-        Text,
-        Audio,
-        File
+        SendText,
+        SendAudio,
+        SendFile,
+        RegisterUser,
+        LogInUser,
+        CreateConversation,
+        GetConversationMessages,
+        Error,
     }
 
     [Serializable]
