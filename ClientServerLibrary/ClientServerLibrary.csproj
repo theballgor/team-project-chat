@@ -60,6 +60,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientServer.cs" />
+    <Compile Include="DbClasses\Conversation.cs" />
+    <Compile Include="DbClasses\FriendShip.cs" />
+    <Compile Include="DbClasses\Message.cs" />
+    <Compile Include="DbClasses\User.cs" />
+    <Compile Include="DbClasses\UserConversation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
