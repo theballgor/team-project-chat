@@ -28,6 +28,8 @@ namespace ClientServerLibrary
 
 
     [Serializable]
+    [Serializable]
+>>>>>>>>> Temporary merge branch 2
     public struct ClientServerMessage
     {
         public ClientServerMessage(
