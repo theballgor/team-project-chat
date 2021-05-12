@@ -76,7 +76,7 @@ namespace Client.Model
         }
 
         //Send message
-        private void SendMessage(ClientServerMessage message)
+        public void SendMessage(ClientServerMessage message)
         {
             Task.Run(new Action(() =>
             {
