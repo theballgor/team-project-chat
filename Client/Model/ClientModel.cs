@@ -64,7 +64,7 @@ namespace Client.Model
         //view-model part
         private void HandleMessage(byte[] arr)
         {
-            ClientServerMessage message = ClientServerMessageFormatter.Deserialize(arr);
+            ClientServerMessage message = ClientServerDataManager.Deserialize(arr);
 
 
             ////        TESTING
@@ -82,7 +82,7 @@ namespace Client.Model
             {
                 try
                 {
-                    byte[] arr = ClientServerMessageFormatter.Serialize(message);
+                    byte[] arr = ClientServerDataManager.Serialize(message);
                     NetworkStream stream = client.GetStream();
                     lock (this)
                     {

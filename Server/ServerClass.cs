@@ -6,17 +6,23 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using ClientServerLibrary;
+using ClientServerLibrary.DbClasses;
 
 namespace Server
 {
-    class ServerClass
+    public partial class ServerClass
     {
+        private DbManager dbManager;
         private TcpListener server;
-        private List<TcpClient> clients;
+        private List<KeyValuePair<string, TcpClient>> connectedClients;
+        private readonly object locker;
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
-            clients = new List<TcpClient>();
+            lock (locker)
+                connectedClients = new List<KeyValuePair<string, TcpClient>>();
+            dbManager = new DbManager();
+            locker = new object();
         }
 
         public void Connect()
@@ -28,13 +34,11 @@ namespace Server
             {
                 while (true)
                 {
-                    TcpClient currentUser = server.AcceptTcpClient();
-                    clients.Add(currentUser);
-                    Console.WriteLine("Connnected\t\t" + currentUser.Client.RemoteEndPoint);
-
+                    TcpClient currentClient = server.AcceptTcpClient();
+                    Console.WriteLine("Connnected\t\t" + currentClient.Client.RemoteEndPoint);
                     Task.Run(() =>
                     {
-                        ConversationHandler(currentUser);
+                        ConversationHandler(currentClient);
                     });
                 }
             });
@@ -42,76 +46,41 @@ namespace Server
 
         private void ConversationHandler(TcpClient client)
         {
-
-            while (true)
-            {
-                byte[] data = GetMethod(client);
-                ClientServerMessage message = ClientServerMessageFormatter.Deserialize(data);
-                switch (message.MessageType)
-                {
-                    case MessageType.SendText:
-                        
-                        break;
-                    case MessageType.SendAudio:
-
-                        break;
-                    case MessageType.SendFile:
-
-                        break;
-                    case MessageType.RegisterUser:
-
-                        break;
-                    case MessageType.LogInUser:
-
-                        break;
-                    case MessageType.CreateConversation:
-
-                        break;
-                }
-            }
-        }
-
-        private byte[] GetMethod(TcpClient client)
-        {
             try
             {
-                byte[] test = ByteReader(client);
-                Console.WriteLine($"{client.Client.RemoteEndPoint}");
-                return test;
-            }
-            catch (Exception)
-            {
-                clients.Remove(client);
-                Console.WriteLine("Disconnected\t\t" + client.Client.RemoteEndPoint);
-                throw;
-            }
-        }
-
-        private void SendMethod(TcpClient client, byte[] message)
-        {
-            Console.WriteLine("Connected clients:\t" + clients.Count);
-            foreach (TcpClient item in clients)
-            {
-                if (item != client)
+                while (true)
                 {
-                    item.GetStream().Write(message, 0, message.Length);
-                    Console.WriteLine("Send");
+                    byte[] data = ClientServerDataManager.TcpClientDataReader(client);
+                    ClientServerMessage message = ClientServerDataManager.Deserialize(data);
+                    switch (message.ActionType)
+                    {
+                        case ActionType.SendText:
+
+                            break;
+                        case ActionType.SendAudio:
+
+                            break;
+                        case ActionType.SendFile:
+
+                            break;
+                        case ActionType.RegisterUser:
+                            RegisterUser((User)message.Content);
+                            break;
+                        case ActionType.LogInUser:
+
+                            break;
+                        case ActionType.CreateConversation:
+
+                            break;
+                    }
+
                 }
             }
-        }
-
-        private byte[] ByteReader(TcpClient client)
-        {
-            NetworkStream stream = client.GetStream();
-            byte[] data = new byte[128];
-            List<byte> messageInBytes = new List<byte>();
-            do
+            catch (Exception e)
             {
-                stream.Read(data, 0, data.Length);
-                messageInBytes.AddRange(data);
-            } while (stream.DataAvailable);
-
-            return messageInBytes.ToArray();
+                AbortConnection(client);
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }
