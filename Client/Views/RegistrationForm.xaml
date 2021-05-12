@@ -36,7 +36,7 @@
 
         <TextBox        x:Name="textBoxEmail" Text="{Binding Email, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Margin="20" Background="#FF282E33" Foreground="White" CaretBrush="White" BorderThickness="0"></TextBox>
         <TextBox    x:Name="textBoxPassword" Text="{Binding Password, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Margin="20" Background="#FF282E33" Foreground="White" CaretBrush="White" BorderThickness="0"></TextBox>
-        
+
         <TextBox        x:Name="textBoxVerrifyPassword" Text="{Binding VerifyPassword, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Margin="20" Background="#FF282E33" Foreground="White" CaretBrush="White" BorderThickness="0"></TextBox>
         <TextBox        x:Name="textBoxNickname" Text="{Binding Nickname, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Margin="20" Background="#FF282E33" Foreground="White" CaretBrush="White" BorderThickness="0"></TextBox>
 
