@@ -14,7 +14,8 @@ namespace ClientServer
     {
         Text,
         Audio,
-        File
+        File,
+        RegistrationRequest
     }
 
     [Serializable]

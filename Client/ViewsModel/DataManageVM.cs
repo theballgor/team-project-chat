@@ -8,6 +8,6 @@ namespace Client.ViewsModel
 {
     class DataManageVM
     {
-
+        
     }
 }
