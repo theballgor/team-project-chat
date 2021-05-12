@@ -31,7 +31,7 @@ namespace Server
         {
             foreach (TcpClient receiverClient in receiverClients)
             {
-                foreach (KeyValuePair<string, TcpClient> client in connectedClients.)
+                foreach (KeyValuePair<string, TcpClient> client in connectedClients)
                 {
                     TcpClient tmpClient = client.Value;
                     if (receiverClient == tmpClient)

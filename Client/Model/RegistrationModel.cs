@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClientServer;
 using ClientServerLibrary.DbClasses;
+using ClientServerLibrary;
 using ClientLibrary;
+
 
 namespace Client.Model
 {
     static class RegistrationModel
     {
 
-
-
         private static ClientServerMessage Pack(string username, string email, string password)
         {
             password = Cryptography.Encrypt(password);
             User user = new User { Email = email, Password = password, Username = username };
 
-            return new ClientServerMessage { Content = user, Date = DateTime.Now, MessageType = MessageType.RegistrationRequest };
+            return new ClientServerMessage { Content = user, Date = DateTime.Now, ActionType = ActionType.RegisterUser };
         }
 
         private static void Validate(string username, string password, string verifyPassword, string email)
@@ -54,10 +53,20 @@ namespace Client.Model
             }
         }
 
-        public static bool Handle(string username, string password, string verifyPassword, string email)
+        public static ClientServerMessage Handle(string username, string password, string verifyPassword, string email)
         {
-            Validate(username, password, verifyPassword, email);
-            Pack(username, email, password);
+            try
+            {
+                Validate(username, password, verifyPassword, email);
+                ClientServerMessage message = Pack(username, email, password);
+                
+                return message;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

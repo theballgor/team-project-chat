@@ -7,54 +7,13 @@ using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
 using Client.Model;
+using ClientServerLibrary;
 
 namespace Client.ViewsModel
 {
-    class RegistrationViewModel : INotifyPropertyChanged
+    partial class DataManageVM : INotifyPropertyChanged
     {
-        private string email;
-        private string nickname;
-        private string password;
         private string verifyPassword;
-
-        public string Email
-        {
-            get
-            {
-                return email;
-            }
-            set
-            {
-                email = value;
-                OnPropertyChanged("Email");
-            }
-        }
-
-        public string Nickname
-        {
-            get
-            {
-                return nickname;
-            }
-            set
-            {
-                nickname = value;
-                OnPropertyChanged("Nickname");
-            }
-        }
-
-        public string Password
-        {
-            get
-            {
-                return password;
-            }
-            set
-            {
-                password = value;
-                OnPropertyChanged("Password");
-            }
-        }
 
         public string VerifyPassword
         {
@@ -77,7 +36,8 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-
+                        ClientServerMessage message = RegistrationModel.Handle(username, password, verifyPassword, email);
+                        client.SendMessage(message);
                     }
                     catch (ArgumentException exc)
                     {
@@ -85,13 +45,6 @@ namespace Client.ViewsModel
                     }
                 });
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string PropertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
         }
 
     }

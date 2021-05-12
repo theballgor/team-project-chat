@@ -23,5 +23,17 @@ namespace Client.Views
         {
             InitializeComponent();
         }
+
+        private void buttonRegistration_Click(object sender, RoutedEventArgs e)
+        {
+            RegistrationForm registrationForm = new RegistrationForm();
+            this.Close();
+            registrationForm.Show();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

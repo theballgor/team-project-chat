@@ -8,6 +8,7 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public enum MessageType
     {
+        RegistrationRequest,
         Text,
         Audio,
         File,

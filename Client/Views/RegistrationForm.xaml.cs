@@ -23,5 +23,13 @@ namespace Client.Views
         {
             InitializeComponent();
         }
+
+        private void buttonNext_Click(object sender, RoutedEventArgs e)
+        {
+            //LoginForm loginForm = new LoginForm();
+            //loginForm.Show();
+
+            //this.Close();
+        }
     }
 }
