@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -32,11 +33,6 @@ namespace Client
             // Listenet server
 
         }
-        private void messageBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -45,11 +41,11 @@ namespace Client
                 DragMove();
             }
         }
-        private void buttonMinimize_Click(object sender, RoutedEventArgs e)
+        private void ButtonMinimize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
-        private void buttonMaximaze_Click(object sender, RoutedEventArgs e)
+        private void ButtonMaximaze_Click(object sender, RoutedEventArgs e)
         {
             if (WindowState == WindowState.Normal)
             {
@@ -57,7 +53,7 @@ namespace Client
             }
             else WindowState = WindowState.Normal;
         }
-        private void buttonClose_Click(object sender, RoutedEventArgs e)
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
@@ -75,11 +71,6 @@ namespace Client
             //window.ShowDialog();
         }
 
-        private void sendMessage_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void PopupBox_Opened(object sender, RoutedEventArgs e)
         {
             PopupBox.IsPopupOpen = true;
@@ -87,6 +78,35 @@ namespace Client
         private void PopupBox_Closed(object sender, RoutedEventArgs e)
         {
             PopupBox.IsPopupOpen = false;
+        }
+
+        private void ButtonOpenMenu_Checked(object sender, RoutedEventArgs e)
+        {
+            var animation = (Storyboard)FindResource("OpenMenu");
+            animation.Begin(this);
+
+            var border = (Border)FindName("GridMain");
+            border.BorderBrush = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60));
+            border.CornerRadius = new CornerRadius(6);
+            border.BorderThickness = new Thickness(2);
+
+            //Button okButton = (Button)this.FindName("PART_OK")
+
+            //myBorder1 = new Border();
+            //myBorder1.BorderBrush = Brushes.SlateBlue;
+            //myBorder1.BorderThickness = new Thickness(5, 10, 15, 20);
+            //myBorder1.Background = Brushes.AliceBlue;
+            //myBorder1.Padding = new Thickness(5);
+            //myBorder1.CornerRadius = new CornerRadius(15);
+        }
+
+        private void ButtonOpenMenu_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var animation = (Storyboard)FindResource("CloseMenu");
+            animation.Begin(this);
+
+            var border = (Border)FindName("GridMain");
+            border.BorderBrush = Brushes.Transparent;
         }
     }
 }
