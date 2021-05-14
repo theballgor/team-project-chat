@@ -16,7 +16,7 @@ namespace Client.Model
     /// </summary>
     class ClientModel
     {
-        private TcpClient client = new TcpClient();
+        private  TcpClient client = new TcpClient();
 
         public ClientModel(IPEndPoint clientIEP)
         {
@@ -64,7 +64,7 @@ namespace Client.Model
         //view-model part
         private void HandleMessage(byte[] arr)
         {
-            ClientServerMessage message = ClientServerMessageFormatter.Deserialize(arr);
+            ClientServerMessage message = ClientServerDataManager.Deserialize(arr);
 
 
             ////        TESTING
@@ -76,13 +76,13 @@ namespace Client.Model
         }
 
         //Send message
-        private void SendMessage(ClientServerMessage message)
+        public void SendMessage(ClientServerMessage message)
         {
             Task.Run(new Action(() =>
             {
                 try
                 {
-                    byte[] arr = ClientServerMessageFormatter.Serialize(message);
+                    byte[] arr = ClientServerDataManager.Serialize(message);
                     NetworkStream stream = client.GetStream();
                     lock (this)
                     {
@@ -95,7 +95,6 @@ namespace Client.Model
                 }
             }));
         }
-
 
         //Get free tcp port
         public static int GetFreeTcpPort()

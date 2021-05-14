@@ -19,51 +19,35 @@ namespace Server
         {
             work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
         }
-
-        public void CreateUser(string userName,string email, string password, string description, string phoneNumber, string avatar)
-        {
-            try
-            {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                userRepo.Add(new User() { Username = userName, Email = email, Password = password, Description = description, PhoneNumber = phoneNumber, Status = UserStatus.Ofline, Avatar = avatar });
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Failed");
-            }
-        }
-        public void CreateUser(string userName, string email, string password, string description, string phoneNumber)
-        {
-            try
-            {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                userRepo.Add(new User() { Username = userName, Email = email, Password=password, Description= description,PhoneNumber= phoneNumber,Status=UserStatus.Ofline, Avatar = null });
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Failed");
-            }
-        }
-        public void CreateUser(User user)
+        public bool CreateUser(User user)
         {
             try
             {
                 IGenericRepository<User> userRepo = work.Repository<User>();
                 userRepo.Add(user);
+                Console.WriteLine("user created");
+                return true;
             }
             catch (Exception)
             {
-                Console.WriteLine("Failed");
+                return false;
+                Console.WriteLine("Failed to create user");
             }
         }
-        public void CreateConversation()
+        public bool CheckLogin(User user)
         {
-
-        }
-
-        public void CreateMessage()
-        {
-
+            try
+            {
+                IGenericRepository<User> userRepo = work.Repository<User>();
+                userRepo.FindAll(User => User.Username == user.Username && User.Password == user.Username).First();
+                Console.WriteLine("user logined");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to login");
+                return false;
+            }
         }
     }
 }

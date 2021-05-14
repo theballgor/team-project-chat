@@ -1,16 +1,19 @@
-﻿using System;
+﻿using ClientServerLibrary.DbClasses;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ClientServerLibrary
 {
     [Serializable]
-    public enum MessageType
+    public enum ActionType
     {
         SendText,
         SendAudio,
@@ -20,7 +23,9 @@ namespace ClientServerLibrary
         CreateConversation,
         GetConversationMessages,
         Error,
+        Success,
     }
+
 
     [Serializable]
     public struct ClientServerMessage
@@ -28,18 +33,18 @@ namespace ClientServerLibrary
         public ClientServerMessage(
             object content,
             object additionalContent,
-            MessageType messageType,
+            ActionType actionType,
             DateTime date)
         {
             Content = content;
             AdditionalContent = additionalContent;
-            MessageType = messageType;
+            ActionType = actionType;
             Date = date;
         }
 
         public object Content { get; set; }
         public object AdditionalContent { get; set; }
-        public MessageType MessageType { get; set; }
+        public ActionType ActionType { get; set; }
         public DateTime Date { get; set; }
     }
 
@@ -50,7 +55,7 @@ namespace ClientServerLibrary
     }
 
 
-    public static class ClientServerMessageFormatter
+    public static class ClientServerDataManager
     {
         public static ClientServerMessage Deserialize(byte[] data)
         {
@@ -74,6 +79,17 @@ namespace ClientServerLibrary
             }
             return serializedData;
         }
-
+        public static byte[] TcpClientDataReader(TcpClient client)
+        {
+            NetworkStream stream = client.GetStream();
+            byte[] data = new byte[128];
+            List<byte> messageInBytes = new List<byte>();
+            do
+            {
+                stream.Read(data, 0, data.Length);
+                messageInBytes.AddRange(data);
+            } while (stream.DataAvailable);
+            return messageInBytes.ToArray();
+        }
     }
 }

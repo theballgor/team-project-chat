@@ -15,13 +15,8 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            //ServerClass server = new ServerClass(new IPEndPoint(GlobalVariables.LocalIP, GlobalVariables.ServerPort));
-            //server.Connect();
-
-     
-            DbManager dbManager = new DbManager();
-            dbManager.CreateUser("Roman", "roman1273232@gmail.com", "1","description","+30675621670");
-            User user=new User() { }
+            ServerClass server = new ServerClass(new IPEndPoint(GlobalVariables.LocalIP, GlobalVariables.ServerPort));
+            server.Connect();
             while (Console.ReadKey().Key != ConsoleKey.Escape)
                 Console.ReadLine();
         }

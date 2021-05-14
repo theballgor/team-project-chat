@@ -6,54 +6,14 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
+using Client.Model;
+using ClientServerLibrary;
 
 namespace Client.ViewsModel
 {
-    class RegistrationViewModel : INotifyPropertyChanged
+    partial class DataManageVM : INotifyPropertyChanged
     {
-        private string email;
-        private string nickname;
-        private string password;
         private string verifyPassword;
-
-        public string Email
-        {
-            get
-            {
-                return email;
-            }
-            set
-            {
-                email = value;
-                OnPropertyChanged("Email");
-            }
-        }
-
-        public string Nickname
-        {
-            get
-            {
-                return nickname;
-            }
-            set
-            {
-                nickname = value;
-                OnPropertyChanged("Nickname");
-            }
-        }
-
-        public string Password
-        {
-            get
-            {
-                return password;
-            }
-            set
-            {
-                password = value;
-                OnPropertyChanged("Password");
-            }
-        }
 
         public string VerifyPassword
         {
@@ -76,8 +36,8 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        Validate();
-                        Send();
+                        ClientServerMessage message = RegistrationModel.Handle(username, password, verifyPassword, email);
+                        client.SendMessage(message);
                     }
                     catch (ArgumentException exc)
                     {
@@ -85,50 +45,6 @@ namespace Client.ViewsModel
                     }
                 });
             }
-        }
-
-        private void Send()
-        {
-            System.Windows.MessageBox.Show(nickname);
-        }
-
-        private void Validate()
-        {
-            ValidateString(nickname, 4, 25, "Invalid Nickname");
-            ValidateString(password, 8, 16, "Invalid Password");
-
-            if (password != verifyPassword)
-                throw new ArgumentException("Verify the password");
-
-            if (!ValidateEmail())
-                throw new ArgumentException("Invalid Email");
-        }
-
-        private bool ValidateString(string str, int from, int to, string errorMessage)
-        {
-            if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-                throw new ArgumentException(errorMessage);
-            return true;
-        }
-
-        private bool ValidateEmail()
-        {
-            try
-            {
-                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string PropertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
         }
 
     }

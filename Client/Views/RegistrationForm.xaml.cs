@@ -15,25 +15,21 @@ using System.Windows.Shapes;
 namespace Client.Views
 {
     /// <summary>
-    /// Логика взаимодействия для RegistrationForm.xaml
+    /// Interaction logic for RegistrationForm.xaml
     /// </summary>
-    public partial class LoginForm : Window
+    public partial class RegistrationForm : Window
     {
-        public LoginForm()
+        public RegistrationForm()
         {
             InitializeComponent();
         }
 
-        private void buttonRegistration_Click(object sender, RoutedEventArgs e)
+        private void buttonNext_Click(object sender, RoutedEventArgs e)
         {
-            RegistrationForm registrationForm = new RegistrationForm();
-            this.Close();
-            registrationForm.Show();
-        }
+            //LoginForm loginForm = new LoginForm();
+            //loginForm.Show();
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
+            //this.Close();
         }
     }
 }

@@ -8,7 +8,7 @@
         Title="Registration" Height="450" Width="800">
 
     <Window.Resources>
-        <viewModel:LoginViewModel x:Key="viewSource"></viewModel:LoginViewModel>
+        <viewModel:DataManageVM x:Key="viewSource"></viewModel:DataManageVM>
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource viewSource}"></Binding>
@@ -34,6 +34,9 @@
 
         <TextBox Text="{Binding Email}" x:Name="textBoxEmail" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Margin="20" Background="#FF282E33" Foreground="White" CaretBrush="White" BorderThickness="0"></TextBox>
         <TextBox Text="{Binding Password}" x:Name="textBoxPassword" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  Margin="20" Background="#FF282E33" Foreground="White" CaretBrush="White" BorderThickness="0"></TextBox>
+
+        <Button x:Name="buttonRegistration" Grid.Row="4" Grid.ColumnSpan="2" Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             Background="#FF282E33" Foreground="Gray" BorderThickness="0" Click="buttonRegistration_Click" >Registration</Button>
 
         <Button x:Name="buttonNext" Grid.Row="5" Grid.ColumnSpan="2" Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              Background="#FF282E33" Foreground="Gray" BorderThickness="0" Command="{Binding Login}" >Login</Button>
