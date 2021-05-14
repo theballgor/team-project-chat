@@ -79,6 +79,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\LoginModel.cs" />
     <Compile Include="Model\RegistrationModel.cs" />
+    <Compile Include="ViewsModel\Base\ViewModel.cs" />
     <Compile Include="Views\LoginForm.xaml.cs">
       <DependentUpon>LoginForm.xaml</DependentUpon>
     </Compile>
