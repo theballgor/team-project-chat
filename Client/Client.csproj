@@ -77,6 +77,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\DataWorker.cs" />
     <Compile Include="Model\LoginModel.cs" />
     <Compile Include="Model\RegistrationModel.cs" />
     <Compile Include="Views\LoginForm.xaml.cs">
@@ -189,9 +190,7 @@
   <ItemGroup>
     <Resource Include="Views\Assets\DefaultAvatar.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

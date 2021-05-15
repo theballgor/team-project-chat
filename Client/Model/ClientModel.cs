@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClientServerLibrary;
@@ -14,69 +15,69 @@ namespace Client.Model
     /// LOGIC
     /// зв'язок клієнта з сервером
     /// </summary>
-    class ClientModel
+    public static class ClientModel
     {
-        private  TcpClient client = new TcpClient();
+        private static TcpClient client;
 
-        public ClientModel(IPEndPoint clientIEP)
+
+        public static void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
         {
             try
             {
-                client = new TcpClient(clientIEP);
+                client = new TcpClient(new IPEndPoint(clientIpAddress, clientPort));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
+
             }
         }
 
-        public void Connect(IPEndPoint serverIEP)
+        public static void Connect(IPAddress ipAddress, int port)
         {
-            client.Connect(serverIEP);
+            if (client != null)
+                client.Connect(new IPEndPoint(ipAddress, port));
         }
 
-        public void StartListening()
+        public static void StartListening(ref ClientServerMessage message)
         {
-            Task.Run(new Action(() =>
+            try
             {
-                try
+                NetworkStream stream = client.GetStream();
+                byte[] data = new byte[128];
+                while (true)
                 {
-                    NetworkStream stream = client.GetStream();
-                    byte[] data = new byte[128];
-                    while (true)
+                    List<byte> fullData = new List<byte>();
+                    do
                     {
-                        List<byte> fullData = new List<byte>();
-                        do
-                        {
-                            stream.Read(data, 0, data.Length);
-                            fullData.AddRange(data);
-                        } while (stream.DataAvailable);
-                        HandleMessage(fullData.ToArray());
-                    }
+                        stream.Read(data, 0, data.Length);
+                        fullData.AddRange(data);
+                    } while (stream.DataAvailable);
+
+                    message = ClientServerDataManager.Deserialize(fullData.ToArray());
                 }
-                catch (Exception exc)
-                {
-                    MessageBox.Show(exc.Message, "Error");
-                }
-            }));
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message, "Error");
+            }
+
         }
 
-        //view-model part
-        private void HandleMessage(byte[] arr)
-        {
-            ClientServerMessage message = ClientServerDataManager.Deserialize(arr);
+        ////view-model part
+        //private static void HandleMessage(ref ClientServerMessage message)
+        //{
+        //    message.Content = "Hello";
+
+        //    ///
+        //    ///
+        //    ///
+        //}
 
 
-            ////        TESTING
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("From:\t");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(message.Content.ToString());
-            ////
-        }
+
 
         //Send message
-        public void SendMessage(ClientServerMessage message)
+        public static void SendMessage(ClientServerMessage message)
         {
             Task.Run(new Action(() =>
             {
@@ -84,10 +85,7 @@ namespace Client.Model
                 {
                     byte[] arr = ClientServerDataManager.Serialize(message);
                     NetworkStream stream = client.GetStream();
-                    lock (this)
-                    {
-                        stream.Write(arr, 0, arr.Length);
-                    }
+                    stream.Write(arr, 0, arr.Length);
                 }
                 catch (Exception exc)
                 {
@@ -96,28 +94,13 @@ namespace Client.Model
             }));
         }
 
-        //Get free tcp port
         public static int GetFreeTcpPort()
         {
-            TcpListener l = new TcpListener(IPAddress.Loopback, 0);
-            l.Start();
-            int port = ((IPEndPoint)l.LocalEndpoint).Port;
-            l.Stop();
+            TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
             return port;
         }
-
-        ////Get local IP address
-        //public static string GetLocalIPAddress()
-        //{
-        //    var host = Dns.GetHostEntry(Dns.GetHostName());
-        //    foreach (var ip in host.AddressList)
-        //    {
-        //        if (ip.AddressFamily == AddressFamily.InterNetwork)
-        //        {
-        //            return ip.ToString();
-        //        }
-        //    }
-        //    throw new Exception("No network adapters with an IPv4 address in the system!");
-        //}
     }
 }

@@ -11,9 +11,53 @@ using ClientServerLibrary;
 
 namespace Client.ViewsModel
 {
-    partial class DataManageVM : INotifyPropertyChanged
+    class RegistrationViewModel : INotifyPropertyChanged
     {
+
+        
+        private string email;
+        private string username;
+        private string password;
         private string verifyPassword;
+
+        public string Email
+        {
+            get
+            {
+                return email;
+            }
+            set
+            {
+                email = value;
+                OnPropertyChanged("Email");
+            }
+        }
+
+        public string Username
+        {
+            get
+            {
+                return username;
+            }
+            set
+            {
+                username = value;
+                OnPropertyChanged("Username");
+            }
+        }
+
+        public string Password
+        {
+            get
+            {
+                return password;
+            }
+            set
+            {
+                password = value;
+                OnPropertyChanged("Password");
+            }
+        }
 
         public string VerifyPassword
         {
@@ -28,7 +72,9 @@ namespace Client.ViewsModel
             }
         }
 
-        public RelayCommand Register
+
+
+        public RelayCommand RegisterButton
         {
             get
             {
@@ -37,7 +83,8 @@ namespace Client.ViewsModel
                     try
                     {
                         ClientServerMessage message = RegistrationModel.Handle(username, password, verifyPassword, email);
-                        client.SendMessage(message);
+                        ClientModel.SendMessage(message);
+
                     }
                     catch (ArgumentException exc)
                     {
@@ -47,5 +94,11 @@ namespace Client.ViewsModel
             }
         }
 
+        protected virtual void OnPropertyChanged(string PropertyName)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

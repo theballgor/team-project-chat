@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -28,7 +29,7 @@ namespace ClientServerLibrary
 
 
     [Serializable]
-    public struct ClientServerMessage
+    public class ClientServerMessage
     {
         public ClientServerMessage(
             object content,
@@ -40,8 +41,10 @@ namespace ClientServerLibrary
             AdditionalContent = additionalContent;
             ActionType = actionType;
             Date = date;
+
         }
 
+        public Mutex mutex = new Mutex();
         public object Content { get; set; }
         public object AdditionalContent { get; set; }
         public ActionType ActionType { get; set; }

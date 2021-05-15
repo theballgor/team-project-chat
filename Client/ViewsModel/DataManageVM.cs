@@ -17,69 +17,9 @@ namespace Client.ViewsModel
     /// <summary>
     /// MVVM
     /// </summary>
-    partial class DataManageVM : INotifyPropertyChanged
+    class DataManageVM : INotifyPropertyChanged
     {
-        ClientModel client;
-        private string email;
-        private string username;
-        private string password;
-
-
-        public void Load()
-        {
-            client = new ClientModel(new IPEndPoint(GlobalVariables.LocalIP, 5001));
-            client.Connect(new IPEndPoint(GlobalVariables.LocalIP, GlobalVariables.ServerPort));
-            client.StartListening();
-        }
-
-
-        public string Email
-        {
-            get
-            {
-                return email;
-            }
-            set
-            {
-                email = value;
-                OnPropertyChanged("Email");
-            }
-        }
-
-        public string Username
-        {
-            get
-            {
-                return username;
-            }
-            set
-            {
-                username = value;
-                OnPropertyChanged("Username");
-            }
-        }
-
-        public string Password
-        {
-            get
-            {
-                return password;
-            }
-            set
-            {
-                password = value;
-                OnPropertyChanged("Password");
-            }
-        }
-
-
-
         public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string PropertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
-        }
     }
 
 }
