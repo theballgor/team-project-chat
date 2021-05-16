@@ -13,9 +13,6 @@ namespace Server
 {
    partial class ServerClass
     {
-
-
-
         private void SendMessage(TcpClient receiverClient, byte[] message)
         {
             receiverClient.GetStream().Write(message, 0, message.Length);
@@ -43,7 +40,6 @@ namespace Server
                 }
             }
         }
-
         public void AbortConnection(TcpClient client)
         {
             try

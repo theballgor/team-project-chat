@@ -31,7 +31,7 @@ namespace Server
             catch (Exception)
             {
                 Console.WriteLine("Failed to create user");
-                return false;   
+                return false;
             }
         }
         public User CheckLogin(User user)
@@ -46,6 +46,36 @@ namespace Server
             catch (Exception)
             {
                 Console.WriteLine("Failed to login");
+                return null;
+            }
+        }
+        public Conversation CreateConversatin(Conversation conversation)
+        {
+            try
+            {
+                IGenericRepository<Conversation> conversationRepo = work.Repository<Conversation>();
+                conversationRepo.Add(conversation);
+                Console.WriteLine("conversation created");
+                return conversation;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create conversation");
+                return null;
+            }
+        }
+        public ConversationConnection CreateConversationConnection(ConversationConnection conversationConnection)
+        {
+            try
+            {
+                IGenericRepository<ConversationConnection> conversationConnectionRepo = work.Repository<ConversationConnection>();
+                conversationConnectionRepo.Add(conversationConnection);
+                Console.WriteLine("conversationConnection created");
+                return conversationConnection;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create conversationConnection");
                 return null;
             }
         }

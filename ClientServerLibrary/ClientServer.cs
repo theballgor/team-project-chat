@@ -21,6 +21,8 @@ namespace ClientServerLibrary
         RegisterUser,
         LogInUser,
         CreateConversation,
+        JoinConversation,
+        AddFriend,
         GetConversationMessages,
         FatalError,
     }

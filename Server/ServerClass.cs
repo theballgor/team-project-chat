@@ -71,7 +71,7 @@ namespace Server
                             LoginUser((User)message.Content);
                             break;
                         case ActionType.CreateConversation:
-
+                            CreateConversation((Conversation)message.Content);
                             break;
                     }
                     void RegisterUser(User user)
@@ -82,7 +82,18 @@ namespace Server
                     void LoginUser(User user)
                     {
                         User dbUser = dbManager.CheckLogin(user);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });
+                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });                        
+                    }
+                    void CreateConversation(Conversation conversation)
+                    {
+                        Conversation dbConversation = dbManager.CreateConversatin(conversation);
+                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
+                    }
+                    void JoinConversation(ConversationConnection conversationConnection)
+                    {
+                        //not ended
+                        Conversation dbConversation = dbManager.CreateConversationConnection(conversationConnection);
+                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
                     }
                 }
             }
