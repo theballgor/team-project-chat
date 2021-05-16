@@ -22,8 +22,7 @@ namespace ClientServerLibrary
         LogInUser,
         CreateConversation,
         GetConversationMessages,
-        Error,
-        Success,
+        FatalError,
     }
 
 
