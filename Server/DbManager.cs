@@ -30,23 +30,23 @@ namespace Server
             }
             catch (Exception)
             {
-                return false;
                 Console.WriteLine("Failed to create user");
+                return false;   
             }
         }
-        public bool CheckLogin(User user)
+        public User CheckLogin(User user)
         {
             try
             {
                 IGenericRepository<User> userRepo = work.Repository<User>();
-                userRepo.FindAll(User => User.Username == user.Username && User.Password == user.Username).First();
+                User dbUser= userRepo.FindAll(User => User.Username == user.Username && User.Password == user.Username).First();
                 Console.WriteLine("user logined");
-                return true;
+                return dbUser;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to login");
-                return false;
+                return null;
             }
         }
     }

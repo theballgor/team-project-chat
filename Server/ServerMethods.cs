@@ -13,19 +13,20 @@ namespace Server
 {
    partial class ServerClass
     {
-        private void RegisterUser(User user)
-        {
-            Console.WriteLine(dbManager.CreateUser(user));
-        }
-        private void LoginUser(User user)
-        {
-            dbManager.CheckLogin(user);
-        }
+
 
 
         private void SendMessage(TcpClient receiverClient, byte[] message)
         {
             receiverClient.GetStream().Write(message, 0, message.Length);
+        }
+        private void SendMessage(TcpClient receiverClient, ClientServerMessage message)
+        {
+            SendMessage(receiverClient, ClientServerDataManager.Serialize(message));
+        }
+        private void SendMessage(List<TcpClient> receiverClients, ClientServerMessage message)
+        {
+            SendMessage(receiverClients, ClientServerDataManager.Serialize(message));
         }
         private void SendMessage(List<TcpClient> receiverClients, byte[] message)
         {
@@ -43,6 +44,7 @@ namespace Server
                 }
             }
         }
+
         public void AbortConnection(TcpClient client)
         {
             try

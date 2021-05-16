@@ -23,7 +23,7 @@ namespace Server
             lock (locker)
                 connectedClients = new List<KeyValuePair<string, TcpClient>>();
             dbManager = new DbManager();
-   
+
         }
 
         public void Connect()
@@ -68,13 +68,23 @@ namespace Server
                             RegisterUser((User)message.Content);
                             break;
                         case ActionType.LogInUser:
-
+                            LoginUser((User)message.Content);
                             break;
                         case ActionType.CreateConversation:
 
                             break;
                     }
-
+                    void RegisterUser(User user)
+                    {
+                        bool registerResult = dbManager.CreateUser(user);
+                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = registerResult });
+                    }
+                    void LoginUser(User user)
+                    {
+                        User dbUser = dbManager.CheckLogin(user);
+                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });
+                        
+                    }
                 }
             }
             catch (Exception e)
