@@ -83,6 +83,7 @@ namespace Server
                     {
                         User dbUser = dbManager.CheckLogin(user);
                         SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });
+                        
                     }
                 }
             }
