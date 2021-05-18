@@ -9,8 +9,17 @@ using ClientLibrary;
 
 namespace Client.Model
 {
-     class LoginModel
+    class LoginModel
     {
+        public LoginModel()
+        {
+            if (ClientModel.IsConnected)
+            {
+                ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
+                ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
+            }
+        }
+
         private string email;
         private string password;
 
@@ -37,52 +46,55 @@ namespace Client.Model
             }
         }
 
-        public void Send()
+        public void TryLogin()
         {
-            DataWorker.Test();
+            Task.Run(() =>
+            {
+                try
+                {
+                    Validate();
+                    User user = new User
+                    {
+                        Email = email,
+                        Password = Cryptography.Encrypt(password),
+                        Avatar = null,
+                        ConversationConnections = null,
+                        Description = null,
+                        Id = -1,
+                        PhoneNumber = null,
+                        Status = UserStatus.Online,
+                        Username = null
+                    };
 
-            User user = new User {
-                Email = email,
-                Password = Cryptography.Encrypt(password),
-                Avatar = null,
-                ConversationConnections = null,
-                Description = null,
-                Id = -1,
-                PhoneNumber = null,
-                Status = UserStatus.Online,
-                Username = null
-            };
+                    ClientServerMessage message = new ClientServerMessage { Content = user };
+                    message.ActionType = ActionType.LogInUser;
 
-            ClientServerMessage message = new ClientServerMessage { Content = user };
-            message.ActionType = ActionType.LogInUser;
+                    ClientModel.SendMessage(message);
+                    message = ClientModel.Listen();
+
+                    User response = (message.Content as User);
+                    if (response.Id == -1)
+                        return;
+
+                    Console.WriteLine(response.Email + "\n" + (message.Content as User).Username);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            });
         }
-
-        public void LoginUser(User user)
-        {
-            Console.WriteLine(user.Email);
-        }
-
-        public void Validate()
-        {
-            ValidateString(password, "Invalid data", 8, 16);
-            ValidateEmail("Invalid data");
-        }
-
-        private void ValidateString(string str, string exceptionMessage, int from, int to)
-        {
-            if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-                throw new ArgumentException(exceptionMessage);
-        }
-
-        private void ValidateEmail(string exceptionMessage)
+        private void Validate()
         {
             try
             {
                 System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
+                if (string.IsNullOrEmpty(password) || (password.Length < 8 || password.Length > 16))
+                    throw new ArgumentException("Invalid email or password");
             }
             catch (Exception)
             {
-                throw new ArgumentException(exceptionMessage);
+                throw new ArgumentException("Invalid email or password");
             }
         }
     }

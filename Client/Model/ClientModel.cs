@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClientServerLibrary;
+using ClientServerLibrary.DbClasses;
 
 namespace Client.Model
 {
@@ -19,42 +20,25 @@ namespace Client.Model
     {
         private static TcpClient client;
 
-
-        public static void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
+        public static ClientServerMessage Listen()
         {
-            try
+            NetworkStream stream = client.GetStream();
+            byte[] data = new byte[128];
+            List<byte> fullData = new List<byte>();
+            do
             {
-                client = new TcpClient(new IPEndPoint(clientIpAddress, clientPort));
-            }
-            catch (Exception)
-            {
+                stream.Read(data, 0, data.Length);
+                fullData.AddRange(data);
+            } while (stream.DataAvailable);
 
-            }
+            return ClientServerDataManager.Deserialize(fullData.ToArray());
         }
-
-        public static void Connect(IPAddress ipAddress, int port)
-        {
-            if (client != null)
-                client.Connect(new IPEndPoint(ipAddress, port));
-        }
-
         public static void StartListening(ref ClientServerMessage message)
         {
             try
             {
-                NetworkStream stream = client.GetStream();
-                byte[] data = new byte[128];
                 while (true)
-                {
-                    List<byte> fullData = new List<byte>();
-                    do
-                    {
-                        stream.Read(data, 0, data.Length);
-                        fullData.AddRange(data);
-                    } while (stream.DataAvailable);
-
-                    message = ClientServerDataManager.Deserialize(fullData.ToArray());
-                }
+                    message = Listen();
             }
             catch (Exception exc)
             {
@@ -62,23 +46,9 @@ namespace Client.Model
             }
 
         }
-
-        ////view-model part
-        //private static void HandleMessage(ref ClientServerMessage message)
-        //{
-        //    message.Content = "Hello";
-
-        //    ///
-        //    ///
-        //    ///
-        //}
-
-
-
-
-        //Send message
         public static void SendMessage(ClientServerMessage message)
         {
+            if (client != null && client.Connected)
             Task.Run(new Action(() =>
             {
                 try
@@ -94,6 +64,14 @@ namespace Client.Model
             }));
         }
 
+        public static bool IsConnected => client.Connected;
+
+
+
+
+
+
+        // Startup methods
         public static int GetFreeTcpPort()
         {
             TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
@@ -101,6 +79,22 @@ namespace Client.Model
             int port = ((IPEndPoint)listener.LocalEndpoint).Port;
             listener.Stop();
             return port;
+        }
+        public static void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
+        {
+            try
+            {
+                client = new TcpClient(new IPEndPoint(clientIpAddress, clientPort));
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        public static void Connect(IPAddress ipAddress, int port)
+        {
+            if (client != null)
+                client.Connect(new IPEndPoint(ipAddress, port));
         }
     }
 }

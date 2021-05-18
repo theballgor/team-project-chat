@@ -6,78 +6,78 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
+using Client.Model;
 
 namespace Client.ViewsModel
 {
-    //partial class DataManageVM : INotifyPropertyChanged
-    //{
-       
-    //    public RelayCommand Login
-    //    {
-    //        get
-    //        {
-    //            return new RelayCommand(obj =>
-    //            {
-    //                try
-    //                {
-    //                    Validate();
-    //                    Send();
-    //                }
-    //                catch (ArgumentException exc)
-    //                {
-    //                    MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-    //                }
-    //            });
-    //        }
-    //    }
+    class LoginViewModel : INotifyPropertyChanged
+    {
+        private LoginModel loginModel = new LoginModel();
 
-    //    public RelayCommand RegistrationWindow
-    //    {
-    //        get
-    //        {
-    //            return new RelayCommand(obj =>
-    //            {
-    //                try
-    //                {
-    //                    //open reg window 
+        public string Email
+        {
+            get
+            {
+                return loginModel.Email;
+            }
+            set
+            {
+                loginModel.Email = value;
+                OnPropertyChanged("Email");
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                return loginModel.Password;
+            }
+            set
+            {
+                loginModel.Password = value;
+                OnPropertyChanged("Password");
+            }
+        }
+
+        public RelayCommand Login
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    try
+                    {
+                        loginModel.TryLogin();
+                    }
+                    catch (ArgumentException exc)
+                    {
+                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
+            }
+        }
+        public RelayCommand RegistrationWindow
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    try
+                    {
                         
+                    }
+                    catch (ArgumentException exc)
+                    {
+                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
+            }
+        }
 
-    //                }
-    //                catch (ArgumentException exc)
-    //                {
-    //                    MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-    //                }
-    //            });
-    //        }
-    //    }
-
-    //    private void Send()
-    //    {
-    //        MessageBox.Show("Ok");
-    //    }
-
-    //    private void Validate()
-    //    {
-    //        ValidateString(password, "Invalid data", 8, 16);
-    //        ValidateEmail("Invalid data");
-    //    }
-
-    //    private void ValidateString(string str, string exceptionMessage, int from, int to)
-    //    {
-    //        if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-    //            throw new ArgumentException(exceptionMessage);
-    //    }
-
-    //    private void ValidateEmail(string exceptionMessage)
-    //    {
-    //        try
-    //        {
-    //            System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
-    //        }
-    //        catch (Exception)
-    //        {
-    //            throw new ArgumentException(exceptionMessage);
-    //        }
-    //    }
-    //}
+        protected virtual void OnPropertyChanged(string PropertyName)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
 }

@@ -13,66 +13,56 @@ namespace Client.ViewsModel
 {
     class RegistrationViewModel : INotifyPropertyChanged
     {
-
-        
-        private string email;
-        private string username;
-        private string password;
-        private string verifyPassword;
+        private RegistrationModel registrationModel = new RegistrationModel();
 
         public string Email
         {
             get
             {
-                return email;
+                return registrationModel.Email;
             }
             set
             {
-                email = value;
+                registrationModel.Email = value;
                 OnPropertyChanged("Email");
             }
         }
-
         public string Username
         {
             get
             {
-                return username;
+                return registrationModel.Username;
             }
             set
             {
-                username = value;
+                registrationModel.Username = value;
                 OnPropertyChanged("Username");
             }
         }
-
         public string Password
         {
             get
             {
-                return password;
+                return registrationModel.Password;
             }
             set
             {
-                password = value;
+                registrationModel.Password = value;
                 OnPropertyChanged("Password");
             }
         }
-
         public string VerifyPassword
         {
             get
             {
-                return verifyPassword;
+                return registrationModel.VerifyPassword;
             }
             set
             {
-                verifyPassword = value;
+                registrationModel.VerifyPassword = value;
                 OnPropertyChanged("VerifyPassword");
             }
         }
-
-
 
         public RelayCommand RegisterButton
         {
@@ -82,9 +72,7 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        ClientServerMessage message = RegistrationModel.Handle(username, password, verifyPassword, email);
-                        ClientModel.SendMessage(message);
-
+                        registrationModel.TryRegister();
                     }
                     catch (ArgumentException exc)
                     {
@@ -98,7 +86,6 @@ namespace Client.ViewsModel
         {
             PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }
