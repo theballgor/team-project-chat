@@ -11,24 +11,60 @@ using ClientServerLibrary;
 
 namespace Client.ViewsModel
 {
-    partial class DataManageVM : INotifyPropertyChanged
+    class RegistrationViewModel : INotifyPropertyChanged
     {
-        private string verifyPassword;
+        private RegistrationModel registrationModel = new RegistrationModel();
 
+        public string Email
+        {
+            get
+            {
+                return registrationModel.Email;
+            }
+            set
+            {
+                registrationModel.Email = value;
+                OnPropertyChanged("Email");
+            }
+        }
+        public string Username
+        {
+            get
+            {
+                return registrationModel.Username;
+            }
+            set
+            {
+                registrationModel.Username = value;
+                OnPropertyChanged("Username");
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                return registrationModel.Password;
+            }
+            set
+            {
+                registrationModel.Password = value;
+                OnPropertyChanged("Password");
+            }
+        }
         public string VerifyPassword
         {
             get
             {
-                return verifyPassword;
+                return registrationModel.VerifyPassword;
             }
             set
             {
-                verifyPassword = value;
+                registrationModel.VerifyPassword = value;
                 OnPropertyChanged("VerifyPassword");
             }
         }
 
-        public RelayCommand Register
+        public RelayCommand RegisterButton
         {
             get
             {
@@ -36,8 +72,7 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        ClientServerMessage message = RegistrationModel.Handle(username, password, verifyPassword, email);
-                        client.SendMessage(message);
+                        registrationModel.TryRegister();
                     }
                     catch (ArgumentException exc)
                     {
@@ -47,5 +82,10 @@ namespace Client.ViewsModel
             }
         }
 
+        protected virtual void OnPropertyChanged(string PropertyName)
+        {
+            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

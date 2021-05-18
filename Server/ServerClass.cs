@@ -53,6 +53,7 @@ namespace Server
                 {
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
                     ClientServerMessage message = ClientServerDataManager.Deserialize(data);
+                    Console.WriteLine("Message from " + client.Client.RemoteEndPoint);
                     switch (message.ActionType)
                     {
                         case ActionType.SendText:
@@ -65,7 +66,15 @@ namespace Server
 
                             break;
                         case ActionType.RegisterUser:
-                            RegisterUser((User)message.Content);
+                            //RegisterUser((User)message.Content);
+
+
+                            (message.Content as User).Username = "This is register!";
+                            (message.Content as User).Id = 1;
+                            SendMessage(client, ClientServerDataManager.Serialize(message));
+                            Console.WriteLine((message.Content as User).Username + "\t" + (message.Content as User).Email);
+
+
                             break;
                         case ActionType.LogInUser:
                             LoginUser((User)message.Content);
@@ -97,10 +106,10 @@ namespace Server
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 AbortConnection(client);
-                Console.WriteLine(e.Message);
+                Console.WriteLine(client.Client.RemoteEndPoint + "\t disconnected");
             }
         }
     }

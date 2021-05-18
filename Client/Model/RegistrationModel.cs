@@ -10,63 +10,118 @@ using ClientLibrary;
 
 namespace Client.Model
 {
-    static class RegistrationModel
+    class RegistrationModel
     {
-
-        private static ClientServerMessage Pack(string username, string email, string password)
+        public RegistrationModel()
         {
-            password = Cryptography.Encrypt(password);
-            User user = new User { Email = email, Password = password, Username = username };
-
-            return new ClientServerMessage { Content = user, Date = DateTime.Now, ActionType = ActionType.RegisterUser };
+            if (ClientModel.IsConnected)
+            {
+                ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
+                ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
+            }
         }
 
-        private static void Validate(string username, string password, string verifyPassword, string email)
+        private string email;
+        private string username;
+        private string password;
+        private string verifyPassword;
+
+        public string Email
         {
-            ValidateString(username, 4, 25, "Invalid Nickname");
-            ValidateString(password, 8, 16, "Invalid Password");
+            get
+            {
+                return email;
+            }
+            set
+            {
+                email = value;
+            }
+        }
+        public string Username
+        {
+            get
+            {
+                return username;
+            }
+            set
+            {
+                username = value;
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                return password;
+            }
+            set
+            {
+                password = value;
+            }
+        }
+        public string VerifyPassword
+        {
+            get
+            {
+                return verifyPassword;
+            }
+            set
+            {
+                verifyPassword = value;
+            }
+        }
+
+        public void TryRegister()
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    Validate();
+                    User user = new User
+                    {
+                        Email = email,
+                        Password = Cryptography.Encrypt(password),
+                        Avatar = null,
+                        ConversationConnections = null,
+                        Description = null,
+                        Id = -1,
+                        PhoneNumber = null,
+                        Status = UserStatus.Online,
+                        Username = username
+                    };
+
+                    ClientServerMessage message = new ClientServerMessage { Content = user };
+                    message.ActionType = ActionType.RegisterUser;
+
+                    ClientModel.SendMessage(message);
+                    message = ClientModel.Listen();
+
+                    User response = (message.Content as User);
+                    if (response.Id == -1)
+                        return;
+
+                    Console.WriteLine(response.Email + "\n" + (message.Content as User).Username);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            });
+        }
+        private void Validate()
+        {
+            if (string.IsNullOrEmpty(username) || (username.Length < 4 || username.Length > 25))
+                throw new ArgumentException("Invalid Nickname");
+
+            if (string.IsNullOrEmpty(password) || (password.Length < 8 || password.Length > 16))
+                throw new ArgumentException("Invalid Password");
 
             if (password != verifyPassword)
                 throw new ArgumentException("Verify the password");
 
-            if (!ValidateEmail(email))
-                throw new ArgumentException("Invalid Email");
-        }
-
-        private static bool ValidateString(string str, int from, int to, string errorMessage)
-        {
-            if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-                throw new ArgumentException(errorMessage);
-            return true;
-        }
-
-        private static bool ValidateEmail(string email)
-        {
-            try
-            {
-                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public static ClientServerMessage Handle(string username, string password, string verifyPassword, string email)
-        {
-            try
-            {
-                Validate(username, password, verifyPassword, email);
-                ClientServerMessage message = Pack(username, email, password);
-                
-                return message;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            try { System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email); }
+            catch (Exception) { throw new ArgumentException("Invalid Email"); }
         }
     }
 }

@@ -6,12 +6,39 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
+using Client.Model;
 
 namespace Client.ViewsModel
 {
-    partial class DataManageVM : INotifyPropertyChanged
+    class LoginViewModel : INotifyPropertyChanged
     {
-       
+        private LoginModel loginModel = new LoginModel();
+
+        public string Email
+        {
+            get
+            {
+                return loginModel.Email;
+            }
+            set
+            {
+                loginModel.Email = value;
+                OnPropertyChanged("Email");
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                return loginModel.Password;
+            }
+            set
+            {
+                loginModel.Password = value;
+                OnPropertyChanged("Password");
+            }
+        }
+
         public RelayCommand Login
         {
             get
@@ -20,8 +47,7 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        Validate();
-                        Send();
+                        loginModel.TryLogin();
                     }
                     catch (ArgumentException exc)
                     {
@@ -30,7 +56,6 @@ namespace Client.ViewsModel
                 });
             }
         }
-
         public RelayCommand RegistrationWindow
         {
             get
@@ -39,9 +64,7 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        //open reg window 
                         
-
                     }
                     catch (ArgumentException exc)
                     {
@@ -51,33 +74,10 @@ namespace Client.ViewsModel
             }
         }
 
-        private void Send()
+        protected virtual void OnPropertyChanged(string PropertyName)
         {
-            MessageBox.Show("Ok");
+            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
         }
-
-        private void Validate()
-        {
-            ValidateString(password, "Invalid data", 8, 16);
-            ValidateEmail("Invalid data");
-        }
-
-        private void ValidateString(string str, string exceptionMessage, int from, int to)
-        {
-            if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-                throw new ArgumentException(exceptionMessage);
-        }
-
-        private void ValidateEmail(string exceptionMessage)
-        {
-            try
-            {
-                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException(exceptionMessage);
-            }
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
