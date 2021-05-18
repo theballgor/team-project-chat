@@ -19,6 +19,7 @@ namespace Server
         }
         private void LoginUser(User user)
         {
+
             dbManager.CheckLogin(user);
         }
 

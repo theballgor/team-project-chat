@@ -29,7 +29,7 @@ namespace ClientServerLibrary
 
 
     [Serializable]
-    public class ClientServerMessage
+    public struct ClientServerMessage
     {
         public ClientServerMessage(
             object content,
@@ -44,7 +44,6 @@ namespace ClientServerLibrary
 
         }
 
-        public Mutex mutex = new Mutex();
         public object Content { get; set; }
         public object AdditionalContent { get; set; }
         public ActionType ActionType { get; set; }
