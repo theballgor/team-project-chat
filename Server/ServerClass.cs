@@ -14,18 +14,17 @@ namespace Server
     {
         private DbManager dbManager;
         private TcpListener server;
-        private List<KeyValuePair<string, TcpClient>> connectedClients;
+        private List<KeyValuePair<int, TcpClient>> connectedClients;
         private readonly object locker;
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
             locker = new object();
             lock (locker)
-                connectedClients = new List<KeyValuePair<string, TcpClient>>();
+                connectedClients = new List<KeyValuePair<int, TcpClient>>();
             dbManager = new DbManager();
 
         }
-
         public void Connect()
         {
             server.Start();
@@ -44,7 +43,6 @@ namespace Server
                 }
             });
         }
-
         private void ConversationHandler(TcpClient client)
         {
             try
@@ -73,6 +71,18 @@ namespace Server
                         case ActionType.CreateConversation:
                             CreateConversation((Conversation)message.Content);
                             break;
+                        case ActionType.JoinConversation:
+                            JoinConversation((int)message.Content);
+                            break;
+                        case ActionType.AddFriend:
+                            AddFriend((int)message.Content);
+                            break;
+                        case ActionType.GetConversationMessages:
+
+                            break;
+                        case ActionType.FatalError:
+
+                            break;
                     }
                     void RegisterUser(User user)
                     {
@@ -82,18 +92,31 @@ namespace Server
                     void LoginUser(User user)
                     {
                         User dbUser = dbManager.CheckLogin(user);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });                        
+                        if (dbUser != null)
+                            connectedClients.Add(new KeyValuePair<int, TcpClient>(dbUser.Id, client));
+                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });
                     }
                     void CreateConversation(Conversation conversation)
                     {
-                        Conversation dbConversation = dbManager.CreateConversatin(conversation);
+                        Conversation dbConversation = dbManager.CreateConversation(conversation);
                         SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
                     }
-                    void JoinConversation(ConversationConnection conversationConnection)
+                    void JoinConversation(int conversationId)
                     {
-                        //not ended
-                        Conversation dbConversation = dbManager.CreateConversationConnection(conversationConnection);
+                        Conversation conversation = dbManager.GetConversationById(conversationId);
+                        ConversationConnection dbConversation = null;
+                        if (conversation != null)
+                        {
+                            User user = dbManager.GetUserById(GetUserIdByClient(client));
+                            dbConversation = dbManager.CreateConversationConnection(new ConversationConnection() { Conversation = conversation, User = user });
+                        }
                         SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
+                    }
+                    void AddFriend(int friendId)
+                    {
+                        User currentUser = dbManager.GetUserById(GetUserIdByClient(client));
+                        Friendship friendship=new Friendship() {Inviter= currentUser, Requester=dbManager.GetUserById(friendId),InviteTime=DateTime.Now,FriendshipStatus= FriendshipStatus.Pending};
+                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = friendship });
                     }
                 }
             }
