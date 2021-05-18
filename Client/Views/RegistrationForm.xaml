@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="RegistrationForm" Height="450" Width="800">
     <Window.Resources>
-        <viewModel:DataManageVM x:Key="viewSource"></viewModel:DataManageVM>
+        <viewModel:RegistrationViewModel x:Key="viewSource"></viewModel:RegistrationViewModel>
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource viewSource}"></Binding>
@@ -43,7 +43,7 @@
         <RadioButton x:Name="radioButtonLogOn" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center"    VerticalAlignment="Center" IsChecked="True"  Foreground="White">SingUp</RadioButton>
 
         <Button x:Name="buttonNext" Grid.Row="6" Grid.ColumnSpan="2" Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             Background="#FF282E33" Foreground="Gray" BorderThickness="0" Click="buttonNext_Click" Command="{Binding Register}" >Next</Button>
+                             Background="#FF282E33" Foreground="Gray" BorderThickness="0" Click="buttonNext_Click" Command="{Binding RegisterButton}" >Next</Button>
     </Grid>
 </Window>
 
