@@ -12,17 +12,16 @@ namespace Client.ViewsModel
 {
     class LoginViewModel : INotifyPropertyChanged
     {
-        private LoginModel loginModel = new LoginModel();
 
         public string Email
         {
             get
             {
-                return loginModel.Email;
+                return LoginModel.Email;
             }
             set
             {
-                loginModel.Email = value;
+                LoginModel.Email = value;
                 OnPropertyChanged("Email");
             }
         }
@@ -30,11 +29,11 @@ namespace Client.ViewsModel
         {
             get
             {
-                return loginModel.Password;
+                return LoginModel.Password;
             }
             set
             {
-                loginModel.Password = value;
+                LoginModel.Password = value;
                 OnPropertyChanged("Password");
             }
         }
@@ -47,7 +46,10 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        loginModel.TryLogin();
+                        LoginModel.TryLogin();
+
+
+
                     }
                     catch (ArgumentException exc)
                     {
@@ -73,6 +75,8 @@ namespace Client.ViewsModel
                 });
             }
         }
+
+
 
         protected virtual void OnPropertyChanged(string PropertyName)
         {

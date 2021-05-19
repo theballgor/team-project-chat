@@ -9,9 +9,9 @@ using ClientLibrary;
 
 namespace Client.Model
 {
-    class LoginModel
+    static class LoginModel
     {
-        public LoginModel()
+        static LoginModel()
         {
             if (ClientModel.IsConnected)
             {
@@ -20,10 +20,12 @@ namespace Client.Model
             }
         }
 
-        private string email;
-        private string password;
+        public static User user;
 
-        public string Email
+        private static string email;
+        private static string password;
+
+        public static string Email
         {
             get
             {
@@ -34,7 +36,7 @@ namespace Client.Model
                 email = value;
             }
         }
-        public string Password
+        public static string Password
         {
             get
             {
@@ -46,7 +48,7 @@ namespace Client.Model
             }
         }
 
-        public void TryLogin()
+        public static void TryLogin()
         {
             Task.Run(() =>
             {
@@ -70,13 +72,7 @@ namespace Client.Model
                     message.ActionType = ActionType.LogInUser;
 
                     ClientModel.SendMessage(message);
-                    message = ClientModel.Listen();
 
-                    User response = (message.Content as User);
-                    if (response.Id == -1)
-                        return;
-
-                    Console.WriteLine(response.Email + "\n" + (message.Content as User).Username);
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +80,7 @@ namespace Client.Model
                 }
             });
         }
-        private void Validate()
+        private static void Validate()
         {
             try
             {
