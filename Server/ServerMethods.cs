@@ -18,6 +18,21 @@ namespace Server
         private void SendMessage(List<TcpClient> receiverClients, ClientServerMessage message) => SendMessage(receiverClients, ClientServerDataManager.Serialize(message));
         private int GetUserIdByClient(TcpClient client) => connectedClients.Find(u => u.Value == client).Key;
         private TcpClient GetClientByUserId(int userId) => connectedClients.Find(u => u.Key == userId).Value;
+        private List<TcpClient> GetClientsByUsers(User[] users)
+        {
+            List<TcpClient> clients = new List<TcpClient>();
+            foreach (KeyValuePair<int, TcpClient> client in connectedClients)
+            {
+                foreach (var user in users)
+                {
+                    if (client.Key == user.Id)
+                    {
+                        clients.Add(client.Value);
+                    }
+                }
+            }
+            return clients;
+        }
         private void SendMessage(List<TcpClient> receiverClients, byte[] message)
         {
             foreach (TcpClient receiverClient in receiverClients)
@@ -33,6 +48,7 @@ namespace Server
                 }
             }
         }
+
         public void AbortConnection(TcpClient client)
         {
             try

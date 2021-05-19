@@ -8,7 +8,6 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public enum MessageType
     {
-        RegistrationRequest,
         Text,
         Audio,
         File,
@@ -28,7 +27,6 @@ namespace ClientServerLibrary.DbClasses
         public DateTime SendTime { get { return sendTime; } set { sendTime = value; OnPropertyChanged("SendTime"); } }
         [NotMapped]
         private DateTime sendTime;
-
         public bool IsRead { get { return isRead; } set { isRead = value; OnPropertyChanged("IsRead"); } }
         [NotMapped]
         private bool isRead;
@@ -39,7 +37,6 @@ namespace ClientServerLibrary.DbClasses
         public virtual User Sender { get; set; }
         [Column("conversation_id")]
         public virtual Conversation Conversation { get; set; }
-
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
