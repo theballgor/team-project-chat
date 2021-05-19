@@ -10,11 +10,11 @@ using ClientLibrary;
 
 namespace Client.Model
 {
-    internal class RegistrationModel
+    class RegistrationModel
     {
         public RegistrationModel()
         {
-            if (!ClientModel.IsConnected)
+            if (ClientModel.IsConnected)
             {
                 ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
                 ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
@@ -77,7 +77,7 @@ namespace Client.Model
             {
                 try
                 {
-                    //Validate();
+                    Validate();
                     User user = new User
                     {
                         Email = email,
