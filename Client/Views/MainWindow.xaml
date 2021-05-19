@@ -6,7 +6,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Client"
         xmlns:customcontrols="clr-namespace:Client.CustomerControls"
-        xmlns:viewmodels="clr-namespace:Client.ViewsModel"
+        xmlns:views="clr-namespace:Client.Views"
+        xmlns:viewmodels="clr-namespace:Client.ViewsModel" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         x:Name="mainWindow"
         AllowsTransparency="True"
@@ -180,8 +181,18 @@
                     </Grid>
                 </Border>
 
+                <ContentControl Content="{Binding CurrentViewModel}" Grid.Row="1">
+                    <ContentControl.Resources>
+                        <DataTemplate DataType="{x:Type viewmodels:AccountViewModel}">
+                            <views:MainView/>
+                        </DataTemplate>
+                    </ContentControl.Resources>
+                </ContentControl>
+
+                <!--<views:MainView Grid.Row="2"></views:MainView>-->
+
                 <!--Log out Button-->
-                <StackPanel Grid.Row="1"
+                <!--<StackPanel Grid.Row="1"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             Margin="23 6"
@@ -194,7 +205,7 @@
                     </Button>
                 </StackPanel>
 
-                <!--Setting Owner Menu-->
+                --><!--Setting Owner Menu--><!--
                 <Grid x:Name="GridMenu"
                       Margin="-260 0 0 0"
                       HorizontalAlignment="Left"
@@ -221,7 +232,7 @@
                             </TransformGroup>
                         </StackPanel.RenderTransform>
 
-                        <!--<Avatar-->
+                        --><!--<Avatar--><!--
                         <Button Background="{x:Null}" BorderBrush="{x:Null}" Height="Auto" Margin="0 8" Width="103" >
                             <Rectangle RadiusX="8" 
                                        RadiusY="5"
@@ -235,17 +246,17 @@
                                 </Rectangle.Fill>
                             </Rectangle>
                         </Button>
-                        <!--User name-->
+                        --><!--User name--><!--
                         <TextBlock Foreground="#9E9E9E"
                                    FontFamily="Fonts/#Gudea"
                                    TextAlignment="Center"
                                    Text="USER NAME">
                         </TextBlock>
-                        <!--Line-->
+                        --><!--Line--><!--
                         <Line Stroke="#FF626262" StrokeThickness="0.8"  X1="0" X2="200" Margin="0 15"></Line>
                     </StackPanel>
 
-                    <!--Setting Button bar-->
+                    --><!--Setting Button bar--><!--
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80"></ColumnDefinition>
@@ -253,12 +264,12 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <!--Notifications Button-->
+                            --><!--Notifications Button--><!--
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
                                     Background="#FF111111" Height="30" Width="30" Margin="0 4">
                                 <materialDesign:PackIcon Kind="Notifications"></materialDesign:PackIcon>
                             </Button>
-                            <!--Account settings Button-->
+                            --><!--Account settings Button--><!--
                             <Button Margin="0 4" Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
                                     Background="#FF111111" Height="30" Width="30">
                                 <materialDesign:PackIcon Kind="AccountSettings"></materialDesign:PackIcon>
@@ -273,7 +284,7 @@
                             </Button>
                         </StackPanel>
 
-                        <!--Button Descriptions-->
+                        --><!--Button Descriptions--><!--
                         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" >
                             <Label Content="notifications"
                                    FontFamily="Fonts/Gueda"
@@ -304,7 +315,7 @@
 
                     </Grid>
 
-                    <!--Line-->
+                    --><!--Line--><!--
                     <Line Grid.Row="2" Stroke="#FF626262" StrokeThickness="0.8"  X1="0" X2="200" HorizontalAlignment="Center" Margin="0 10"></Line>
 
                     <Border Grid.Row="3">
@@ -317,7 +328,7 @@
                     </Border>
 
 
-                    <!--Settings Button-->
+                    --><!--Settings Button-->
                     <!--<Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton }"
                                 Width="40" 
                                 Height="40"
@@ -333,13 +344,13 @@
                                 Height="35"
                                 Background="Black">
                             <materialDesign:PackIcon Kind="InfoCircle"></materialDesign:PackIcon>
-                        </Button>-->
+                        </Button>--><!--
 
 
 
                 </Grid>
 
-                <!--Chat-->
+                --><!--Chat--><!--
                 <Border x:Name="GridMain" Width="Auto" Grid.Row="1" Margin="0">
                     <Grid >
                         <Grid.RowDefinitions>
@@ -347,27 +358,27 @@
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
-                            <!--Column for contact chat list-->
+                            --><!--Column for contact chat list--><!--
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <!--Conversation-->
+                            --><!--Conversation--><!--
                             <ColumnDefinition></ColumnDefinition>
-                            <!--Profile info-->
+                            --><!--Profile info--><!--
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
 
-                        <!--#region Chat list-->
+                        --><!--#region Chat list--><!--
                         <Grid Grid.Row="0" MinWidth="320" Margin="10 10 0 0" Grid.ColumnSpan="1">
                             <Grid.RowDefinitions>
-                                <!--Menu bar-->
+                                --><!--Menu bar--><!--
                                 <RowDefinition Height="54"></RowDefinition>
-                                <!--Title & search option-->
+                                --><!--Title & search option--><!--
                                 <RowDefinition Height="Auto"></RowDefinition>
-                                <!--Chats List-->
+                                --><!--Chats List--><!--
                                 <RowDefinition></RowDefinition>
                             </Grid.RowDefinitions>
 
-                            <!--Menu bar button-->
+                            --><!--Menu bar button--><!--
                             <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition></ColumnDefinition>
@@ -376,20 +387,20 @@
                                 </Grid.ColumnDefinitions>
 
 
-                                <!--<ToggleButton
+                                --><!--<ToggleButton
                                           Style="{StaticResource MaterialDesignActionToggleButton}"
                                           ToolTip="MaterialDesignActionLightToggleButton"
                                           Content="{materialDesign:PackIcon Kind=EmoticonSad}"
                                           materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=EmoticonHappy}" />-->
 
-                                <!--Menu Button Open-->
+                                <!--Menu Button Open--><!--
                                 <ToggleButton x:Name="buttonOpenMenu"
                                           Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                                           Foreground="#00897B"
                                           Checked="ButtonOpenMenu_Checked"
                                           Unchecked="ButtonOpenMenu_Unchecked">
                                 </ToggleButton>
-                                <!--Create chat-->
+                                --><!--Create chat--><!--
                                 <Button Grid.Column="1"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                                     Margin="25 0"
@@ -398,7 +409,7 @@
                                     Foreground="#00897B">
                                     <materialDesign:PackIcon Kind="Forum" Width="28" Height="28"></materialDesign:PackIcon>
                                 </Button>
-                                <!--Friends list-->
+                                --><!--Friends list--><!--
                                 <Button Grid.Column="2"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                                     BorderBrush="Transparent"
@@ -407,7 +418,7 @@
                                 </Button>
                             </Grid>
 
-                            <!--Search field-->
+                            --><!--Search field--><!--
                             <Grid Grid.Row="1"
                               Margin="2">
                                 <TextBox Margin="20 10" 
@@ -417,7 +428,7 @@
                                 <customcontrols:GlowFrame Foreground="white" CornerRadius="8" Margin="0"></customcontrols:GlowFrame>
                             </Grid>
 
-                            <!--Contact list-->
+                            --><!--Contact list-->
                             <!--<Border Grid.Row="1">
                         <materialDesign:Flipper VerticalAlignment="Center" Margin="7,5,6,4" Height="44">
                             <materialDesign:Flipper.FrontContent >
@@ -461,24 +472,24 @@
                         </materialDesign:Flipper>
                     </Border>-->
 
-                            <!--Chat list-->
+                            <!--Chat list--><!--
                             <Border Grid.Row="2" Margin="0 10 0 0">
                                 <customcontrols:ChatList></customcontrols:ChatList>
                             </Border>
                         </Grid>
-                        <!--#end region-->
+                        --><!--#end region-->
 
 
-                        <!--#region Conversation Screen-->
+                        <!--#region Conversation Screen--><!--
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
-                                <!--Conversation header-->
+                                --><!--Conversation header--><!--
                                 <RowDefinition Height="Auto"></RowDefinition>
-                                <!--Body-->
+                                --><!--Body--><!--
                                 <RowDefinition></RowDefinition>
-                                <!--Reply-->
+                                --><!--Reply--><!--
                                 <RowDefinition Height="Auto"></RowDefinition>
-                                <!--Send Message Box-->
+                                --><!--Send Message Box--><!--
                                 <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
 
@@ -491,24 +502,24 @@
                             VerticalAlignment="Center">
 
                                     <Grid.ColumnDefinitions>
-                                        <!--Contact header name& Online Status-->
+                                        --><!--Contact header name& Online Status--><!--
                                         <ColumnDefinition ></ColumnDefinition>
-                                        <!--Video call button-->
+                                        --><!--Video call button--><!--
                                         <ColumnDefinition Width="40"></ColumnDefinition>
-                                        <!--CallButton-->
+                                        --><!--CallButton--><!--
                                         <ColumnDefinition Width="40"></ColumnDefinition>
-                                        <!--More options-->
+                                        --><!--More options--><!--
                                         <ColumnDefinition Width="50"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
 
-                                    <!--Contact Info Button-->
+                                    --><!--Contact Info Button--><!--
                                     <Button
                                 Template="{StaticResource contactInfoButtonTemplate}"
                                 Height="Auto">
                                     </Button>
 
 
-                                    <!--Video call Button-->
+                                    --><!--Video call Button--><!--
                                     <Button
                                 Grid.Column="1"
                                 Background="Black"
@@ -523,7 +534,7 @@
                                         <materialDesign:PackIcon Kind="Video" ></materialDesign:PackIcon>
                                     </Button>
 
-                                    <!--Call Button-->
+                                    --><!--Call Button--><!--
                                     <Button
                                 Grid.Column="2"
                                 Background="Black"
@@ -538,7 +549,7 @@
                                         <materialDesign:PackIcon Kind="Call" ></materialDesign:PackIcon>
                                     </Button>
 
-                                    <!--More options Button-->
+                                    --><!--More options Button--><!--
                                     <ToggleButton
                                 Grid.Column="3"
                                 Background="Black"
@@ -554,13 +565,13 @@
                                         <materialDesign:PackIcon Kind="MoreVert"></materialDesign:PackIcon>
                                     </ToggleButton>
                                 </Grid>
-                                <!--Click="OpenContactInfoWindow_Click"-->
+                                --><!--Click="OpenContactInfoWindow_Click"--><!--
                             </Border>
 
-                            <!--Conversation Messages Body-->
+                            --><!--Conversation Messages Body--><!--
                             <customcontrols:Conversation Grid.Row="1" Margin="10 8 10 0"/>
 
-                            <!--D label-->
+                            --><!--D label--><!--
                             <Label Grid.Row="1" 
                                Background="Transparent" 
                                Foreground="#232323" 
@@ -572,19 +583,19 @@
                                FontFamily="Fonts/#Audiowide">
                             </Label>
 
-                            <!--#region TextBox to send message-->
+                            --><!--#region TextBox to send message--><!--
                             <Grid Grid.Row="3">
                                 <Border Height="48"
                                     Margin="10 8"
                                     Background="#1D1D1D"
                                     CornerRadius="0 0 8 8">
-                                    <!--BorderBrush="#607D8B"-->
+                                    --><!--BorderBrush="#607D8B"--><!--
 
                                     <Grid >
                                         <Grid.ColumnDefinitions>
-                                            <!--TextBox-->
+                                            --><!--TextBox--><!--
                                             <ColumnDefinition></ColumnDefinition>
-                                            <!--Attachment Button-->
+                                            --><!--Attachment Button--><!--
                                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                                         </Grid.ColumnDefinitions>
 
@@ -601,10 +612,10 @@
                                     Style="{StaticResource MaterialDesignTextBox}"
                                     materialDesign:HintAssist.Hint="Message">
                                         </TextBox>
-                                        <!--Text="{Binding MessageText}"-->
+                                        --><!--Text="{Binding MessageText}"--><!--
 
                                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                            <!--ToDo Commands-->
+                                            --><!--ToDo Commands--><!--
                                             <Button
                                         x:Name="sendMessage"
                                         Margin="3 0"
@@ -671,20 +682,21 @@
                                 </Border>
 
                             </Grid>
-                            <!--#endregion-->
+                            --><!--#endregion-->
 
-                            <!--#region contact info-->
+                            <!--#region contact info--><!--
                             <customcontrols:ContactInfo x:Name="ContactInfoScreen"
                                                     Visibility="Collapsed"
                                                     FontFamily="Fonts/#Audiowide"
                                                     Grid.RowSpan="2"
                         />
-                            <!--#endregion-->
+                            --><!--#endregion--><!--
 
                         </Grid>
-                        <!--#endregion-->
+                        --><!--#endregion--><!--
                     </Grid>
-                </Border>
+                </Border>-->
+                
             </Grid>
         </Border>
     </Border>

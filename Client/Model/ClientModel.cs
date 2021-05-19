@@ -14,7 +14,7 @@ namespace Client.Model
     /// LOGIC
     /// зв'язок клієнта з сервером
     /// </summary>
-    class ClientModel
+    public class ClientModel
     {
         private  TcpClient client = new TcpClient();
 

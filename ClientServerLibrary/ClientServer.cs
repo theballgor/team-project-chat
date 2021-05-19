@@ -26,6 +26,21 @@ namespace ClientServerLibrary
         Success,
     }
 
+    // Enum відповідальний за реєстрацію
+    public enum RegistrationResult
+    { 
+        //Якщо успішно
+        Success,
+        //Якщо пароль невірний
+        PasswordDoNotMatch,
+        //Якщо e-mail уже існує
+        EmailAlreadyExists,
+        //Якщо user (nick name) уже існує
+        UserNameAlreadyExists
+    }
+
+
+
 
     [Serializable]
     public struct ClientServerMessage

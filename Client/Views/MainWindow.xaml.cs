@@ -57,56 +57,58 @@ namespace Client
         {
             Application.Current.Shutdown();
         }
-        private void OpenContactInfoWindow_Click(object sender, RoutedEventArgs e)
-        {
-            ContactInfoScreen.Visibility = Visibility.Visible;
+        //private void OpenContactInfoWindow_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ContactInfoScreen.Visibility = Visibility.Visible;
 
-            //Window window = new Window
-            //{
-            //    Content = new ContactInfo(),
-            //    SizeToContent = SizeToContent.WidthAndHeight,
-            //    ResizeMode = ResizeMode.NoResize
-            //};
+        //    //Window window = new Window
+        //    //{
+        //    //    Content = new ContactInfo(),
+        //    //    SizeToContent = SizeToContent.WidthAndHeight,
+        //    //    ResizeMode = ResizeMode.NoResize
+        //    //};
 
-            //window.ShowDialog();
-        }
+        //    //window.ShowDialog();
+        //}
 
-        private void PopupBox_Opened(object sender, RoutedEventArgs e)
-        {
-            PopupBox.IsPopupOpen = true;
-        }
-        private void PopupBox_Closed(object sender, RoutedEventArgs e)
-        {
-            PopupBox.IsPopupOpen = false;
-        }
+        //private void PopupBox_Opened(object sender, RoutedEventArgs e)
+        //{
+        //    PopupBox.IsPopupOpen = true;
+        //}
+        //private void PopupBox_Closed(object sender, RoutedEventArgs e)
+        //{
+        //    PopupBox.IsPopupOpen = false;
+        //}
 
-        private void ButtonOpenMenu_Checked(object sender, RoutedEventArgs e)
-        {
-            var animation = (Storyboard)FindResource("OpenMenu");
-            animation.Begin(this);
+        //private void ButtonOpenMenu_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    var animation = (Storyboard)FindResource("OpenMenu");
+        //    animation.Begin(this);
 
-            var border = (Border)FindName("GridMain");
-            border.BorderBrush = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60));
-            border.CornerRadius = new CornerRadius(6);
-            border.BorderThickness = new Thickness(2);
+        //    var border = (Border)FindName("GridMain");
+        //    border.BorderBrush = new SolidColorBrush(Color.FromArgb(100, 60, 60, 60));
+        //    border.CornerRadius = new CornerRadius(6);
+        //    border.BorderThickness = new Thickness(2);
 
-            //Button okButton = (Button)this.FindName("PART_OK")
 
-            //myBorder1 = new Border();
-            //myBorder1.BorderBrush = Brushes.SlateBlue;
-            //myBorder1.BorderThickness = new Thickness(5, 10, 15, 20);
-            //myBorder1.Background = Brushes.AliceBlue;
-            //myBorder1.Padding = new Thickness(5);
-            //myBorder1.CornerRadius = new CornerRadius(15);
-        }
+        //    /////////////////////
+        //    //Button okButton = (Button)this.FindName("PART_OK")
 
-        private void ButtonOpenMenu_Unchecked(object sender, RoutedEventArgs e)
-        {
-            var animation = (Storyboard)FindResource("CloseMenu");
-            animation.Begin(this);
+        //    //myBorder1 = new Border();
+        //    //myBorder1.BorderBrush = Brushes.SlateBlue;
+        //    //myBorder1.BorderThickness = new Thickness(5, 10, 15, 20);
+        //    //myBorder1.Background = Brushes.AliceBlue;
+        //    //myBorder1.Padding = new Thickness(5);
+        //    //myBorder1.CornerRadius = new CornerRadius(15);
+        //}
 
-            var border = (Border)FindName("GridMain");
-            border.BorderBrush = Brushes.Transparent;
-        }
+        //private void ButtonOpenMenu_Unchecked(object sender, RoutedEventArgs e)
+        //{
+        //    var animation = (Storyboard)FindResource("CloseMenu");
+        //    animation.Begin(this);
+
+        //    var border = (Border)FindName("GridMain");
+        //    border.BorderBrush = Brushes.Transparent;
+        //}
     }
 }
