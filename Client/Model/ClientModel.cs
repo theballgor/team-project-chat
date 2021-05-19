@@ -16,7 +16,11 @@ namespace Client.Model
     /// LOGIC
     /// зв'язок клієнта з сервером
     /// </summary>
-    public static class ClientModel
+    /// 
+
+
+
+    internal static class ClientModel
     {
         private static TcpClient client;
 
@@ -33,12 +37,15 @@ namespace Client.Model
 
             return ClientServerDataManager.Deserialize(fullData.ToArray());
         }
+
         public static void StartListening(ref ClientServerMessage message)
         {
             try
             {
                 while (true)
-                    message = Listen();
+                {
+                    DataWorker.Handle(Listen());
+                }
             }
             catch (Exception exc)
             {
@@ -64,7 +71,16 @@ namespace Client.Model
             }));
         }
 
-        public static bool IsConnected => client.Connected;
+        public static bool IsConnected
+        {
+            get
+            {
+                if (client != null)
+                    return client.Connected;
+                else
+                    return false;
+            }
+        }
 
 
 

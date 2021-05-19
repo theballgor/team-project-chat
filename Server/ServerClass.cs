@@ -66,18 +66,14 @@ namespace Server
 
                             break;
                         case ActionType.RegisterUser:
-                            //RegisterUser((User)message.Content);
 
-
-                            (message.Content as User).Username = "This is register!";
-                            (message.Content as User).Id = 1;
-                            SendMessage(client, ClientServerDataManager.Serialize(message));
-                            Console.WriteLine((message.Content as User).Username + "\t" + (message.Content as User).Email);
-
-
+                            RegisterUser((User)message.Content);
+                            Console.WriteLine(((User)message.Content).Email + "Registered");
                             break;
                         case ActionType.LogInUser:
                             LoginUser((User)message.Content);
+
+                            Console.WriteLine(((User)message.Content).Email + "Logined");
                             break;
                         case ActionType.CreateConversation:
                             CreateConversation((Conversation)message.Content);
@@ -98,12 +94,12 @@ namespace Server
                         Conversation dbConversation = dbManager.CreateConversatin(conversation);
                         SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
                     }
-                    void JoinConversation(ConversationConnection conversationConnection)
-                    {
-                        //not ended
-                        Conversation dbConversation = dbManager.CreateConversationConnection(conversationConnection);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
-                    }
+                    //void JoinConversation(ConversationConnection conversationConnection)
+                    //{
+                    //    //not ended
+                    //    Conversation dbConversation = dbManager.CreateConversationConnection(conversationConnection);
+                    //    SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
+                    //}
                 }
             }
             catch (Exception)

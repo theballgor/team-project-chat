@@ -9,21 +9,21 @@ using ClientLibrary;
 
 namespace Client.Model
 {
-    class LoginModel
+    internal static class LoginModel
     {
-        public LoginModel()
+        static LoginModel()
         {
-            if (ClientModel.IsConnected)
+            if (!ClientModel.IsConnected)
             {
                 ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
                 ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
             }
         }
 
-        private string email;
-        private string password;
+        static private string email;
+        static private string password;
 
-        public string Email
+        static public string Email
         {
             get
             {
@@ -34,7 +34,7 @@ namespace Client.Model
                 email = value;
             }
         }
-        public string Password
+        static public string Password
         {
             get
             {
@@ -46,7 +46,12 @@ namespace Client.Model
             }
         }
 
-        public void TryLogin()
+        static public User User;
+
+        /// <summary>
+        /// Відправка даних залогінення на сервер та отримує i розпаковує отримані дані
+        /// </summary>
+        static public void TryLogin()
         {
             Task.Run(() =>
             {
@@ -70,13 +75,10 @@ namespace Client.Model
                     message.ActionType = ActionType.LogInUser;
 
                     ClientModel.SendMessage(message);
-                    message = ClientModel.Listen();
 
-                    User response = (message.Content as User);
-                    if (response.Id == -1)
-                        return;
+                    /// ГОЛОВНА СТОРІНКА ПОЧИНАЄТЬСЯ ТУТ З ДАНИМИ У ОБ'ЄКТІ [response]
+                    /// 
 
-                    Console.WriteLine(response.Email + "\n" + (message.Content as User).Username);
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +86,10 @@ namespace Client.Model
                 }
             });
         }
-        private void Validate()
+
+
+
+        static private void Validate()
         {
             try
             {

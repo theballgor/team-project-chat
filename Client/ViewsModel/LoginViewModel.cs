@@ -7,13 +7,12 @@ using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
 using Client.Model;
+using ClientServerLibrary.DbClasses;
 
 namespace Client.ViewsModel
 {
     class LoginViewModel : INotifyPropertyChanged
     {
-        private LoginModel loginModel = new LoginModel();
-
         public string Email
         {
             get
@@ -30,14 +29,16 @@ namespace Client.ViewsModel
         {
             get
             {
-                return loginModel.Password;
+                return LoginModel.Password;
             }
             set
             {
-                loginModel.Password = value;
+                LoginModel.Password = value;
                 OnPropertyChanged("Password");
             }
         }
+
+
 
         public RelayCommand Login
         {
@@ -47,7 +48,11 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        loginModel.TryLogin();
+                        LoginModel.TryLogin();
+
+
+
+                        // ROUTE(LoginModel.User);
                     }
                     catch (ArgumentException exc)
                     {
