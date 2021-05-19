@@ -72,6 +72,7 @@
     <Compile Include="Database\IGenericRepository.cs" />
     <Compile Include="Database\Repositories.cs" />
     <Compile Include="DbManager.cs" />
+    <Compile Include="Database\Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerClass.cs" />
@@ -80,6 +81,10 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Files\MessageFiles\Files\" />
+    <Folder Include="Files\MessageFiles\Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
