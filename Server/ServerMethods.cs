@@ -13,36 +13,42 @@ namespace Server
 {
    partial class ServerClass
     {
-        private void RegisterUser(User user)
+        private void SendMessage(TcpClient receiverClient, byte[] message) => receiverClient.GetStream().Write(message, 0, message.Length);
+        private void SendMessage(TcpClient receiverClient, ClientServerMessage message) => SendMessage(receiverClient, ClientServerDataManager.Serialize(message));
+        private void SendMessage(List<TcpClient> receiverClients, ClientServerMessage message) => SendMessage(receiverClients, ClientServerDataManager.Serialize(message));
+        private int GetUserIdByClient(TcpClient client) => connectedClients.Find(u => u.Value == client).Key;
+        private TcpClient GetClientByUserId(int userId) => connectedClients.Find(u => u.Key == userId).Value;
+        private List<TcpClient> GetClientsByUsers(User[] users)
         {
-            Console.WriteLine(dbManager.CreateUser(user));
-        }
-        private void LoginUser(User user)
-        {
-            dbManager.CheckLogin(user);
-        }
-
-
-        private void SendMessage(TcpClient receiverClient, byte[] message)
-        {
-            receiverClient.GetStream().Write(message, 0, message.Length);
+            List<TcpClient> clients = new List<TcpClient>();
+            foreach (KeyValuePair<int, TcpClient> client in connectedClients)
+            {
+                foreach (var user in users)
+                {
+                    if (client.Key == user.Id)
+                    {
+                        clients.Add(client.Value);
+                    }
+                }
+            }
+            return clients;
         }
         private void SendMessage(List<TcpClient> receiverClients, byte[] message)
         {
             foreach (TcpClient receiverClient in receiverClients)
             {
-                foreach (KeyValuePair<string, TcpClient> client in connectedClients)
+                foreach (KeyValuePair<int, TcpClient> client in connectedClients)
                 {
                     TcpClient tmpClient = client.Value;
                     if (receiverClient == tmpClient)
                     {
                         tmpClient.GetStream().Write(message, 0, message.Length);
-                        Console.WriteLine("Send");
                         break;
                     }
                 }
             }
         }
+
         public void AbortConnection(TcpClient client)
         {
             try
@@ -62,13 +68,13 @@ namespace Server
                 Console.WriteLine(e.Message);
             }
         }
-        public void AbortConnection(string login)
+        public void AbortConnection(int userId)
         {
             try
             {
                 for (int i = 0; i < connectedClients.Count; i++)
                 {
-                    if (connectedClients[i].Key == login)
+                    if (connectedClients[i].Key == userId)
                     {
                         Console.WriteLine($"User {connectedClients[i].Key} aborted connection");
                         connectedClients.RemoveAt(i);
