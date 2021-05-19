@@ -16,15 +16,19 @@ namespace ClientServerLibrary
     [Serializable]
     public enum ActionType
     {
-        SendText,
-        SendAudio,
-        SendFile,
+        SendConversationMessage,
+        SendFriendRequest,
         RegisterUser,
         LogInUser,
         CreateConversation,
         JoinConversation,
-        AddFriend,
+       
         GetConversationMessages,
+        GetUserConversations,
+        GetConversationUsers,
+        GetUserFriendshhips,
+        GetUserInfo,
+
         FatalError,
     }
 
