@@ -115,6 +115,18 @@ namespace Server
             }
       
         }
+        public Message[] GetAllConversationMessages(Conversation conversation)
+        {
+            try
+            {
+                IGenericRepository<Message> friendshipRepo = work.Repository<Message>();
+                return friendshipRepo.FindAll(item => item.Conversation == conversation).ToArray();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         // create
         public bool CreateUser(User user)
         {
