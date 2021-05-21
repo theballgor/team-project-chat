@@ -6,25 +6,15 @@ using System.Threading.Tasks;
 using ClientServerLibrary;
 using ClientServerLibrary.DbClasses;
 using ClientLibrary;
+using System.ComponentModel;
 
 namespace Client.Model
 {
     static class LoginModel
     {
-        static LoginModel()
-        {
-            if (ClientModel.IsConnected)
-            {
-                ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
-                ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
-            }
-        }
-
-        public static User user;
-
+        // Fields
         private static string email;
         private static string password;
-
         public static string Email
         {
             get
@@ -48,6 +38,16 @@ namespace Client.Model
             }
         }
 
+        // Event
+        public static event EventHandler LoginSucces;
+
+        // Notyfier
+        public static void Notify(User user)
+        {
+            LoginSucces(null, new ViewModelEventArgs { Content = user });
+        }
+
+        // Methods
         public static void TryLogin()
         {
             Task.Run(() =>
@@ -94,4 +94,6 @@ namespace Client.Model
             }
         }
     }
+
+
 }

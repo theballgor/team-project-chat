@@ -1,6 +1,8 @@
-﻿using Client.Store;
+﻿using Client.Model;
+using Client.Store;
 using Client.Stores;
 using Client.ViewsModel;
+using ClientServerLibrary;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -18,9 +20,12 @@ namespace Client
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            ClientModelStore clientModelStore = new ClientModelStore();
+            ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
+            ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
+            ClientModel.StartListening();
+
             NavigationStore navigationStore = new NavigationStore();
-            navigationStore.CurrentViewModel = new LoginViewModel(clientModelStore, navigationStore);
+            navigationStore.CurrentViewModel = new LoginViewModel(navigationStore);
             MainWindow = new MainWindow()
             {
                 DataContext = new MainViewModel(navigationStore)
