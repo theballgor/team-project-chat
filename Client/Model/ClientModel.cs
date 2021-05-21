@@ -41,7 +41,7 @@ namespace Client.Model
 
         public void StartListening()
         {
-            Task.Run(new Action(() =>
+            Task.Run(new Action(() => 
             {
                 try
                 {

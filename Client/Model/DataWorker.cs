@@ -12,7 +12,17 @@ namespace Client.Model
 {
     public static class DataWorker
     {
+
+        public static event EventHandler<ReceivingDataEcentArgs> ReceivingDataEvent;
+        public class ReceivingDataEcentArgs : EventArgs
+        {
+            public ReceivingDataEcentArgs(object data) => Data = data ?? throw new ArgumentNullException(nameof(data));
+            public object Data { get; }
+        }
+
+
         public static User _user;
+
         public static void Handle(ClientServerMessage message)
         {
             switch (message.ActionType)
@@ -25,7 +35,7 @@ namespace Client.Model
                     break;
                 case ActionType.LogInUser:
 
-                    _user = Login(message);
+                ReceivingDataEvent?.Invoke(null, new ReceivingDataEcentArgs(Login(message)));
 
                     break;
                 case ActionType.CreateConversation:
@@ -56,6 +66,8 @@ namespace Client.Model
             else
                 return null;
         }
+
+
 
     }
 }

@@ -24,6 +24,7 @@ namespace Client.Commands
 
         public LoginCommand(LoginViewModel loginViewModel, NavigationService<AccountViewModel> navigationService, LoginModel loginModel)
         {
+            DataWorker.ReceivingDataEvent += DataWorker_ReceivingDataEvent;
             _loginViewModel = loginViewModel;
             _loginModel = loginModel;
             _navigationService = navigationService;
@@ -34,25 +35,11 @@ namespace Client.Commands
         {
 
             _loginModel.TryLogin( _loginViewModel.Username, _loginViewModel.Password);
-
-            Thread.Sleep(10000);
-
-            User user = DataWorker._user;
-
-
-            if (_userStore.CurrentUserModel!=null)
-            { 
-
-            }
-
-            
+            Thread.Sleep(5000);
 
 
 
-
-
-            
-
+  
             //ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
             //ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
 
@@ -62,8 +49,16 @@ namespace Client.Commands
 
 
 
-            _navigationService.Navigate();
+            //_navigationService.Navigate();
 
         }
+            void DataWorker_ReceivingDataEvent(object sender, DataWorker.ReceivingDataEcentArgs e)
+            {
+                User user = (User)e.Data;
+
+                if(user!=null)
+                    _navigationService.Navigate();
+            }
+
     }
 }

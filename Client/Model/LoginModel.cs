@@ -39,7 +39,7 @@ namespace Client.Model
                     User user = new User
                     {
                         Email = email,
-                        Password = Cryptography.Encrypt(password),
+                        Password = password,
                         Avatar = null,
                         ConversationConnections = null,
                         Description = null,

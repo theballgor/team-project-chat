@@ -51,6 +51,7 @@ namespace Server
             {
                 while (true)
                 {
+
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
                     ClientServerMessage clientServerMessage = ClientServerDataManager.Deserialize(data);
                     switch (clientServerMessage.ActionType)
