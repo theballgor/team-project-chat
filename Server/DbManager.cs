@@ -23,7 +23,7 @@ namespace Server
             try
             {
                 IGenericRepository<User> userRepo = work.Repository<User>();
-                User dbUser= userRepo.FindAll(User => User.Username == user.Username && User.Password == user.Username).First();
+                User dbUser = userRepo.FindAll(User => User.Username == user.Username && User.Password == user.Username).First();
                 Console.WriteLine("user logined");
                 return dbUser;
             }
@@ -113,7 +113,7 @@ namespace Server
             {
                 return null;
             }
-      
+
         }
         // create
         public bool CreateUser(User user)

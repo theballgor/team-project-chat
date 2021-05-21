@@ -1,12 +1,8 @@
-﻿using Client.Store;
+﻿
+using Client.Model;
+using Client.Store;
 using Client.Stores;
 using Client.ViewsModel;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Client
@@ -28,6 +24,7 @@ namespace Client
             MainWindow.Show();
 
             base.OnStartup(e);
+
         }
     }
 }

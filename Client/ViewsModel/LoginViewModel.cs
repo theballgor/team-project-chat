@@ -7,77 +7,53 @@ using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
 using Client.Model;
+using System.Windows.Input;
+using Client.Stores;
+using Client.Store;
+using Client.Services;
+using ClientServerLibrary;
 
 namespace Client.ViewsModel
 {
-    class LoginViewModel : INotifyPropertyChanged
+    public class LoginViewModel : ViewModelBase
     {
-        private LoginModel loginModel = new LoginModel();
 
-        public string Email
+        private string _username;
+        public string Username
         {
-            get
-            {
-                return loginModel.Email;
-            }
-            set
-            {
-                loginModel.Email = value;
-                OnPropertyChanged("Email");
+            get { return _username; }
+            set 
+            { 
+                _username = value;
+                OnPropertyChanged(nameof(Username));
             }
         }
+
+        private string _password;
         public string Password
         {
-            get
-            {
-                return loginModel.Password;
-            }
-            set
-            {
-                loginModel.Password = value;
-                OnPropertyChanged("Password");
+            get { return _password; }
+            set 
+            { 
+                _password = value;
+                OnPropertyChanged(nameof(Password));
             }
         }
 
-        public RelayCommand Login
-        {
-            get
-            {
-                return new RelayCommand(obj =>
-                {
-                    try
-                    {
-                        loginModel.TryLogin();
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                });
-            }
-        }
-        public RelayCommand RegistrationWindow
-        {
-            get
-            {
-                return new RelayCommand(obj =>
-                {
-                    try
-                    {
-                        
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                });
-            }
-        }
+        public ICommand LoginCommand { get; }
 
-        protected virtual void OnPropertyChanged(string PropertyName)
+        LoginModel loginModel;
+
+
+        public LoginViewModel(ClientModelStore clientModelStore, NavigationStore navigationStore)
         {
-            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+            NavigationService<AccountViewModel> navigationService = new NavigationService<AccountViewModel>(
+                navigationStore, () => new AccountViewModel(clientModelStore, navigationStore));
+
+            loginModel = new LoginModel(clientModelStore);
+
+            LoginCommand = new LoginCommand(this, navigationService, loginModel);
+
         }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

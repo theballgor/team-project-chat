@@ -23,9 +23,6 @@ namespace Client.ViewsModel
             NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
                 navigationStore, () => new LoginViewModel(clientModelStore, navigationStore)));
         }
-        
-
-
 
 
 

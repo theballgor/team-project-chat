@@ -99,15 +99,13 @@
     <Compile Include="Services\ParameterNavigationService.cs" />
     <Compile Include="Stores\ClientModelStore.cs" />
     <Compile Include="Stores\NavigationStore.cs" />
+    <Compile Include="Stores\UserStore.cs" />
     <Compile Include="ViewsModel\AccountViewModel.cs" />
     <Compile Include="ViewsModel\Base\ViewModel.cs" />
     <Compile Include="ViewsModel\MainViewModel.cs" />
     <Compile Include="ViewsModel\ViewModelBase.cs" />
     <Compile Include="Views\CustomerControls\BindablePasswordBox.xaml.cs">
       <DependentUpon>BindablePasswordBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LoginForm.xaml.cs">
-      <DependentUpon>LoginForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewsModel\RegistrationViewModel.cs" />
     <Compile Include="Views\LoginView.xaml.cs">
@@ -189,10 +187,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\LoginForm.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\RegistrationForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

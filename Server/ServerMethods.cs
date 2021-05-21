@@ -11,7 +11,7 @@ using ClientServerLibrary.DbClasses;
 
 namespace Server
 {
-   partial class ServerClass
+    partial class ServerClass
     {
         private void SendMessage(TcpClient receiverClient, byte[] message) => receiverClient.GetStream().Write(message, 0, message.Length);
         private void SendMessage(TcpClient receiverClient, ClientServerMessage message) => SendMessage(receiverClient, ClientServerDataManager.Serialize(message));

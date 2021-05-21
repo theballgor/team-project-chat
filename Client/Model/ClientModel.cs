@@ -16,11 +16,16 @@ namespace Client.Model
     /// LOGIC
     /// зв'язок клієнта з сервером
     /// </summary>
-    public static class ClientModel
+    public class ClientModel
     {
-        private static TcpClient client;
+        private TcpClient client;
 
-        public static ClientServerMessage Listen()
+        public ClientModel()
+        {
+
+        }
+
+        public ClientServerMessage Listen()
         {
             NetworkStream stream = client.GetStream();
             byte[] data = new byte[128];
@@ -33,46 +38,47 @@ namespace Client.Model
 
             return ClientServerDataManager.Deserialize(fullData.ToArray());
         }
-        public static void StartListening(ref ClientServerMessage message)
-        {
-            try
-            {
-                while (true)
-                    message = Listen();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message, "Error");
-            }
 
-        }
-        public static void SendMessage(ClientServerMessage message)
+        public void StartListening()
         {
-            if (client != null && client.Connected)
             Task.Run(new Action(() =>
             {
                 try
                 {
-                    byte[] arr = ClientServerDataManager.Serialize(message);
-                    NetworkStream stream = client.GetStream();
-                    stream.Write(arr, 0, arr.Length);
+                    while (true)
+                        DataWorker.Handle(Listen());
                 }
                 catch (Exception exc)
                 {
-                    MessageBox.Show("Error: " + exc.Message, "Send error");
+                    MessageBox.Show(exc.Message, "Error");
                 }
+
             }));
         }
 
-        public static bool IsConnected => client.Connected;
+        public void SendMessage(ClientServerMessage message)
+        {
+            if (client != null && client.Connected)
+                Task.Run(new Action(() =>
+                {
+                    try
+                    {
+                        byte[] arr = ClientServerDataManager.Serialize(message);
+                        NetworkStream stream = client.GetStream();
+                        stream.Write(arr, 0, arr.Length);
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show("Error: " + exc.Message, "Send error");
+                    }
+                }));
+        }
+
+        public bool IsConnected => client.Connected;
 
 
-
-
-
-
-        // Startup methods
-        public static int GetFreeTcpPort()
+        //Startup methods
+        public int GetFreeTcpPort()
         {
             TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
             listener.Start();
@@ -80,18 +86,13 @@ namespace Client.Model
             listener.Stop();
             return port;
         }
-        public static void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
-        {
-            try
-            {
-                client = new TcpClient(new IPEndPoint(clientIpAddress, clientPort));
-            }
-            catch (Exception)
-            {
 
-            }
+        public void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
+        {
+              client = new TcpClient(new IPEndPoint(clientIpAddress, clientPort));
         }
-        public static void Connect(IPAddress ipAddress, int port)
+
+        public void Connect(IPAddress ipAddress, int port)
         {
             if (client != null)
                 client.Connect(new IPEndPoint(ipAddress, port));
