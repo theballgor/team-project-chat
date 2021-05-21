@@ -16,6 +16,7 @@ namespace Server
         private TcpListener server;
         private List<KeyValuePair<string, TcpClient>> connectedClients;
         private readonly object locker;
+
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
@@ -44,7 +45,6 @@ namespace Server
                 }
             });
         }
-
         private void ConversationHandler(TcpClient client)
         {
             try
@@ -53,35 +53,37 @@ namespace Server
                 {
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
                     ClientServerMessage message = ClientServerDataManager.Deserialize(data);
-                    Console.WriteLine("Message from " + client.Client.RemoteEndPoint);
                     switch (message.ActionType)
                     {
-                        case ActionType.SendText:
+                        //case ActionType.Mes:
 
-                            break;
-                        case ActionType.SendAudio:
+                        //    break;
+                        //case ActionType.SendAudio:
 
-                            break;
-                        case ActionType.SendFile:
+                        //    break;
+                        //case ActionType.SendFile:
 
-                            break;
+                        //break;
                         case ActionType.RegisterUser:
                             //RegisterUser((User)message.Content);
 
 
-                            (message.Content as User).Username = "This is register!";
-                            (message.Content as User).Id = 1;
-                            SendMessage(client, ClientServerDataManager.Serialize(message));
-                            Console.WriteLine((message.Content as User).Username + "\t" + (message.Content as User).Email);
+                            //(message.Content as User).Username = "This is register!";
+                            //(message.Content as User).Id = 1;
+                            //SendMessage(client, ClientServerDataManager.Serialize(message));
+                            //Console.WriteLine((message.Content as User).Username + "\t" + (message.Content as User).Email);
 
 
                             break;
                         case ActionType.LogInUser:
+
+
                             LoginUser((User)message.Content);
+
                             break;
-                        case ActionType.CreateConversation:
-                            CreateConversation((Conversation)message.Content);
-                            break;
+                            //case ActionType.CreateConversation:
+                            //    CreateConversation((Conversation)message.Content);
+                            //    break;
                     }
                     void RegisterUser(User user)
                     {
@@ -90,25 +92,28 @@ namespace Server
                     }
                     void LoginUser(User user)
                     {
-                        User dbUser = dbManager.CheckLogin(user);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });                        
+                        //User dbUser = dbManager.CheckLogin(user);
+                        //SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });
+
+
+                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = user });
                     }
-                    void CreateConversation(Conversation conversation)
-                    {
-                        Conversation dbConversation = dbManager.CreateConversatin(conversation);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
-                    }
-                    void JoinConversation(ConversationConnection conversationConnection)
-                    {
-                        //not ended
-                        Conversation dbConversation = dbManager.CreateConversationConnection(conversationConnection);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
-                    }
+                    //void CreateConversation(Conversation conversation)
+                    //{
+                    //    Conversation dbConversation = dbManager.CreateConversatin(conversation);
+                    //    SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
+                    //}
+                    //void JoinConversation(ConversationConnection conversationConnection)
+                    //{
+                    //    //not ended
+                    //    Conversation dbConversation = dbManager.CreateConversationConnection(conversationConnection);
+                    //    SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
+                    //}
                 }
             }
             catch (Exception)
             {
-                AbortConnection(client);
+                //AbortConnection(client);
                 Console.WriteLine(client.Client.RemoteEndPoint + "\t disconnected");
             }
         }

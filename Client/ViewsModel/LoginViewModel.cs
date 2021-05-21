@@ -7,12 +7,23 @@ using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
 using Client.Model;
+using ClientServerLibrary.DbClasses;
+using Client.Store;
+using ClientLibrary;
 
 namespace Client.ViewsModel
 {
-    class LoginViewModel : INotifyPropertyChanged
+    class LoginViewModel : ViewModelBase
     {
+        // Constructor
+        public LoginViewModel(NavigationStore navigationStore)
+        {
+            this.navigationStore = navigationStore;
+            navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            LoginModel.LoginSucces += LoginModel_LoginSucces;
+        }
 
+        // Fields
         public string Email
         {
             get
@@ -37,7 +48,10 @@ namespace Client.ViewsModel
                 OnPropertyChanged("Password");
             }
         }
+        private readonly NavigationStore navigationStore;
+        public ViewModelBase CurrentViewModel => navigationStore.CurrentViewModel;
 
+        // Commands
         public RelayCommand Login
         {
             get
@@ -47,9 +61,6 @@ namespace Client.ViewsModel
                     try
                     {
                         LoginModel.TryLogin();
-
-
-
                     }
                     catch (ArgumentException exc)
                     {
@@ -76,12 +87,14 @@ namespace Client.ViewsModel
             }
         }
 
-
-
-        protected virtual void OnPropertyChanged(string PropertyName)
+        // Callback
+        private void LoginModel_LoginSucces(object sender, EventArgs e)
         {
-            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+            Console.WriteLine("Logined: " + ((e as ViewModelEventArgs).Content as User).Email);
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnCurrentViewModelChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
+        }
     }
 }

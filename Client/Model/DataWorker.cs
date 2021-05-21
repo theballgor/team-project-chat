@@ -23,7 +23,7 @@ namespace Client.Model
                     break;
                 case ActionType.LogInUser:
 
-                    LoginModel.user = Login(message);
+                    LoginModel.Notify(Login(message));
 
                     break;
                 case ActionType.CreateConversation:
@@ -51,7 +51,6 @@ namespace Client.Model
         {
             if (message.Content != null)
                 return message.Content as User;
-
             else
                 return null;
         }
