@@ -6,12 +6,55 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
+using Client.Model;
+using ClientServerLibrary.DbClasses;
+using Client.Store;
+using ClientLibrary;
+using Client.Services;
 
 namespace Client.ViewsModel
 {
-    partial class DataManageVM : INotifyPropertyChanged
+    class LoginViewModel : ViewModelBase
     {
-       
+        // Fields
+        public string Email
+        {
+            get
+            {
+                return LoginModel.Email;
+            }
+            set
+            {
+                LoginModel.Email = value;
+                OnPropertyChanged("Email");
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                return LoginModel.Password;
+            }
+            set
+            {
+                LoginModel.Password = value;
+                OnPropertyChanged("Password");
+            }
+        }
+        private readonly NavigationStore navigationStore;
+        public ViewModelBase CurrentViewModel => navigationStore.CurrentViewModel;
+        NavigationService<AccountViewModel> navigationService;
+
+        // Constructor
+        public LoginViewModel(NavigationStore navigationStore)
+        {
+            this.navigationStore = navigationStore;
+            navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            LoginModel.LoginSucces += LoginModel_LoginSucces;
+            navigationService = new NavigationService<AccountViewModel>(navigationStore, () => new AccountViewModel(navigationStore));
+        }
+
+        // Commands
         public RelayCommand Login
         {
             get
@@ -20,8 +63,7 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        Validate();
-                        Send();
+                        LoginModel.TryLogin();
                     }
                     catch (ArgumentException exc)
                     {
@@ -30,7 +72,6 @@ namespace Client.ViewsModel
                 });
             }
         }
-
         public RelayCommand RegistrationWindow
         {
             get
@@ -39,9 +80,7 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        //open reg window 
                         
-
                     }
                     catch (ArgumentException exc)
                     {
@@ -51,33 +90,26 @@ namespace Client.ViewsModel
             }
         }
 
-        private void Send()
+        // Callback
+        private void LoginModel_LoginSucces(object sender, EventArgs e)
         {
-            MessageBox.Show("Ok");
-        }
-
-        private void Validate()
-        {
-            ValidateString(password, "Invalid data", 8, 16);
-            ValidateEmail("Invalid data");
-        }
-
-        private void ValidateString(string str, string exceptionMessage, int from, int to)
-        {
-            if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-                throw new ArgumentException(exceptionMessage);
-        }
-
-        private void ValidateEmail(string exceptionMessage)
-        {
-            try
+            User user = ((e as ViewModelEventArgs).Content as User);
+            if (user != null)
             {
-                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
+                Console.WriteLine("Logined: " + user.Email);
+                navigationService.Navigate();
             }
-            catch (Exception)
+            else
             {
-                throw new ArgumentException(exceptionMessage);
+                Console.WriteLine("Failed to login");
             }
+         
+           
+
+        }
+        protected virtual void OnCurrentViewModelChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
         }
     }
 }
