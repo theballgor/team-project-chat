@@ -57,13 +57,7 @@ namespace Server
                     Console.WriteLine("Message from " + client.Client.RemoteEndPoint);
                     switch (message.ActionType)
                     {
-                        case ActionType.SendText:
-
-                            break;
-                        case ActionType.SendAudio:
-
-                            break;
-                        case ActionType.SendFile:
+                        case ActionType.SendConversationMessage:
 
                             break;
                         case ActionType.RegisterUser:
@@ -77,8 +71,11 @@ namespace Server
 
 
                             break;
-                        case ActionType.LogInUser:
-                            LoginUser((User)message.Content);
+                        case ActionType.LogInUserByEmail:
+                            LoginUserByEmail((User)clientServerMessage.Content);
+                            break;
+                        case ActionType.LogInUserByUsername:
+                            LoginUserByUsername((User)clientServerMessage.Content);
                             break;
                         case ActionType.CreateConversation:
                             CreateConversation((Conversation)message.Content);
@@ -120,10 +117,23 @@ namespace Server
                     /// <summary>
                     /// returns Content=User or null
                     /// </summary>
-                    void LoginUser(User user)
+                    void LoginUserByEmail(User user)
                     {
-                        User dbUser = dbManager.CheckLogin(user);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbUser });                        
+                        user = dbManager.CheckLoginByEmail(user);
+                        if (user != null)
+                            connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
+                    }
+
+                    /// <summary>
+                    /// returns Content=User or null
+                    /// </summary>
+                    void LoginUserByUsername(User user)
+                    {
+                        user = dbManager.CheckLoginByUsername(user);
+                        if (user != null)
+                            connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                     }
 
                     /// <summary>
@@ -131,7 +141,7 @@ namespace Server
                     /// </summary>
                     void CreateConversation(Conversation conversation)
                     {
-                        Conversation dbConversation = dbManager.CreateConversatin(conversation);
+                        Conversation dbConversation = dbManager.CreateConversation(conversation);
                         SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
                     }
 
