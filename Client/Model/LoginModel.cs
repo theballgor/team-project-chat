@@ -6,24 +6,16 @@ using System.Threading.Tasks;
 using ClientServerLibrary;
 using ClientServerLibrary.DbClasses;
 using ClientLibrary;
+using System.ComponentModel;
 
 namespace Client.Model
 {
-    class LoginModel
+    static class LoginModel
     {
-        public LoginModel()
-        {
-            if (ClientModel.IsConnected)
-            {
-                ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
-                ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
-            }
-        }
-
-        private string email;
-        private string password;
-
-        public string Email
+        // Fields
+        private static string email;
+        private static string password;
+        public static string Email
         {
             get
             {
@@ -34,7 +26,7 @@ namespace Client.Model
                 email = value;
             }
         }
-        public string Password
+        public static string Password
         {
             get
             {
@@ -46,7 +38,17 @@ namespace Client.Model
             }
         }
 
-        public void TryLogin()
+        // Event
+        public static event EventHandler LoginSucces;
+
+        // Notyfier
+        public static void Notify(User user)
+        {
+            LoginSucces(null, new ViewModelEventArgs { Content = user });
+        }
+
+        // Methods
+        public static void TryLogin()
         {
             Task.Run(() =>
             {
@@ -70,13 +72,7 @@ namespace Client.Model
                     message.ActionType = ActionType.LogInUser;
 
                     ClientModel.SendMessage(message);
-                    message = ClientModel.Listen();
 
-                    User response = (message.Content as User);
-                    if (response.Id == -1)
-                        return;
-
-                    Console.WriteLine(response.Email + "\n" + (message.Content as User).Username);
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +80,7 @@ namespace Client.Model
                 }
             });
         }
-        private void Validate()
+        private static void Validate()
         {
             try
             {
@@ -98,4 +94,6 @@ namespace Client.Model
             }
         }
     }
+
+
 }

@@ -16,6 +16,7 @@ namespace Server
         private TcpListener server;
         private List<KeyValuePair<string, TcpClient>> connectedClients;
         private readonly object locker;
+
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
@@ -44,7 +45,6 @@ namespace Server
                 }
             });
         }
-
         private void ConversationHandler(TcpClient client)
         {
             try
@@ -54,7 +54,6 @@ namespace Server
                 {
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
                     ClientServerMessage message = ClientServerDataManager.Deserialize(data);
-                    Console.WriteLine("Message from " + client.Client.RemoteEndPoint);
                     switch (message.ActionType)
                     {
                         case ActionType.SendConversationMessage:
@@ -64,15 +63,16 @@ namespace Server
                             //RegisterUser((User)message.Content);
 
 
-                            (message.Content as User).Username = "This is register!";
-                            (message.Content as User).Id = 1;
-                            SendMessage(client, ClientServerDataManager.Serialize(message));
-                            Console.WriteLine((message.Content as User).Username + "\t" + (message.Content as User).Email);
+                            //(message.Content as User).Username = "This is register!";
+                            //(message.Content as User).Id = 1;
+                            //SendMessage(client, ClientServerDataManager.Serialize(message));
+                            //Console.WriteLine((message.Content as User).Username + "\t" + (message.Content as User).Email);
 
 
                             break;
                         case ActionType.LogInUserByEmail:
                             LoginUserByEmail((User)clientServerMessage.Content);
+
                             break;
                         case ActionType.LogInUserByUsername:
                             LoginUserByUsername((User)clientServerMessage.Content);
