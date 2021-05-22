@@ -58,7 +58,7 @@ namespace Client.Model
                     User user = new User
                     {
                         Email = email,
-                        Password = Cryptography.Encrypt(password),
+                        Password = password,
                         Avatar = null,
                         ConversationConnections = null,
                         Description = null,
@@ -69,7 +69,7 @@ namespace Client.Model
                     };
 
                     ClientServerMessage message = new ClientServerMessage { Content = user };
-                    message.ActionType = ActionType.LogInUser;
+                    message.ActionType = ActionType.LogInUserByEmail;
 
                     ClientModel.SendMessage(message);
 

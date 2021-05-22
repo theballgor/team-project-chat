@@ -10,19 +10,12 @@ using Client.Model;
 using ClientServerLibrary.DbClasses;
 using Client.Store;
 using ClientLibrary;
+using Client.Services;
 
 namespace Client.ViewsModel
 {
     class LoginViewModel : ViewModelBase
     {
-        // Constructor
-        public LoginViewModel(NavigationStore navigationStore)
-        {
-            this.navigationStore = navigationStore;
-            navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
-            LoginModel.LoginSucces += LoginModel_LoginSucces;
-        }
-
         // Fields
         public string Email
         {
@@ -50,6 +43,16 @@ namespace Client.ViewsModel
         }
         private readonly NavigationStore navigationStore;
         public ViewModelBase CurrentViewModel => navigationStore.CurrentViewModel;
+        NavigationService<AccountViewModel> navigationService;
+
+        // Constructor
+        public LoginViewModel(NavigationStore navigationStore)
+        {
+            this.navigationStore = navigationStore;
+            navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            LoginModel.LoginSucces += LoginModel_LoginSucces;
+            navigationService = new NavigationService<AccountViewModel>(navigationStore, () => new AccountViewModel(navigationStore));
+        }
 
         // Commands
         public RelayCommand Login
@@ -90,7 +93,19 @@ namespace Client.ViewsModel
         // Callback
         private void LoginModel_LoginSucces(object sender, EventArgs e)
         {
-            Console.WriteLine("Logined: " + ((e as ViewModelEventArgs).Content as User).Email);
+            User user = ((e as ViewModelEventArgs).Content as User);
+            if (user != null)
+            {
+                Console.WriteLine("Logined: " + user.Email);
+                navigationService.Navigate();
+            }
+            else
+            {
+                Console.WriteLine("Failed to login");
+            }
+         
+           
+
         }
         protected virtual void OnCurrentViewModelChanged()
         {

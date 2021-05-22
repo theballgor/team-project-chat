@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -14,7 +16,7 @@ namespace Server
     {
         private DbManager dbManager;
         private TcpListener server;
-        private List<KeyValuePair<string, TcpClient>> connectedClients;
+        private List<KeyValuePair<int, TcpClient>> connectedClients;
         private readonly object locker;
 
         public ServerClass(IPEndPoint serverIEP)
@@ -22,7 +24,7 @@ namespace Server
             server = new TcpListener(serverIEP);
             locker = new object();
             lock (locker)
-                connectedClients = new List<KeyValuePair<string, TcpClient>>();
+                connectedClients = new List<KeyValuePair<int, TcpClient>>();
             dbManager = new DbManager();
 
         }
@@ -53,32 +55,23 @@ namespace Server
                 while (true)
                 {
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
-                    ClientServerMessage message = ClientServerDataManager.Deserialize(data);
-                    switch (message.ActionType)
+                    ClientServerMessage clientServerMessage = ClientServerDataManager.Deserialize(data);
+                    switch (clientServerMessage.ActionType)
                     {
                         case ActionType.SendConversationMessage:
 
                             break;
                         case ActionType.RegisterUser:
-                            //RegisterUser((User)message.Content);
-
-
-                            //(message.Content as User).Username = "This is register!";
-                            //(message.Content as User).Id = 1;
-                            //SendMessage(client, ClientServerDataManager.Serialize(message));
-                            //Console.WriteLine((message.Content as User).Username + "\t" + (message.Content as User).Email);
-
-
+                            RegisterUser((User)clientServerMessage.Content);
                             break;
                         case ActionType.LogInUserByEmail:
                             LoginUserByEmail((User)clientServerMessage.Content);
-
                             break;
                         case ActionType.LogInUserByUsername:
                             LoginUserByUsername((User)clientServerMessage.Content);
                             break;
                         case ActionType.CreateConversation:
-                            CreateConversation((Conversation)message.Content);
+                            CreateConversation((Conversation)clientServerMessage.Content);
                             break;
                         case ActionType.JoinConversation:
                             JoinConversation((int)clientServerMessage.Content);
@@ -111,7 +104,7 @@ namespace Server
                     void RegisterUser(User user)
                     {
                         bool registerResult = dbManager.CreateUser(user);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = registerResult });
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registerResult });
                     }
 
                     /// <summary>
@@ -142,7 +135,7 @@ namespace Server
                     void CreateConversation(Conversation conversation)
                     {
                         Conversation dbConversation = dbManager.CreateConversation(conversation);
-                        SendMessage(client, new ClientServerMessage() { ActionType = message.ActionType, Content = dbConversation });
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = dbConversation });
                     }
 
                     /// <summary>

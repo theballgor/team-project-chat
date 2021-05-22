@@ -21,7 +21,7 @@ namespace Client.Model
                     break;
                 case ActionType.RegisterUser:
                     break;
-                case ActionType.LogInUser:
+                case ActionType.LogInUserByEmail:
 
                     LoginModel.Notify(Login(message));
 
@@ -36,7 +36,7 @@ namespace Client.Model
                     break;
                 case ActionType.GetConversationUsers:
                     break;
-                case ActionType.GetUserFriendshhips:
+                case ActionType.GetUserFriendships:
                     break;
                 case ActionType.GetUserInfo:
                     break;
