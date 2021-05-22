@@ -49,6 +49,18 @@ namespace Server
             }
         }
         // get
+        public User[] GetAllUsers()
+        {
+            try
+            {
+                IGenericRepository<User> userRepo = work.Repository<User>();
+                return userRepo.GetAll().ToArray();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public Conversation GetConversationById(int conversationId)
         {
             try

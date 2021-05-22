@@ -31,17 +31,14 @@ namespace ClientServerLibrary
         FatalError,
     }
 
-    // Enum відповідальний за реєстрацію
+    [Serializable]
     public enum RegistrationResult
     { 
-        //Якщо успішно
         Success,
-        //Якщо пароль невірний
-        PasswordDoNotMatch,
-        //Якщо e-mail уже існує
         EmailAlreadyExists,
-        //Якщо user (nick name) уже існує
-        UserNameAlreadyExists
+        UserNameAlreadyExists,
+        PhoneNumberAlreadyExists,
+        CreationError,
     }
 
 
