@@ -80,7 +80,7 @@ namespace Client.ViewsModel
                 {
                     try
                     {
-                        
+                        //відкрити реєстраційну форму
                     }
                     catch (ArgumentException exc)
                     {
