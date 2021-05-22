@@ -62,8 +62,11 @@ namespace Server
                         case ActionType.RegisterUser:
                             RegisterUser((User)clientServerMessage.Content);
                             break;
-                        case ActionType.LogInUser:
-                            LoginUser((User)clientServerMessage.Content);
+                        case ActionType.LogInUserByEmail:
+                            LoginUserByEmail((User)clientServerMessage.Content);
+                            break;
+                        case ActionType.LogInUserByUsername:
+                            LoginUserByUsername((User)clientServerMessage.Content);
                             break;
                         case ActionType.CreateConversation:
                             CreateConversation((Conversation)clientServerMessage.Content);
@@ -105,9 +108,20 @@ namespace Server
                     /// <summary>
                     /// returns Content=User or null
                     /// </summary>
-                    void LoginUser(User user)
+                    void LoginUserByEmail(User user)
                     {
-                        user = dbManager.CheckLogin(user);
+                        user = dbManager.CheckLoginByEmail(user);
+                        if (user != null)
+                            connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
+                    }
+
+                    /// <summary>
+                    /// returns Content=User or null
+                    /// </summary>
+                    void LoginUserByUsername(User user)
+                    {
+                        user = dbManager.CheckLoginByUsername(user);
                         if (user != null)
                             connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
