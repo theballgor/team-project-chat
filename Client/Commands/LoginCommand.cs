@@ -33,13 +33,8 @@ namespace Client.Commands
 
         public override void Execute(object parameter)
         {
-
             _loginModel.TryLogin( _loginViewModel.Username, _loginViewModel.Password);
-            Thread.Sleep(5000);
 
-
-
-  
             //ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
             //ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
 
@@ -54,7 +49,7 @@ namespace Client.Commands
         }
             void DataWorker_ReceivingDataEvent(object sender, DataWorker.ReceivingDataEcentArgs e)
             {
-                User user = (User)e.Data;
+                string user = (string)e.Data;
 
                 if(user!=null)
                     _navigationService.Navigate();

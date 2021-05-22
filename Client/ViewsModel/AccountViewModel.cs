@@ -24,7 +24,7 @@ namespace Client.ViewsModel
                 navigationStore, () => new LoginViewModel(clientModelStore, navigationStore)));
         }
 
-
+        
 
     }
 }

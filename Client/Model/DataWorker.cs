@@ -21,7 +21,7 @@ namespace Client.Model
         }
 
 
-        public static User _user;
+        public static string callBack;
 
         public static void Handle(ClientServerMessage message)
         {
