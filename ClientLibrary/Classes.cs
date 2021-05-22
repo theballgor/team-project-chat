@@ -35,7 +35,10 @@ namespace ClientLibrary
         }
     }
 
-
+    public class ViewModelEventArgs : EventArgs
+    {
+        public object Content { get; set; }
+    }
 
 
 

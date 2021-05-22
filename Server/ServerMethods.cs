@@ -11,9 +11,12 @@ using ClientServerLibrary.DbClasses;
 
 namespace Server
 {
-    partial class ServerClass
+    public partial class ServerClass
     {
         private void SendMessage(TcpClient receiverClient, byte[] message) => receiverClient.GetStream().Write(message, 0, message.Length);
+
+
+        
         private void SendMessage(TcpClient receiverClient, ClientServerMessage message) => SendMessage(receiverClient, ClientServerDataManager.Serialize(message));
         private void SendMessage(List<TcpClient> receiverClients, ClientServerMessage message) => SendMessage(receiverClients, ClientServerDataManager.Serialize(message));
         private int GetUserIdByClient(TcpClient client) => connectedClients.Find(u => u.Value == client).Key;

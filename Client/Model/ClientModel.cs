@@ -16,16 +16,13 @@ namespace Client.Model
     /// LOGIC
     /// зв'язок клієнта з сервером
     /// </summary>
-    public class ClientModel
+    public static class ClientModel
     {
-        private TcpClient client;
+        private static TcpClient client;
+        public static bool IsConnected => client.Connected;
 
-        public ClientModel()
-        {
 
-        }
-
-        public ClientServerMessage Listen()
+        private static ClientServerMessage Listen()
         {
             NetworkStream stream = client.GetStream();
             byte[] data = new byte[128];
@@ -38,10 +35,9 @@ namespace Client.Model
 
             return ClientServerDataManager.Deserialize(fullData.ToArray());
         }
-
-        public void StartListening()
+        public static void StartListening()
         {
-            Task.Run(new Action(() => 
+            Task.Run(() =>
             {
                 try
                 {
@@ -53,10 +49,9 @@ namespace Client.Model
                     MessageBox.Show(exc.Message, "Error");
                 }
 
-            }));
+            });
         }
-
-        public void SendMessage(ClientServerMessage message)
+        public static void SendMessage(ClientServerMessage message)
         {
             if (client != null && client.Connected)
                 Task.Run(new Action(() =>
@@ -74,11 +69,12 @@ namespace Client.Model
                 }));
         }
 
-        public bool IsConnected => client.Connected;
 
 
-        //Startup methods
-        public int GetFreeTcpPort()
+
+
+
+        public static int GetFreeTcpPort()
         {
             TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
             listener.Start();
@@ -86,15 +82,20 @@ namespace Client.Model
             listener.Stop();
             return port;
         }
-
-        public void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
+        public static void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
         {
-              client = new TcpClient(new IPEndPoint(clientIpAddress, clientPort));
+            try
+            {
+                client = new TcpClient(new IPEndPoint(clientIpAddress, clientPort));
+            }
+            catch (Exception)
+            {
+
+            }
         }
-
-        public void Connect(IPAddress ipAddress, int port)
+        public static void Connect(IPAddress ipAddress, int port)
         {
-            if (client != null)
+            if (client != null && !IsConnected)
                 client.Connect(new IPEndPoint(ipAddress, port));
         }
     }

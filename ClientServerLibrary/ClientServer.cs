@@ -19,16 +19,15 @@ namespace ClientServerLibrary
         SendConversationMessage,
         SendFriendRequest,
         RegisterUser,
-        LogInUser,
+        LogInUserByEmail,
+        LogInUserByUsername,
         CreateConversation,
         JoinConversation,
-       
         GetConversationMessages,
         GetUserConversations,
         GetConversationUsers,
-        GetUserFriendshhips,
+        GetUserFriendships,
         GetUserInfo,
-
         FatalError,
     }
 
@@ -63,7 +62,6 @@ namespace ClientServerLibrary
             Date = date;
 
         }
-
         public object Content { get; set; }
         public object AdditionalContent { get; set; }
         public ActionType ActionType { get; set; }
@@ -75,7 +73,6 @@ namespace ClientServerLibrary
         public static readonly int ServerPort = 40000;
         public static readonly IPAddress LocalIP = IPAddress.Parse("127.0.0.1");
     }
-
 
     public static class ClientServerDataManager
     {
@@ -113,5 +110,6 @@ namespace ClientServerLibrary
             } while (stream.DataAvailable);
             return messageInBytes.ToArray();
         }
+        
     }
 }

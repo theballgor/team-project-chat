@@ -7,53 +7,109 @@ using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
 using Client.Model;
-using System.Windows.Input;
-using Client.Stores;
+using ClientServerLibrary.DbClasses;
 using Client.Store;
+using ClientLibrary;
 using Client.Services;
-using ClientServerLibrary;
 
 namespace Client.ViewsModel
 {
-    public class LoginViewModel : ViewModelBase
+    class LoginViewModel : ViewModelBase
     {
-
-        private string _username;
-        public string Username
+        // Fields
+        public string Email
         {
-            get { return _username; }
-            set 
-            { 
-                _username = value;
-                OnPropertyChanged(nameof(Username));
+            get
+            {
+                return LoginModel.Email;
+            }
+            set
+            {
+                LoginModel.Email = value;
+                OnPropertyChanged("Email");
             }
         }
-
-        private string _password;
         public string Password
         {
-            get { return _password; }
-            set 
-            { 
-                _password = value;
-                OnPropertyChanged(nameof(Password));
+            get
+            {
+                return LoginModel.Password;
+            }
+            set
+            {
+                LoginModel.Password = value;
+                OnPropertyChanged("Password");
+            }
+        }
+        private readonly NavigationStore navigationStore;
+        public ViewModelBase CurrentViewModel => navigationStore.CurrentViewModel;
+        NavigationService<AccountViewModel> navigationService;
+
+        // Constructor
+        public LoginViewModel(NavigationStore navigationStore)
+        {
+            this.navigationStore = navigationStore;
+            navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            LoginModel.LoginSucces += LoginModel_LoginSucces;
+            navigationService = new NavigationService<AccountViewModel>(navigationStore, () => new AccountViewModel(navigationStore));
+        }
+
+        // Commands
+        public RelayCommand Login
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    try
+                    {
+                        LoginModel.TryLogin();
+                    }
+                    catch (ArgumentException exc)
+                    {
+                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
+            }
+        }
+        public RelayCommand RegistrationWindow
+        {
+            get
+            {
+                return new RelayCommand(obj =>
+                {
+                    try
+                    {
+                        
+                    }
+                    catch (ArgumentException exc)
+                    {
+                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
             }
         }
 
-        public ICommand LoginCommand { get; }
-
-        LoginModel loginModel;
-
-
-        public LoginViewModel(ClientModelStore clientModelStore, NavigationStore navigationStore)
+        // Callback
+        private void LoginModel_LoginSucces(object sender, EventArgs e)
         {
-            NavigationService<AccountViewModel> navigationService = new NavigationService<AccountViewModel>(
-                navigationStore, () => new AccountViewModel(clientModelStore, navigationStore));
+            User user = ((e as ViewModelEventArgs).Content as User);
+            if (user != null)
+            {
+                Console.WriteLine("Logined: " + user.Email);
+                navigationService.Navigate();
+            }
+            else
+            {
+                Console.WriteLine("Failed to login");
+            }
+         
+           
 
-            loginModel = new LoginModel(clientModelStore);
-
-            LoginCommand = new LoginCommand(this, navigationService, loginModel);
-
+        }
+        protected virtual void OnCurrentViewModelChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
         }
     }
 }

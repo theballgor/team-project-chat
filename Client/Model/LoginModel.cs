@@ -6,36 +6,55 @@ using System.Threading.Tasks;
 using ClientServerLibrary;
 using ClientServerLibrary.DbClasses;
 using ClientLibrary;
-using Client.Stores;
+using System.ComponentModel;
 
 namespace Client.Model
 {
-    public class LoginModel
+    static class LoginModel
     {
-        private readonly ClientModelStore _clientModelStore;
-        private readonly ClientModel clientModel;
-
-
-        public LoginModel(ClientModelStore clientModelStore)
+        // Fields
+        private static string email;
+        private static string password;
+        public static string Email
         {
-            clientModel = new ClientModel();
-            ConnectionToServer();
+            get
+            {
+                return email;
+            }
+            set
+            {
+                email = value;
+            }
+        }
+        public static string Password
+        {
+            get
+            {
+                return password;
+            }
+            set
+            {
+                password = value;
+            }
         }
 
-        public void ConnectionToServer()
+        // Event
+        public static event EventHandler LoginSucces;
+
+        // Notyfier
+        public static void Notify(User user)
         {
-           clientModel.CreateClientEndpoint(GlobalVariables.LocalIP, clientModel.GetFreeTcpPort());
-           clientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
-           clientModel.StartListening();
+            LoginSucces(null, new ViewModelEventArgs { Content = user });
         }
 
-        public void TryLogin(string email, string password)
+        // Methods
+        public static void TryLogin()
         {
             Task.Run(() =>
             {
                 try
                 {
-                    Validate(email, password);
+                    Validate();
                     User user = new User
                     {
                         Email = email,
@@ -50,9 +69,10 @@ namespace Client.Model
                     };
 
                     ClientServerMessage message = new ClientServerMessage { Content = user };
-                    message.ActionType = ActionType.LogInUser;
+                    message.ActionType = ActionType.LogInUserByEmail;
 
-                    clientModel.SendMessage(message);
+                    ClientModel.SendMessage(message);
+
                 }
                 catch (Exception ex)
                 {
@@ -60,8 +80,7 @@ namespace Client.Model
                 }
             });
         }
-
-        private void Validate(string email, string password)
+        private static void Validate()
         {
             try
             {
@@ -75,4 +94,6 @@ namespace Client.Model
             }
         }
     }
+
+
 }

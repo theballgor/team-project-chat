@@ -10,8 +10,8 @@ using ClientLibrary;
 
 namespace Client.Model
 {
-    class RegistrationModel
-    {
+    //class RegistrationModel
+    //{
     //    public RegistrationModel()
     //    {
     //        if (ClientModel.IsConnected)
@@ -124,4 +124,3 @@ namespace Client.Model
     //        catch (Exception) { throw new ArgumentException("Invalid Email"); }
     //    }
     }
-}

@@ -11,20 +11,19 @@ using System.Windows.Input;
 
 namespace Client.ViewsModel
 {
-    public class AccountViewModel: ViewModelBase
+    public class AccountViewModel : ViewModelBase
     {
-        private readonly ClientModelStore _clientModelStore;
         public ICommand NavigateLogOutCommand { get; }
 
-        public AccountViewModel(ClientModelStore clientModelStore, NavigationStore navigationStore)
+        public AccountViewModel( NavigationStore navigationStore)
         {
-            _clientModelStore = clientModelStore;
 
             NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
-                navigationStore, () => new LoginViewModel(clientModelStore, navigationStore)));
+                navigationStore, () => new LoginViewModel(navigationStore)));
         }
 
-        
 
+
+        //}
     }
 }
