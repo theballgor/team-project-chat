@@ -15,6 +15,7 @@ namespace Server.Database
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
+            _context.Configuration.ProxyCreationEnabled = false;
         }
 
         public IEnumerable<TEntity> GetAll() { return _dbSet.ToList(); }
