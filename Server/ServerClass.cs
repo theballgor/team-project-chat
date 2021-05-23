@@ -99,12 +99,23 @@ namespace Server
                             break;
                     }
                     /// <summary>
-                    /// returns Content=bool
+                    /// returns Content=RegistrationResult
                     /// </summary>
                     void RegisterUser(User user)
                     {
-                        bool registerResult = dbManager.CreateUser(user);
-                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registerResult });
+                        RegistrationResult registrationResult;
+                        User[] users = dbManager.GetAllUsers();     
+                        if (users.Where(item => item.Email == user.Email) != null)
+                            registrationResult = RegistrationResult.EmailAlreadyExists;
+                        else if (users.Where(item => item.Username == user.Username) != null)
+                            registrationResult = RegistrationResult.UserNameAlreadyExists;
+                        else if (users.Where(item => item.PhoneNumber == user.PhoneNumber) != null)
+                            registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
+                        if (dbManager.CreateUser(user))
+                            registrationResult = RegistrationResult.Success;
+                        else
+                            registrationResult = RegistrationResult.CreationError;
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
                     }
 
                     /// <summary>
@@ -297,7 +308,7 @@ namespace Server
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Send message error");
+                    Console.WriteLine("Can't find user to send message");
                 }
                 AbortConnection(client);
                 Console.WriteLine(client.Client.RemoteEndPoint + "\t disconnected");

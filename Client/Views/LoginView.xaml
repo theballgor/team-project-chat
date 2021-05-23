@@ -16,6 +16,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
 
         </Grid.RowDefinitions>
 
@@ -45,6 +46,16 @@
                 Content="Login">
 
         </Button>
-        
+
+        <Button Grid.Row="4"
+                Margin="40 0"
+                Padding="5"
+                HorizontalContentAlignment="Center"
+                Command="{Binding RegistrationWindow}"
+                Content="Register">
+
+        </Button>
+
+
     </Grid>
 </UserControl>

@@ -21,6 +21,9 @@ namespace Client.Model
                 case ActionType.SendFriendRequest:
                     break;
                 case ActionType.RegisterUser:
+
+                    RegistrationModel.Notify(Register(message));
+
                     break;
                 case ActionType.LogInUserByEmail:
 
@@ -46,6 +49,14 @@ namespace Client.Model
                 default:
                     break;
             }
+        }
+
+        private static object Register(ClientServerMessage message)
+        {
+            if (message.Content != null)
+                return message.Content;
+            else
+                return null;
         }
 
         static User Login(ClientServerMessage message)
