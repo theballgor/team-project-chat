@@ -20,7 +20,7 @@ namespace Client
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Startup();
+            Connecting();
             NavigationStore navigationStore = new NavigationStore();
             navigationStore.CurrentViewModel = new LoginViewModel(navigationStore);
             MainWindow = new MainWindow()
@@ -31,12 +31,11 @@ namespace Client
 
             base.OnStartup(e);
         }
-        private void Startup()
+        private void Connecting()
         {
             ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
             ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
             ClientModel.StartListening();
         }
-
     }
 }

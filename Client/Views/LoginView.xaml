@@ -5,57 +5,77 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewsmodel="clr-namespace:Client.ViewsModel" 
              xmlns:customercontrols="clr-namespace:Client.Views.CustomerControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DataContext="{d:DesignInstance Type=viewsmodel:LoginViewModel}"
              mc:Ignorable="d" 
              MaxWidth="400" 
-             MaxHeight="350" Width="200" Height="250"
-             >
-    <Grid  Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+             MaxHeight="350" Width="230" Height="280">
 
-        </Grid.RowDefinitions>
+    <Grid >
+        <Border Background="#FF2F2F2F" CornerRadius="12 12 0 0" Margin="0 0 0 40">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!--Logo-->
+                    <RowDefinition Height="2*"/>
+                    <!--Email field-->
+                    <RowDefinition Height="Auto"/>
+                    <!--Password field-->
+                    <RowDefinition Height="Auto"/>
+                    <!--Login button-->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   HorizontalAlignment="Center"
-                   FontSize="28"
-                   Text="Login"/>
+                <Border BorderBrush="#FF075345" CornerRadius="50 50 50 50" BorderThickness="1" Width="80" Height="80">
+                    <Label HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Account" Foreground="#FF1B1B1B" Width="70" Height="70"></materialDesign:PackIcon>
+                    </Label>
+                </Border>
 
-        <StackPanel Grid.Row="1">
-            <StackPanel>
-                <TextBlock Text="UserName"/>
-                <TextBox Text="{Binding Email}"></TextBox>
-            </StackPanel>
+                <StackPanel Grid.Row="1" Margin="14 5" Orientation="Horizontal">
 
-            <StackPanel Grid.Row="2">
-                <TextBlock Text="Password"/>
-                <customercontrols:BindablePasswordBox Password="{Binding Password}"/>
-            </StackPanel>
+                    <Label Margin="0 0 10 0"
+                       Foreground="#FF4C5483">
+                        <materialDesign:PackIcon Kind="EmailOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
+                    </Label>
+                    <TextBox Text="{Binding Email}"
+                         Style="{StaticResource MaterialDesignTextBox}" Width="160"/>
 
-        </StackPanel>
+                </StackPanel>
 
-        <Button Grid.Row="3"
-                Margin="40 0"
-                Padding="5"
-                HorizontalContentAlignment="Center"
-                Command="{Binding Login}"
-                Content="Login">
+                <StackPanel Grid.Row="2" Margin="14 5" Orientation="Horizontal">
+                    <Label Margin="0 0 10 0">
+                        <materialDesign:PackIcon Kind="PasswordOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
+                    </Label>
+                    <customercontrols:BindablePasswordBox Password="{Binding Password}" Width="160"/>
+                </StackPanel>
 
-        </Button>
+                <Button Grid.Row="3"
+                    Padding="5"
+                    HorizontalContentAlignment="Center"
+                    Command="{Binding Login}"
+                    Content="LOGIN" 
+                    Margin="21 15"
+                    FontSize="10"
+                    FontFamily="Fonts/Gueda"
+                    Foreground="#828282"
+                    Background="#FF1B1B1B"
+                    BorderBrush="{x:Null}"
+                    Height="Auto">
+                </Button>
+            </Grid>
 
-        <Button Grid.Row="4"
-                Margin="40 0"
-                Padding="5"
-                HorizontalContentAlignment="Center"
-                Command="{Binding RegistrationWindow}"
-                Content="Register">
+        </Border>
 
-        </Button>
-
-
+        <Border  Background="#FF2F2F2F" CornerRadius="0 0 12 12" Margin="0 244 0 0">
+            <Button 
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}"
+                    FontFamily="Fonts/Gueda"
+                    Foreground="#828282"
+                    FontSize="10"
+                    Command="{Binding RegistrationWindow}"
+                    Content="REGISTER">
+            </Button>
+        </Border>
     </Grid>
 </UserControl>

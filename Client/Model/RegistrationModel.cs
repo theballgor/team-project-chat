@@ -12,6 +12,37 @@ namespace Client.Model
 {
     static class RegistrationModel
     {
+        // Event
+        public static event EventHandler RegisterSucces;
+
+        // Fields
+        private static string email;
+        private static string username;
+        private static string password;
+        private static string verifyPassword;
+
+        public static string Email
+        {
+            get { return email; }
+            set { email = value; }
+        }
+        public static string Username
+        {
+            get { return username; }
+            set { username = value; }
+        }
+        public static string Password
+        {
+            get { return password; }
+            set { password = value; }
+        }
+        public static string VerifyPassword
+        {
+            get { return verifyPassword; }
+            set { verifyPassword = value; }
+        }
+
+
         static RegistrationModel()
         {
             if (ClientModel.IsConnected)
@@ -20,59 +51,6 @@ namespace Client.Model
                 ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
             }
         }
-
-        private static string email;
-        private static string username;
-        private static string password;
-        private static string verifyPassword;
-
-        public static string Email
-        {
-            get
-            {
-                return email;
-            }
-            set
-            {
-                email = value;
-            }
-        }
-        public static string Username
-        {
-            get
-            {
-                return username;
-            }
-            set
-            {
-                username = value;
-            }
-        }
-        public static string Password
-        {
-            get
-            {
-                return password;
-            }
-            set
-            {
-                password = value;
-            }
-        }
-        public static string VerifyPassword
-        {
-            get
-            {
-                return verifyPassword;
-            }
-            set
-            {
-                verifyPassword = value;
-            }
-        }
-
-        // Event
-        public static event EventHandler RegisterSucces;
 
         // Notyfier
         public static void Notify(object result)
