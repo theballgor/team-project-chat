@@ -21,7 +21,6 @@ namespace Client.Model
         private static TcpClient client;
         public static bool IsConnected => client.Connected;
 
-
         private static ClientServerMessage Listen()
         {
             NetworkStream stream = client.GetStream();
@@ -68,11 +67,6 @@ namespace Client.Model
                     }
                 }));
         }
-
-
-
-
-
 
         public static int GetFreeTcpPort()
         {
