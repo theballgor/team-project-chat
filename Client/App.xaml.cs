@@ -31,12 +31,12 @@ namespace Client
 
             base.OnStartup(e);
         }
-
         private void Startup()
         {
             ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
             ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
             ClientModel.StartListening();
         }
+
     }
 }
