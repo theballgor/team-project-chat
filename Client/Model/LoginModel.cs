@@ -12,34 +12,24 @@ namespace Client.Model
 {
     static class LoginModel
     {
+        // Event
+        public static event EventHandler LoginSucces;
+
         // Fields
         private static string email;
         private static string password;
+
         public static string Email
         {
-            get
-            {
-                return email;
-            }
-            set
-            {
-                email = value;
-            }
+            get { return email; }
+            set { email = value; }
         }
-        public static string Password
+        public static string Password 
         {
-            get
-            {
-                return password;
-            }
-            set
-            {
-                password = value;
-            }
+            get { return password; }
+            set { password = value; }
         }
 
-        // Event
-        public static event EventHandler LoginSucces;
 
         // Notyfier
         public static void Notify(User user)
@@ -71,7 +61,7 @@ namespace Client.Model
                     ClientServerMessage message = new ClientServerMessage { Content = user };
                     message.ActionType = ActionType.LogInUserByEmail;
 
-                    ClientModel.SendMessage(message);
+                    ClientModel.GetInstance().SendMessage(message);
 
                 }
                 catch (Exception ex)

@@ -44,13 +44,7 @@ namespace Client.Model
 
 
         static RegistrationModel()
-        {
-            if (ClientModel.IsConnected)
-            {
-                ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
-                ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
-            }
-        }
+        {}
 
         // Notyfier
         public static void Notify(object result)
@@ -81,7 +75,7 @@ namespace Client.Model
                     ClientServerMessage message = new ClientServerMessage { Content = user };
                     message.ActionType = ActionType.RegisterUser;
 
-                    ClientModel.SendMessage(message);
+                    ClientModel.GetInstance().SendMessage(message);
                 }
                 catch (Exception ex)
                 {

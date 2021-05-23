@@ -16,12 +16,28 @@ namespace Client.Model
     /// LOGIC
     /// зв'язок клієнта з сервером
     /// </summary>
-    public static class ClientModel
+    public class ClientModel
     {
         private static TcpClient client;
         public static bool IsConnected => client.Connected;
 
-        private static ClientServerMessage Listen()
+        /// <summary>
+        ///  Pattern singelton
+        /// </summary>
+        /// 
+        //закрите поле класу 
+        private static ClientModel instance; 
+        //закритий конструктор singelton
+        private ClientModel() { }
+        //відкритий статичний метод який відіграє роль конструктора
+        public static ClientModel GetInstance()
+        {
+            if (instance == null)
+                instance = new ClientModel();
+            return instance;
+        }
+
+        private ClientServerMessage Listen()
         {
             NetworkStream stream = client.GetStream();
             byte[] data = new byte[128];
@@ -34,7 +50,7 @@ namespace Client.Model
 
             return ClientServerDataManager.Deserialize(fullData.ToArray());
         }
-        public static void StartListening()
+        public void StartListening()
         {
             Task.Run(() =>
             {
@@ -50,7 +66,7 @@ namespace Client.Model
 
             });
         }
-        public static void SendMessage(ClientServerMessage message)
+        public void SendMessage(ClientServerMessage message)
         {
             if (client != null && client.Connected)
                 Task.Run(new Action(() =>
@@ -67,8 +83,7 @@ namespace Client.Model
                     }
                 }));
         }
-
-        public static int GetFreeTcpPort()
+        public int GetFreeTcpPort()
         {
             TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
             listener.Start();
@@ -76,7 +91,7 @@ namespace Client.Model
             listener.Stop();
             return port;
         }
-        public static void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
+        public void CreateClientEndpoint(IPAddress clientIpAddress, int clientPort)
         {
             try
             {
@@ -87,7 +102,7 @@ namespace Client.Model
 
             }
         }
-        public static void Connect(IPAddress ipAddress, int port)
+        public void Connect(IPAddress ipAddress, int port)
         {
             if (client != null && !IsConnected)
                 client.Connect(new IPEndPoint(ipAddress, port));

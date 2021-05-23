@@ -89,6 +89,7 @@
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
+    <Compile Include="Commands\RegistrationCommand.cs" />
     <Compile Include="Model\DataWorker.cs" />
     <Compile Include="Model\LoginModel.cs" />
     <Compile Include="Model\RegistrationModel.cs" />
@@ -113,6 +114,9 @@
     </Compile>
     <Compile Include="Views\RegistrationForm.xaml.cs">
       <DependentUpon>RegistrationForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RegistrationView.xaml.cs">
+      <DependentUpon>RegistrationView.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\CustomerControls\BindablePasswordBox.xaml">
       <SubType>Designer</SubType>
@@ -185,6 +189,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\RegistrationForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RegistrationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

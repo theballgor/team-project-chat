@@ -33,9 +33,9 @@ namespace Client
         }
         private void Connecting()
         {
-            ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
-            ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
-            ClientModel.StartListening();
+            ClientModel.GetInstance().CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetInstance().GetFreeTcpPort());
+            ClientModel.GetInstance().Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
+            ClientModel.GetInstance().StartListening();
         }
     }
 }

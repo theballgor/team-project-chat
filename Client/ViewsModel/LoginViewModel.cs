@@ -11,11 +11,14 @@ using ClientServerLibrary.DbClasses;
 using Client.Store;
 using ClientLibrary;
 using Client.Services;
+using System.Windows.Input;
 
 namespace Client.ViewsModel
 {
     class LoginViewModel : ViewModelBase
     {
+        private readonly NavigationService<AccountViewModel> navigationService;
+
         // Fields
         public string Email
         {
@@ -41,54 +44,57 @@ namespace Client.ViewsModel
                 OnPropertyChanged("Password");
             }
         }
-        private readonly NavigationStore navigationStore;
-        public ViewModelBase CurrentViewModel => navigationStore.CurrentViewModel;
-        NavigationService<AccountViewModel> navigationService;
+
+        public ICommand LoginCommand { get; }
+        public ICommand RegistrationCommand { get; }
 
         // Constructor
         public LoginViewModel(NavigationStore navigationStore)
         {
-            this.navigationStore = navigationStore;
-            navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
             LoginModel.LoginSucces += LoginModel_LoginSucces;
             navigationService = new NavigationService<AccountViewModel>(navigationStore, () => new AccountViewModel(navigationStore));
+
+            LoginCommand = new LoginCommand(this, navigationService);
+            RegistrationCommand = new RegistrationCommand(this, new NavigationService<RegistrationViewModel>(navigationStore, () => new RegistrationViewModel(navigationStore)));
         }
 
         // Commands
-        public RelayCommand Login
-        {
-            get
-            {
-                return new RelayCommand(obj =>
-                {
-                    try
-                    {
-                        LoginModel.TryLogin();
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                });
-            }
-        }
-        public RelayCommand RegistrationWindow
-        {
-            get
-            {
-                return new RelayCommand(obj =>
-                {
-                    try
-                    {
-                        //відкрити реєстраційну форму
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                });
-            }
-        }
+        //public RelayCommand Login
+        //{
+        //    get
+        //    {
+        //        return new RelayCommand(obj =>
+        //        {
+        //            try
+        //            {
+        //                LoginModel.TryLogin();
+        //            }
+        //            catch (ArgumentException exc)
+        //            {
+        //                MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //            }
+        //        });
+        //    }
+        //}
+
+        //public RelayCommand RegistrationWindow
+        //{
+        //    get
+        //    {
+        //        return new RelayCommand(obj =>
+        //        {
+        //            try
+        //            {
+
+        //            }
+        //            catch (ArgumentException exc)
+        //            {
+        //                MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //            }
+        //        });
+        //    }
+        //}
+
 
         // Callback
         private void LoginModel_LoginSucces(object sender, EventArgs e)
@@ -96,20 +102,13 @@ namespace Client.ViewsModel
             User user = ((e as ViewModelEventArgs).Content as User);
             if (user != null)
             {
-                Console.WriteLine("Logined: " + user.Email);
                 navigationService.Navigate();
+                Console.WriteLine("Logined: " + user.Email);
             }
             else
             {
                 Console.WriteLine("Failed to login");
             }
-         
-           
-
-        }
-        protected virtual void OnCurrentViewModelChanged()
-        {
-            OnPropertyChanged(nameof(CurrentViewModel));
         }
     }
 }

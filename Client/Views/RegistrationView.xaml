@@ -1,0 +1,134 @@
+﻿<UserControl x:Class="Client.Views.RegistrationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Client.Views"
+             xmlns:viewsmodel="clr-namespace:Client.ViewsModel" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:customercontrols="clr-namespace:Client.Views.CustomerControls" 
+             d:DataContext="{d:DesignInstance Type=viewsmodel:RegistrationViewModel}"
+             mc:Ignorable="d" 
+             MaxWidth="460" 
+             MaxHeight="340"
+             d:DesignHeight="340" d:DesignWidth="460">
+
+    <Grid>
+        <Border Background="#FF2F2F2F" CornerRadius="12">
+            <Grid>
+                
+                <Grid.RowDefinitions>
+                    <!--Button field-->
+                    <RowDefinition Height="Auto"/>
+                    <!--Registered fields-->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Button x:Name="buttonClose"
+                        Background="{x:Null}"
+                        Margin="400 8 0 7"
+                        Width="25" Height="25"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                    <materialDesign:PackIcon Kind="Close" Foreground="WhiteSmoke"></materialDesign:PackIcon>
+                </Button>
+
+                <Grid Grid.Row="1" >
+                    <Grid.ColumnDefinitions>
+                        <!--Label-->
+                        <ColumnDefinition Width="*"/>
+                        <!--Fields-->
+                        <ColumnDefinition Width="1.2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid HorizontalAlignment="Center" >
+                        <StackPanel HorizontalAlignment="Center">
+                            <Label HorizontalContentAlignment="Center"
+                                   Foreground="#FF0E524E"
+                                   Margin="0 20 0 0">
+                                <materialDesign:PackIcon Kind="Forum" Width="60" Height="60"></materialDesign:PackIcon>
+                            </Label>
+                            <Label Content="Dialogue"
+                                   FontFamily="Fonts/#Audiowide"
+                                   FontSize="40">
+                            </Label>
+                            <Label Content="don't stopping"
+                                   FontFamily="Fonts/#Audiowide"
+                                   FontSize="16"
+                                   HorizontalContentAlignment="Center">
+                            </Label>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Vertical" Background="#FF2C2C2C" Margin="10 4 10 8">
+
+                            <TextBlock Text="REGISTRATION FORM" 
+                                   HorizontalAlignment="Center" 
+                                   Margin="0 14"
+                                   FontFamily="Fonts/#Titillium"
+                                   Foreground="#828282"
+                                   FontWeight="DemiBold"
+                                   FontSize="17">
+                            </TextBlock>
+
+                            <StackPanel  Margin="14 10" Orientation="Horizontal">
+                                <Label Margin="0 0 10 0"
+                                       Foreground="#FF4C5483">
+                                    <materialDesign:PackIcon Kind="EmailOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
+                                </Label>
+                                <TextBox Text="{Binding Email}"
+                                         Style="{StaticResource MaterialDesignTextBox}" Width="180"
+                                         materialDesign:HintAssist.Hint="e-mail"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="14 10" Orientation="Horizontal">
+                                <Label Margin="0 0 10 0">
+                                    <materialDesign:PackIcon Kind="PasswordOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
+                                </Label>
+                                <customercontrols:BindablePasswordBox Password="{Binding Password}" 
+                                                                      Width="180" 
+                                                                      materialDesign:HintAssist.Hint="password"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="14 10" Orientation="Horizontal">
+                                <Label Margin="0 0 10 0">
+                                    <materialDesign:PackIcon Kind="PasswordCheckOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
+                                </Label>
+                                <customercontrols:BindablePasswordBox Password="{Binding VerifyPassword}" 
+                                                                      Width="180"
+                                                                      materialDesign:HintAssist.Hint="verify password"/>
+                            </StackPanel>
+
+                            <StackPanel  Margin="14 10 14 16" Orientation="Horizontal">
+                                <Label Margin="0 0 10 0"
+                                       Foreground="#FF4C5483">
+                                    <materialDesign:PackIcon Kind="AccountBoxOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
+                                </Label>
+                                <TextBox Text="{Binding Username}"
+                                          Style="{StaticResource MaterialDesignTextBox}" Width="180"
+                                          materialDesign:HintAssist.Hint="nickname"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                        <Border Grid.Row="1" Background="#FF262626" Margin="10 0 10 10" CornerRadius="0 0 10 10">
+                            <Button Background="{x:Null}"
+                                    BorderBrush="{x:Null}"
+                                    FontFamily="Fonts/#Titillium"
+                                    Foreground="#828282"
+                                    FontSize="11"
+                                    Command="{Binding RegisteringCommand}"
+                                    Content="REGISTERING" Height="Auto">
+                            </Button>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

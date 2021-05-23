@@ -55,6 +55,19 @@ namespace Client.ViewsModel
                 RegistrationModel.Username = value;
                 OnPropertyChanged("Username");
             }
+        } 
+        
+        public string VerifyPassword
+        {
+            get
+            {
+                return RegistrationModel.VerifyPassword;
+            }
+            set
+            {
+                RegistrationModel.VerifyPassword = value;
+                OnPropertyChanged("VerifyPassword");
+            }
         }
 
         private readonly NavigationStore navigationStore;
@@ -71,23 +84,23 @@ namespace Client.ViewsModel
         }
 
         // Commands
-        public RelayCommand Register
-        {
-            get
-            {
-                return new RelayCommand(obj =>
-                {
-                    try
-                    {
-                        RegistrationModel.TryRegister();
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                });
-            }
-        }
+        //public RelayCommand Register
+        //{
+        //    get
+        //    {
+        //        return new RelayCommand(obj =>
+        //        {
+        //            try
+        //            {
+        //                RegistrationModel.TryRegister();
+        //            }
+        //            catch (ArgumentException exc)
+        //            {
+        //                MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //            }
+        //        });
+        //    }
+        //}
 
         // Callback
         private void RegistrationModel_RegistrationSucces(object sender, EventArgs e)

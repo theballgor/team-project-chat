@@ -38,7 +38,8 @@
                         <materialDesign:PackIcon Kind="EmailOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
                     </Label>
                     <TextBox Text="{Binding Email}"
-                         Style="{StaticResource MaterialDesignTextBox}" Width="160"/>
+                         Style="{StaticResource MaterialDesignTextBox}" Width="160"
+                         materialDesign:HintAssist.Hint="E-mail"/>
 
                 </StackPanel>
 
@@ -46,17 +47,17 @@
                     <Label Margin="0 0 10 0">
                         <materialDesign:PackIcon Kind="PasswordOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
                     </Label>
-                    <customercontrols:BindablePasswordBox Password="{Binding Password}" Width="160"/>
+                    <customercontrols:BindablePasswordBox Password="{Binding Password}" Width="160"
+                                                          materialDesign:HintAssist.Hint="Password"/>
                 </StackPanel>
 
                 <Button Grid.Row="3"
                     Padding="5"
                     HorizontalContentAlignment="Center"
-                    Command="{Binding Login}"
+                    Command="{Binding LoginCommand}"
                     Content="LOGIN" 
-                    Margin="21 15"
-                    FontSize="10"
-                    FontFamily="Fonts/Gueda"
+                    Margin="21 14"
+                    FontSize="12"
                     Foreground="#828282"
                     Background="#FF1B1B1B"
                     BorderBrush="{x:Null}"
@@ -70,10 +71,9 @@
             <Button 
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
-                    FontFamily="Fonts/Gueda"
                     Foreground="#828282"
-                    FontSize="10"
-                    Command="{Binding RegistrationWindow}"
+                    FontSize="12"
+                    Command="{Binding RegistrationCommand}"
                     Content="REGISTER">
             </Button>
         </Border>

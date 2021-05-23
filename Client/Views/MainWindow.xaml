@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:Client"
         xmlns:customcontrols="clr-namespace:Client.CustomerControls"
         xmlns:views="clr-namespace:Client.Views"
-        xmlns:viewmodels="clr-namespace:Client.ViewsModel" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        xmlns:viewmodels="clr-namespace:Client.ViewsModel" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         x:Name="mainWindow"
         AllowsTransparency="True"
@@ -183,12 +184,21 @@
 
                 <ContentControl Content="{Binding CurrentViewModel}" Grid.Row="1">
                     <ContentControl.Resources>
+                        
                         <DataTemplate DataType="{x:Type viewmodels:AccountViewModel}">
                             <views:MainView/>
+                        </DataTemplate> 
+                        
+                        <DataTemplate DataType="{x:Type viewmodels:RegistrationViewModel}">
+                            <views:RegistrationView/>
                         </DataTemplate>
+                        
                     </ContentControl.Resources>
                 </ContentControl>
 
+                
+                
+                
                 <!--<views:MainView Grid.Row="2"></views:MainView>-->
 
                 <!--Log out Button-->
