@@ -12,11 +12,14 @@ using ClientServerLibrary.DbClasses;
 using ClientLibrary;
 using Client.Store;
 using Client.Services;
+using System.Windows.Input;
 
 namespace Client.ViewsModel
 {
     class RegistrationViewModel : ViewModelBase
     {
+        private readonly NavigationService<LoginViewModel> navigationService;
+
         // Fields
         public string Email
         {
@@ -30,7 +33,6 @@ namespace Client.ViewsModel
                 OnPropertyChanged("Email");
             }
         }
-
         public string Password
         {
             get
@@ -43,7 +45,6 @@ namespace Client.ViewsModel
                 OnPropertyChanged("Password");
             }
         }
-
         public string Username
         {
             get
@@ -55,8 +56,7 @@ namespace Client.ViewsModel
                 RegistrationModel.Username = value;
                 OnPropertyChanged("Username");
             }
-        } 
-        
+        }  
         public string VerifyPassword
         {
             get
@@ -70,37 +70,17 @@ namespace Client.ViewsModel
             }
         }
 
-        private readonly NavigationStore navigationStore;
-        public ViewModelBase CurrentViewModel => navigationStore.CurrentViewModel;
-        NavigationService<LoginViewModel> navigationService;
+        public ICommand RegisterCommand { get; }
+        public ICommand CloseViewCommand { get; }
 
         // Constructor
         public RegistrationViewModel(NavigationStore navigationStore)
         {
-            this.navigationStore = navigationStore;
-            navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
             RegistrationModel.RegisterSucces += RegistrationModel_RegistrationSucces;
             navigationService = new NavigationService<LoginViewModel>(navigationStore, () => new LoginViewModel(navigationStore));
+            RegisterCommand = new RegisterCommand(this, navigationService);
+            CloseViewCommand = new CloseViewCommand(this, navigationService);
         }
-
-        // Commands
-        //public RelayCommand Register
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(obj =>
-        //        {
-        //            try
-        //            {
-        //                RegistrationModel.TryRegister();
-        //            }
-        //            catch (ArgumentException exc)
-        //            {
-        //                MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            }
-        //        });
-        //    }
-        //}
 
         // Callback
         private void RegistrationModel_RegistrationSucces(object sender, EventArgs e)
@@ -109,27 +89,22 @@ namespace Client.ViewsModel
             switch ((RegistrationResult)(e as ViewModelEventArgs).Content)
             {
                 case RegistrationResult.Success:
-                    Console.WriteLine("user succesfylly refistered");
-                    navigationService.Navigate();
-                    break;
+                     Console.WriteLine("user succesfylly refistered");
+                     navigationService.Navigate();
+                     break;
 
                 case RegistrationResult.UserNameAlreadyExists:
-                    Console.WriteLine("user already exist");
-                    break;
+                     Console.WriteLine("user already exist");
+                     break;
 
                 case RegistrationResult.EmailAlreadyExists:
-                    Console.WriteLine("email already exist");
-                    break;
+                     Console.WriteLine("email already exist");
+                     break;
 
                 default:
-                    Console.WriteLine("failed to register");
-                    break;
-
+                     Console.WriteLine("failed to register");
+                     break;
             }
-        }
-        protected virtual void OnCurrentViewModelChanged()
-        {
-            OnPropertyChanged(nameof(CurrentViewModel));
         }
     }
 }

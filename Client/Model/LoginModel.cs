@@ -48,7 +48,7 @@ namespace Client.Model
                     User user = new User
                     {
                         Email = email,
-                        Password = password,
+                        Password = Cryptography.Encrypt(password),
                         Avatar = null,
                         ConversationConnections = null,
                         Description = null,
@@ -84,6 +84,4 @@ namespace Client.Model
             }
         }
     }
-
-
 }

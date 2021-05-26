@@ -28,7 +28,9 @@
                         Background="{x:Null}"
                         Margin="400 8 0 7"
                         Width="25" Height="25"
-                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
+                        Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                        Command="{Binding CloseViewCommand}">
+                        
                     <materialDesign:PackIcon Kind="Close" Foreground="WhiteSmoke"></materialDesign:PackIcon>
                 </Button>
 
@@ -51,7 +53,7 @@
                                    FontFamily="Fonts/#Audiowide"
                                    FontSize="40">
                             </Label>
-                            <Label Content="don't stopping"
+                            <Label Content="speak more"
                                    FontFamily="Fonts/#Audiowide"
                                    FontSize="16"
                                    HorizontalContentAlignment="Center">
@@ -65,7 +67,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0" Orientation="Vertical" Background="#FF2C2C2C" Margin="10 4 10 8">
+                        <StackPanel Grid.Row="0" Orientation="Vertical" Background="#FF2B2B2B" Margin="10 4 10 8">
 
                             <TextBlock Text="REGISTRATION FORM" 
                                    HorizontalAlignment="Center" 
@@ -116,13 +118,13 @@
 
                         </StackPanel>
 
-                        <Border Grid.Row="1" Background="#FF262626" Margin="10 0 10 10" CornerRadius="0 0 10 10">
+                        <Border Grid.Row="1" Background="#FF191919" Margin="10 0 10 10" CornerRadius="0 0 10 10">
                             <Button Background="{x:Null}"
                                     BorderBrush="{x:Null}"
                                     FontFamily="Fonts/#Titillium"
                                     Foreground="#828282"
                                     FontSize="11"
-                                    Command="{Binding RegisteringCommand}"
+                                    Command="{Binding RegisterCommand}"
                                     Content="REGISTERING" Height="Auto">
                             </Button>
                         </Border>

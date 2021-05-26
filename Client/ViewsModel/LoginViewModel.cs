@@ -58,44 +58,6 @@ namespace Client.ViewsModel
             RegistrationCommand = new RegistrationCommand(this, new NavigationService<RegistrationViewModel>(navigationStore, () => new RegistrationViewModel(navigationStore)));
         }
 
-        // Commands
-        //public RelayCommand Login
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(obj =>
-        //        {
-        //            try
-        //            {
-        //                LoginModel.TryLogin();
-        //            }
-        //            catch (ArgumentException exc)
-        //            {
-        //                MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            }
-        //        });
-        //    }
-        //}
-
-        //public RelayCommand RegistrationWindow
-        //{
-        //    get
-        //    {
-        //        return new RelayCommand(obj =>
-        //        {
-        //            try
-        //            {
-
-        //            }
-        //            catch (ArgumentException exc)
-        //            {
-        //                MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            }
-        //        });
-        //    }
-        //}
-
-
         // Callback
         private void LoginModel_LoginSucces(object sender, EventArgs e)
         {
