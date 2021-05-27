@@ -91,6 +91,9 @@ namespace Server
                         case ActionType.GetUserFriendships:
                             GetUserFriendShips();
                             break;
+                        case ActionType.GetFriendsFromUserFriendships:
+                            GetFriendsFromUserFriendships();
+                            break;
                         case ActionType.GetUserInfo:
                             GetUserInfo();
                             break;
@@ -287,6 +290,24 @@ namespace Server
                     {
                         Friendship[] friendships = dbManager.GetAllUserFriendShips(currentUser);
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = friendships });
+                    }
+
+                    /// <summary>
+                    /// returns Content=User[]
+                    /// </summary>
+                    void GetFriendsFromUserFriendships()
+                    {
+
+                        Friendship[] friendships= dbManager.GetAllUserFriendShips(currentUser);
+                        User[] users = new User[friendships.Length];
+                        for (int i = 0; i < friendships.Length; i++)
+                        {
+                            if (friendships[i].Requester == currentUser)
+                                users[i] = friendships[i].Inviter;
+                            else
+                                users[i] = friendships[i].Requester;
+                        }
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
                     }
 
                     /// <summary>
