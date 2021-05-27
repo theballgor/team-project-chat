@@ -27,6 +27,7 @@ namespace ClientServerLibrary
         GetUserConversations,
         GetConversationUsers,
         GetUserFriendships,
+        GetFriendsFromUserFriendships,
         GetUserInfo,
         FatalError,
     }
