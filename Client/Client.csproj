@@ -97,9 +97,7 @@
     <Compile Include="Model\RegistrationModel.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\ParameterNavigationService.cs" />
-    <Compile Include="Stores\ClientModelStore.cs" />
     <Compile Include="Stores\NavigationStore.cs" />
-    <Compile Include="Stores\UserStore.cs" />
     <Compile Include="ViewsModel\AccountViewModel.cs" />
     <Compile Include="ViewsModel\Base\ViewModel.cs" />
     <Compile Include="ViewsModel\MainViewModel.cs" />

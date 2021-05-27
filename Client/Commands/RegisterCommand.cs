@@ -19,6 +19,11 @@ namespace Client.Commands
         public override void Execute(object parameter)
         {
             RegistrationModel.TryRegister();
+
+            _viewModel.Email = "";
+            _viewModel.Password = "";
+            _viewModel.Username = "";
+            _viewModel.VerifyPassword = "";
         }
     }
 }
