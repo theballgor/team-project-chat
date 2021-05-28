@@ -20,26 +20,7 @@ namespace Client.ViewsModel
     public class AccountViewModel : ViewModelBase
     {
 
-        #region Contacts
-        public ObservableCollection<User> _contacts;
-        public ObservableCollection<User> Contacts
-        {
-            get => _contacts;
-            set
-            {
-                //To change the list
-                if (_contacts == value) return;
-
-                //To update the list
-                _contacts = value;
-
-                OnPropertyChanged("Contacts");
-            }
-        }
-        #endregion
-
-
-
+       
         ObservableCollection<Message> messages;
         public ObservableCollection<Message> Messages { get { return messages == null ? messages = new ObservableCollection<Message>() : messages; } set { messages = value; } }
 
@@ -74,17 +55,28 @@ namespace Client.ViewsModel
             }
         }
 
-        //Constructor
-        public AccountViewModel(NavigationStore navigationStore)
-        {
-            AccountModel.RequestContacts();
-            AccountModel.GetContactsList += AccountModel_GetContactsList;
 
-            NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
-                navigationStore, () => new LoginViewModel(navigationStore)));
+
+
+        #region Contacts
+
+        public ObservableCollection<User> _contacts;
+        public ObservableCollection<User> Contacts
+        {
+            get => _contacts;
+            set
+            {
+                //To change the list
+                if (_contacts == value) return;
+
+                //To update the list
+                _contacts = value;
+
+                OnPropertyChanged("Contacts");
+            }
         }
 
-
+        //Logic
         private void AccountModel_GetContactsList(object sender, EventArgs e)
         {
             User[] users = ((e as ViewModelEventArgs).Content as User[]);
@@ -103,5 +95,23 @@ namespace Client.ViewsModel
             }
             
         }
+
+        #endregion
+
+
+
+
+
+
+        //Constructor
+        public AccountViewModel(NavigationStore navigationStore)
+        {
+            AccountModel.RequestContacts();
+            AccountModel.GetContactsList += AccountModel_GetContactsList;
+
+            NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
+                navigationStore, () => new LoginViewModel(navigationStore)));
+        }
+
     }
 }
