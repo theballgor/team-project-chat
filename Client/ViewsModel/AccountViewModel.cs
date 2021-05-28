@@ -91,6 +91,7 @@ namespace Client.ViewsModel
             
             if (users != null)
             {
+                Contacts = new ObservableCollection<User>();
                 foreach (var user in users)
                 {
                     Contacts.Add(user);
