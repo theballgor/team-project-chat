@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Client.Stores;
 using ClientServerLibrary;
 using ClientServerLibrary.DbClasses;
 
@@ -21,15 +21,13 @@ namespace Client.Model
                     break;
                 case ActionType.SendFriendRequest:
                     break;
+
                 case ActionType.RegisterUser:
-
                     RegistrationModel.Notify(Register(message));
-
                     break;
+
                 case ActionType.LogInUserByEmail:
-
                     LoginModel.Notify(Login(message));
-
                     break;
                 case ActionType.CreateConversation:
                     break;
@@ -46,6 +44,9 @@ namespace Client.Model
                 case ActionType.GetUserInfo:
                     break;
                 case ActionType.FatalError:
+                    break;
+                case ActionType.GetFriendsFromUserFriendships:
+                    AccountModel.Notify(GetContactsList(message));
                     break;
                 default:
                     break;
@@ -68,5 +69,19 @@ namespace Client.Model
                 return null;
         }
 
+        static User[] GetContactsList(ClientServerMessage message)
+        {
+            if (message.Content != null)
+            { 
+                return message.Content as User[];
+            }
+            else
+                return null;
+        }
+
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> enumerable)
+        {
+            return new ObservableCollection<T>(enumerable);
+        }
     }
 }

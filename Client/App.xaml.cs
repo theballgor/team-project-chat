@@ -1,6 +1,5 @@
 ﻿using Client.Model;
 using Client.Store;
-using Client.Stores;
 using Client.ViewsModel;
 using ClientServerLibrary;
 using System;

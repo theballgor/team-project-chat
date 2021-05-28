@@ -43,8 +43,6 @@ namespace ClientServerLibrary
     }
 
 
-
-
     [Serializable]
     public struct ClientServerMessage
     {

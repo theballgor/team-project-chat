@@ -2,11 +2,14 @@
 using Client.Model;
 using Client.Services;
 using Client.Store;
+using ClientLibrary;
+using ClientServerLibrary.DbClasses;
 using Client.Stores;
 using ClientServerLibrary.DbClasses;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -19,6 +22,27 @@ namespace Client.ViewsModel
 {
     public class AccountViewModel : ViewModelBase
     {
+
+        #region Contacts
+        public ObservableCollection<User> _contacts;
+        public ObservableCollection<User> Contacts
+        {
+            get => _contacts;
+            set
+            {
+                //To change the list
+                if (_contacts == value) return;
+
+                //To update the list
+                _contacts = value;
+
+                OnPropertyChanged("Contacts");
+            }
+        }
+        #endregion
+
+
+
         ObservableCollection<Message> messages;
         public ObservableCollection<Message> Messages { get { return messages == null ? messages = new ObservableCollection<Message>() : messages; } set { messages = value; } }
 
@@ -54,13 +78,27 @@ namespace Client.ViewsModel
             }
         }
 
+        //Constructor
         public AccountViewModel( NavigationStore navigationStore)
         {
+            AccountModel.RequestContacts();
+            AccountModel.GetContactsList += AccountModel_GetContactsList;
 
             NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
                 navigationStore, () => new LoginViewModel(navigationStore)));
 
+                foreach (var user in users)
+                {
+                    Contacts.Add(user);
+                }
 
+                Console.WriteLine("Success");
+            }
+            else
+            {
+                Console.WriteLine("Failed to contacts list");
+            }
+        }
             //SendTextMessageCommand = new 
         }
     }
