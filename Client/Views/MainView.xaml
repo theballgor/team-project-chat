@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:customcontrols="clr-namespace:Client.CustomerControls"
-             xmlns:local="clr-namespace:Client.Views"
+             xmlns:local="clr-namespace:Client.Views" xmlns:viewsmodel="clr-namespace:Client.ViewsModel" d:DataContext="{d:DesignInstance Type=viewsmodel:AccountViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -517,7 +517,7 @@
                                     Margin="8 0"
                                     FontSize="18"
                                     BorderThickness="0"
-                                    
+                                    Text="{Binding MessageContent}"            
                                     Background="Transparent"
                                     Foreground="WhiteSmoke"
                                     VerticalAlignment="Center"
@@ -535,6 +535,7 @@
                                         Background="Black"     
                                         Width="35"
                                         Height="35"
+                                        Command="{Binding SendMessageCommand}"
                                         Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
                                         <materialDesign:PackIcon Kind="Send"></materialDesign:PackIcon>
                                         <Button.Effect>
@@ -572,6 +573,7 @@
                                             <Button
                                                 ToolTip="File"
                                                 Margin="0 3"
+                                                Command="{Binding SelectFileCommand}"
                                                 Background="{x:Null}"
                                                 Foreground="WhiteSmoke"
                                                 Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">

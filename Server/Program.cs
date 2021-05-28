@@ -15,6 +15,11 @@ namespace Server
     {
         static void Main(string[] args)
         {
+
+            /*GenericUnitOfWork work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
+            IGenericRepository<User> rUsers = work.Repository<User>();
+            Console.WriteLine(rUsers.GetAll().First().Email);*/
+
             ServerClass server = new ServerClass(new IPEndPoint(GlobalVariables.LocalIP, GlobalVariables.ServerPort));
             server.Connect();
             while (Console.ReadKey().Key != ConsoleKey.Escape)

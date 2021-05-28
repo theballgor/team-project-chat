@@ -188,7 +188,7 @@ namespace Server
                                 case MessageType.Text:
                                     {
                                         content = message.Content;
-                                        message = dbManager.CreateMessage(message);
+                                        //additional content logic
                                         break;
                                     }
                            
@@ -204,7 +204,6 @@ namespace Server
                                         string newFilePath = filePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
                                         File.WriteAllBytes(newFilePath, file);
                                         message.Content = newFilePath;
-                                        message = dbManager.CreateMessage(message);
                                         break;
                                     }                  
                                 case MessageType.Image:
@@ -216,7 +215,6 @@ namespace Server
                                         string newFilePath = imagePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
                                         File.WriteAllBytes(newFilePath, file);
                                         message.Content = newFilePath;
-                                        message = dbManager.CreateMessage(message);
                                         break;
                                     }
                             }

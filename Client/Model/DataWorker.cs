@@ -17,6 +17,7 @@ namespace Client.Model
             switch (message.ActionType)
             {
                 case ActionType.SendConversationMessage:
+                    
                     break;
                 case ActionType.SendFriendRequest:
                     break;
