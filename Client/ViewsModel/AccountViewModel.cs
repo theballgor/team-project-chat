@@ -4,12 +4,9 @@ using Client.Services;
 using Client.Store;
 using ClientLibrary;
 using ClientServerLibrary.DbClasses;
-using Client.Stores;
-using ClientServerLibrary.DbClasses;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -61,7 +58,6 @@ namespace Client.ViewsModel
             Message msg = AccountModel.SendMessage(MessageContent, MessageFiles);
             Messages.Add(msg); 
         })); } }
-
         public ICommand SelectFileCommand
         {
             get
@@ -79,27 +75,32 @@ namespace Client.ViewsModel
         }
 
         //Constructor
-        public AccountViewModel( NavigationStore navigationStore)
+        public AccountViewModel(NavigationStore navigationStore)
         {
             AccountModel.RequestContacts();
             AccountModel.GetContactsList += AccountModel_GetContactsList;
 
             NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
                 navigationStore, () => new LoginViewModel(navigationStore)));
+        }
 
+
+        private void AccountModel_GetContactsList(object sender, EventArgs e)
+        {
+            User[] users = ((e as ViewModelEventArgs).Content as User[]);
+            
+            if (users != null)
+            {
                 foreach (var user in users)
                 {
                     Contacts.Add(user);
                 }
-
-                Console.WriteLine("Success");
             }
             else
             {
-                Console.WriteLine("Failed to contacts list");
+                Console.WriteLine("User is null");
             }
-        }
-            //SendTextMessageCommand = new 
+            
         }
     }
 }
