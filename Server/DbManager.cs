@@ -154,6 +154,28 @@ namespace Server
                 return null;
             }
         }
+        public User[] GetAllUsersFromUserFriendship(int userId)
+        {
+            try
+            {
+                IGenericRepository<Friendship> friendshipRepo = work.Repository<Friendship>();
+                User user = GetUserById(userId);
+                Friendship[] friendships = friendshipRepo.FindAll(item => item.Inviter == user || item.Requester == user).ToArray();
+                User[] users = new User[friendships.Length];
+                for (int i = 0; i < friendships.Length; i++)
+                {
+                    if (friendships[i].Requester == user)
+                        users[i] = friendships[i].Inviter;
+                    else
+                        users[i] = friendships[i].Requester;
+                }
+                return users;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         // create
         public bool CreateUser(User user)
         {
@@ -215,6 +237,7 @@ namespace Server
                 return null;
             }
         }
+  
         public Message CreateMessage(Message message)
         {
             try
