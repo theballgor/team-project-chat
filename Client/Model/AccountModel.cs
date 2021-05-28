@@ -32,6 +32,7 @@ namespace Client.Model
         }
 
 
+        #region Contacts
         public static event EventHandler GetContactsList;
 
         //Request to servet, get contacts list
@@ -56,5 +57,6 @@ namespace Client.Model
         {
             GetContactsList(null, new ViewModelEventArgs {Content = contacts});
         }
+        #endregion
     }
 }
