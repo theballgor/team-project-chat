@@ -186,47 +186,56 @@ namespace Server
                         message = dbManager.CreateMessage(message);
                         if (message != null)
                         {
-                            List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
+                 
                             object content=null;
-                            switch (message.MessageType)
-                            {
-                                case MessageType.Text:
-                                    {
-                                        content = message.Content;
-                                        //additional content logic
-                                        break;
-                                    }
-                           
-                                case MessageType.Audio:
+                            List<KeyValuePair<string, byte[]>> files = (List<KeyValuePair<string, byte[]>>)clientServerMessage.AdditionalContent;
 
-                                    break;
-                                case MessageType.File:
-                                    {
-                                        string filePath = ConfigurationManager.AppSettings.Get("FilePath");
 
-                                        byte[] file = (byte[])clientServerMessage.Content;
-                                        string fileName = clientServerMessage.AdditionalContent.ToString();
-                                        string newFilePath = filePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
-                                        File.WriteAllBytes(newFilePath, file);
-                                        message.Content = newFilePath;
-                                        break;
-                                    }                  
-                                case MessageType.Image:
-                                    {
-                                        string imagePath = ConfigurationManager.AppSettings.Get("ImagePath");
 
-                                        byte[] file = (byte[])clientServerMessage.Content;
-                                        string fileName = clientServerMessage.AdditionalContent.ToString();
-                                        string newFilePath = imagePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
-                                        File.WriteAllBytes(newFilePath, file);
-                                        message.Content = newFilePath;
-                                        break;
-                                    }
-                            }
+
+
+
+                            //switch (message.MessageType)
+                            //{
+                            //    case MessageType.Text:
+                            //        {
+                            //            content = message.Content;
+                            //            //additional content logic
+                            //            break;
+                            //        }
+
+                            //    case MessageType.Audio:
+
+                            //        break;
+                            //    case MessageType.File:
+                            //        {
+                            //            string filePath = ConfigurationManager.AppSettings.Get("FilePath");
+
+                            //            byte[] file = (byte[])clientServerMessage.Content;
+                            //            string fileName = clientServerMessage.AdditionalContent.ToString();
+                            //            string newFilePath = filePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
+                            //            File.WriteAllBytes(newFilePath, file);
+                            //            message.Content = newFilePath;
+                            //            break;
+                            //        }                  
+                            //    case MessageType.Image:
+                            //        {
+                            //            string imagePath = ConfigurationManager.AppSettings.Get("ImagePath");
+
+                            //            byte[] file = (byte[])clientServerMessage.Content;
+                            //            string fileName = clientServerMessage.AdditionalContent.ToString();
+                            //            string newFilePath = imagePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
+                            //            File.WriteAllBytes(newFilePath, file);
+                            //            message.Content = newFilePath;
+                            //            break;
+                            //        }
+                            //}
+
+
+                            List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
                             users.Remove(currentUser);
                             List<TcpClient> clients = GetClientsByUsers(users.ToArray());
                             SendMessage(clients, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = content });
-
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = true });
                         }
                         else
