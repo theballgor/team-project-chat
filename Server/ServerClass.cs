@@ -51,7 +51,7 @@ namespace Server
         {
             try
             {
-                User currentUser = dbManager.GetUserById(GetUserIdByClient(client));
+                User currentUser=null;
                 while (true)
                 {
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
@@ -129,6 +129,7 @@ namespace Server
                         user = dbManager.CheckLoginByEmail(user);
                         if (user != null)
                             connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        currentUser = user;
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                     }
 
@@ -140,6 +141,7 @@ namespace Server
                         user = dbManager.CheckLoginByUsername(user);
                         if (user != null)
                             connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        currentUser = user;
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                     }
 
@@ -297,14 +299,19 @@ namespace Server
                     {
 
                         Friendship[] friendships= dbManager.GetAllUserFriendShips(currentUser);
-                        User[] users = new User[friendships.Length];
-                        for (int i = 0; i < friendships.Length; i++)
+                        User[] users = null;
+                        if (friendships != null)
                         {
-                            if (friendships[i].Requester == currentUser)
-                                users[i] = friendships[i].Inviter;
-                            else
-                                users[i] = friendships[i].Requester;
+                            users = new User[friendships.Length];
+                            for (int i = 0; i < friendships.Length; i++)
+                            {
+                                if (friendships[i].Requester == currentUser)
+                                    users[i] = friendships[i].Inviter;
+                                else
+                                    users[i] = friendships[i].Requester;
+                            }
                         }
+                
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
                     }
 

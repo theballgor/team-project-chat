@@ -20,10 +20,10 @@ namespace Client.Commands
         {
             RegistrationModel.TryRegister();
 
-            _viewModel.Email = "";
-            _viewModel.Password = "";
-            _viewModel.Username = "";
-            _viewModel.VerifyPassword = "";
+            //_viewModel.Email = "";
+            //_viewModel.Password = "";
+            //_viewModel.Username = "";
+            //_viewModel.VerifyPassword = "";
         }
     }
 }

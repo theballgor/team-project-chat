@@ -134,7 +134,7 @@ namespace Server
             try
             {
                 IGenericRepository<Friendship> friendshipRepo = work.Repository<Friendship>();
-                return friendshipRepo.FindAll(item => item.Inviter == user || item.Requester == user).ToArray();
+                return friendshipRepo.FindAll(item => item.Inviter.Id == user.Id || item.Requester.Id == user.Id).ToArray();
             }
             catch (Exception)
             {
