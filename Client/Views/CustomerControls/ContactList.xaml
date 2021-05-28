@@ -133,9 +133,6 @@
                 <ItemsControl ItemsSource="{Binding Contacts}"
                               ItemTemplate="{StaticResource ContactButtonItemTemplate}"
                               Padding="0 10">
-                        <!--<ItemsControl.DataContext>
-                                <viewmodels:ViewModel></viewmodels:ViewModel>
-                        </ItemsControl.DataContext>-->
                 </ItemsControl>
             </StackPanel>
 

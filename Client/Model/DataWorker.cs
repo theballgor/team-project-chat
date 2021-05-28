@@ -44,6 +44,9 @@ namespace Client.Model
                     break;
                 case ActionType.FatalError:
                     break;
+                case ActionType.GetFriendsFromUserFriendships:
+                    AccountModel.Notify(GetContactsList(message));
+                    break;
                 default:
                     break;
             }
@@ -65,5 +68,19 @@ namespace Client.Model
                 return null;
         }
 
+        static User[] GetContactsList(ClientServerMessage message)
+        {
+            if (message.Content != null)
+            { 
+                return message.Content as User[];
+            }
+            else
+                return null;
+        }
+
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> enumerable)
+        {
+            return new ObservableCollection<T>(enumerable);
+        }
     }
 }
