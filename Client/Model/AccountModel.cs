@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Client.Model
@@ -13,24 +14,49 @@ namespace Client.Model
     static class AccountModel
     {
         // Constructor
-        static AccountModel() 
+        static AccountModel()
         {
             conversations = new ObservableCollection<Conversation>();
-            contactList = new ObservableCollection<User>();
+            contacts = new ObservableCollection<User>();
             messages = new ObservableCollection<ObservableCollection<Message>>();
+
+            RequestContacts();
+            GetUserConversations();
+            //GetConversationMessages(0);
+
+
+            ////HARDCODE
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    Conversation conversation = new Conversation();
+            //    conversation.Id = i;
+            //    conversation.Name = "Conversation #" + i;
+
+            //    conversations.Add(conversation);
+            //}
+
+            ////HARDCODE
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    User user = new User();
+            //    user.Id = i;
+            //    user.Username = "User #" + i;
+
+            //    contacts.Add(user);
+            //}
         }
 
         // Fields
 
-                /// Message from textbox
+        /// Message from textbox
         private static string messageContent;
-        public static string MessageContent 
+        public static string MessageContent
         {
             get => messageContent;
-            set { messageContent = value; } 
+            set { messageContent = value; }
         }
 
-                /// Current logged user
+        /// Current logged user
         private static User user;
         public static User User
         {
@@ -44,7 +70,7 @@ namespace Client.Model
             }
         }
 
-                /// All conversations
+        /// All conversations
         private static ObservableCollection<Conversation> conversations;
         public static ObservableCollection<Conversation> Conversations
         {
@@ -59,7 +85,7 @@ namespace Client.Model
             }
         }
 
-                /// All messages
+        /// All messages
         private static ObservableCollection<ObservableCollection<Message>> messages;
         public static ObservableCollection<ObservableCollection<Message>> Messages
         {
@@ -74,7 +100,7 @@ namespace Client.Model
             }
         }
 
-                /// Contact list
+        /// Contact list
         private static ObservableCollection<User> contacts;
         public static ObservableCollection<User> Contacts
         {
@@ -89,7 +115,7 @@ namespace Client.Model
             }
         }
 
-                /// Files 
+        /// Files 
         // ???
         private static List<KeyValuePair<string, byte[]>> messageFiles;
         public static List<KeyValuePair<string, byte[]>> MessageFiles
@@ -121,8 +147,16 @@ namespace Client.Model
 
 
         // Methods
-        // TODO
-        public static  void SendMessage()
+        public static void LogOut()
+        {
+            MessageContent = null;
+            User = null;
+            Conversations = null;
+            Messages = null;
+            Contacts = null;
+            MessageFiles = null;
+        }
+        public static void SendMessage()
         {
             Task.Run(() =>
             {
@@ -130,13 +164,13 @@ namespace Client.Model
                 message.Content = messageContent;
                 //message.Conversation = ?
                 message.IsRead = false;
-                message.MessageType = MessageType.Text;
                 message.Sender = User;
                 message.SendTime = DateTime.Now;
 
                 ClientServerMessage csMessage = new ClientServerMessage { Content = message };
                 csMessage.AdditionalContent = messageFiles;
                 ClientModel.GetInstance().SendMessage(csMessage);
+
                 Messages[message.Conversation.Id].Add(message);
             });
         }
@@ -146,7 +180,7 @@ namespace Client.Model
             {
                 try
                 {
-                    ClientServerMessage message = new ClientServerMessage { };
+                    ClientServerMessage message = new ClientServerMessage { Content = User };
                     message.ActionType = ActionType.GetFriendsFromUserFriendships;
 
                     ClientModel.GetInstance().SendMessage(message);
@@ -157,5 +191,21 @@ namespace Client.Model
                 }
             });
         }
+        public static void GetConversationMessages(int conversationId)
+        {
+            Task.Run(() =>
+            {
+                ClientModel.GetInstance().SendMessage(new ClientServerMessage { Content = new Conversation { Id = conversationId }, ActionType = ActionType.GetConversationMessages });
+            });
+        }
+        public static void GetUserConversations()
+        {
+            Task.Run(() =>
+            {
+                ClientModel.GetInstance().SendMessage(new ClientServerMessage { Content = User, ActionType = ActionType.GetUserConversations });
+            });
+        }
+
     }
+
 }

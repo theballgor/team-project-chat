@@ -79,7 +79,7 @@
 
                                                     <!--Name-->
                                                     <TextBlock Grid.Column="0" 
-                                                               Text="{Binding UserName}"
+                                                               Text="{Binding Username}"
                                                                FontSize="12">
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">

@@ -58,12 +58,15 @@ namespace Client.ViewsModel
         }
 
 
+
+
         public string MessageContent
         {
             get => AccountModel.MessageContent;
             set
             {
-                AccountModel.MessageContent = value; OnPropertyChanged("MessageContent");
+                AccountModel.MessageContent = value; 
+                OnPropertyChanged("MessageContent");
             }
         }
         
@@ -77,19 +80,11 @@ namespace Client.ViewsModel
         // Commands
 
         public ICommand NavigateLogOutCommand { get; }
-        protected ICommand _sendMessageCommand;
         protected ICommand _selectFileCommand;
-        // TODO
-        public ICommand SendMessageCommand
-        {
-            get
-            {
-                return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter =>
-                {
-                    AccountModel.SendMessage();
-                }));
-            }
-        }
+        protected ICommand _getConversationMessagesCommand;
+        protected ICommand _sendMessageCommand;
+        protected ICommand _getSelectedChatCommand;
+
         public ICommand SelectFileCommand
         {
             get
@@ -105,6 +100,55 @@ namespace Client.ViewsModel
                 }));
             }
         }
+        public ICommand GetSelectedChatCommand
+        {
+            get
+            {
+                return _getSelectedChatCommand ?? (_getSelectedChatCommand = new RelayCommand(parameter =>
+                {
+                    if(parameter is Conversation currentConversation)
+                    {
+                        LoadConversationMessages(currentConversation);
+                    }
+                }));
+            }
+        }
+
+        private void LoadConversationMessages(Conversation currentConversation)
+        {
+            AccountModel.GetConversationMessages(currentConversation.Id);
+        }
+
+        // Server-commands
+
+
+        public ICommand SendMessageCommand
+        {
+            get
+            {
+                return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter =>
+                {
+                    AccountModel.SendMessage();
+                }));
+            }
+        }
+
+        public ICommand GetConversationMessagesCommand
+        {
+            get
+            {
+                return _getConversationMessagesCommand ?? (_getConversationMessagesCommand = new RelayCommand(parameter =>
+                {
+                    //AccountModel.GetConversationMessages((int)parameter);
+                    AccountModel.GetConversationMessages(0);
+                }));
+            }
+        }
+
+
+
+
+
 
     }
 
@@ -114,32 +158,32 @@ namespace Client.ViewsModel
 
         private void Messages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         private void AllMessages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         private void Conversations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         private void AccountModel_LoadMessages(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         private void AccountModel_GetContactsList1(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         private void AccountModel_LoadConversations(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+
         }
     }
 }
