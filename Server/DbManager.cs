@@ -153,9 +153,10 @@ namespace Server
                 Console.WriteLine("user created");
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 Console.WriteLine("Failed to create user");
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }

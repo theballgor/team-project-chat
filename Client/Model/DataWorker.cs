@@ -17,48 +17,60 @@ namespace Client.Model
             switch (message.ActionType)
             {
                 case ActionType.SendConversationMessage:
-                    
-                    break;
-                case ActionType.SendFriendRequest:
+                    Message conversationMessage = SendConversationMessage(message);
+                    AccountModel.Messages[conversationMessage.Conversation.Id].Add(conversationMessage);
                     break;
 
-                case ActionType.RegisterUser:
-                    RegistrationModel.Notify(Register(message));
+                case ActionType.SendFriendRequest:
+                    AccountModel.ContactList.Add(SendFriendRequest(message));
                     break;
 
                 case ActionType.LogInUserByEmail:
                     LoginModel.Notify(Login(message));
                     break;
+
+                // ???
+                case ActionType.RegisterUser:
+                    break;
+
+
                 case ActionType.CreateConversation:
+                    AccountModel.Conversations.Add(CreateConversation(message));
                     break;
+
                 case ActionType.JoinConversation:
+                    AccountModel.Conversations.Add(JoinConversation(message));
                     break;
+
+                //
                 case ActionType.GetConversationMessages:
                     break;
+
                 case ActionType.GetUserConversations:
+
+                    AccountModel.Conversations = GetUserConversations(message);
+
                     break;
+
+                //
                 case ActionType.GetConversationUsers:
                     break;
+
+                //
                 case ActionType.GetUserFriendships:
                     break;
+
+                //
                 case ActionType.GetUserInfo:
                     break;
+
+                //
                 case ActionType.FatalError:
                     break;
-                case ActionType.GetFriendsFromUserFriendships:
-                    AccountModel.Notify(GetContactsList(message));
-                    break;
+
                 default:
                     break;
             }
-        }
-
-        private static object Register(ClientServerMessage message)
-        {
-            if (message.Content != null)
-                return message.Content;
-            else
-                return null;
         }
 
         static User Login(ClientServerMessage message)
@@ -69,19 +81,73 @@ namespace Client.Model
                 return null;
         }
 
-        static User[] GetContactsList(ClientServerMessage message)
+        static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
         {
             if (message.Content != null)
-            { 
-                return message.Content as User[];
+            {
+                List<Conversation> messageList = message.Content as List<Conversation>;
+
+                ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
+
+                foreach (var item in messageList)
+                    conversations.Add(item);
+
+                return conversations;
             }
             else
                 return null;
         }
 
-        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> enumerable)
+
+        ///// HARDCODE
+        //static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
+        //{
+        //    ObservableCollection<Conversation> collection = new ObservableCollection<Conversation>();
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        Conversation conversation = new Conversation();
+        //        conversation.Id = i;
+        //        conversation.Name = "Conversation #" + i;
+
+        //        collection.Add(conversation);
+        //    }
+
+        //    return collection;
+        //}
+
+
+        static Message SendConversationMessage(ClientServerMessage message)
         {
-            return new ObservableCollection<T>(enumerable);
+            if (message.Content != null)
+                return message.Content as Message;
+            else
+                return null;
         }
+
+        static Conversation CreateConversation(ClientServerMessage message)
+        {
+            if (message.Content != null)
+                return message.Content as Conversation;
+            else
+                return null;
+        }
+
+        static Conversation JoinConversation(ClientServerMessage message)
+        {
+            if (message.Content != null)
+                return message.Content as Conversation;
+            else
+                return null;
+        }
+
+        static User SendFriendRequest(ClientServerMessage message)
+        {
+            if (message.Content != null)
+                return message.Content as User;
+            else
+                return null;
+        }
+
+
     }
 }
