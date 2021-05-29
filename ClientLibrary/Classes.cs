@@ -40,6 +40,4 @@ namespace ClientLibrary
         public object Content { get; set; }
     }
 
-
-
 }

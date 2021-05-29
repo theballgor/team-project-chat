@@ -89,6 +89,7 @@
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
+    <Compile Include="Model\AccountModel.cs" />
     <Compile Include="Model\DataWorker.cs" />
     <Compile Include="Model\LoginModel.cs" />
     <Compile Include="Model\RegistrationModel.cs" />
