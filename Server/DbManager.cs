@@ -13,17 +13,15 @@ namespace Server
 {
     class DbManager
     {
-        private GenericUnitOfWork work;
         public DbManager()
         {
-            work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
+            Repositories.InitializeGenericRepositories();
         }
         public User CheckLoginByEmail(User user)
         {
             try
-            {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                User dbUser= userRepo.FindAll(User => User.Email == user.Email && User.Password == user.Password).First();
+            {            
+                User dbUser= Repositories.RUsers.FindAll(User => User.Email == user.Email && User.Password == user.Password).First();
                 Console.WriteLine("user logined");
                 return dbUser;
             }
@@ -37,8 +35,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                User dbUser = userRepo.FindAll(User => User.Username == user.Username && User.Password == user.Password).First();
+                User dbUser = Repositories.RUsers.FindAll(User => User.Username == user.Username && User.Password == user.Password).First();
                 Console.WriteLine("user logined");
                 return dbUser;
             }
@@ -53,8 +50,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                return userRepo.GetAll().ToArray();
+                return Repositories.RUsers.GetAll().ToArray();
             }
             catch (Exception)
             {
@@ -65,8 +61,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<Conversation> conversationRepo = work.Repository<Conversation>();
-                return conversationRepo.FindById(conversationId);
+                return Repositories.RConversations.FindById(conversationId);
             }
             catch (Exception)
             {
@@ -77,8 +72,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                return userRepo.FindById(userId);
+                return Repositories.RUsers.FindById(userId);
             }
             catch (Exception)
             {
@@ -89,8 +83,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<ConversationConnection> conversationConnectionRepo = work.Repository<ConversationConnection>();
-                return conversationConnectionRepo.FindAll(item => item.User.Id == userId).ToArray();
+                return Repositories.RConversationConnections.FindAll(item => item.User.Id == userId).ToArray();
             }
             catch (Exception)
             {
@@ -101,8 +94,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<ConversationConnection> conversationConnectionRepo = work.Repository<ConversationConnection>();
-                ConversationConnection[] userConversationConnections = conversationConnectionRepo.FindAll(item => item.User.Id == userId).ToArray();
+                ConversationConnection[] userConversationConnections = Repositories.RConversationConnections.FindAll(item => item.User.Id == userId).ToArray();
                 List<Conversation> conversations = new List<Conversation>();
                 foreach (var item in userConversationConnections)
                     conversations.Add(item.Conversation);
@@ -117,8 +109,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<ConversationConnection> conversationConnectionRepo = work.Repository<ConversationConnection>();
-                ConversationConnection[] userConversationConnections = conversationConnectionRepo.FindAll(item => item.Conversation.Id == conversation.Id).ToArray();
+                ConversationConnection[] userConversationConnections = Repositories.RConversationConnections.FindAll(item => item.Conversation.Id == conversation.Id).ToArray();
                 List<User> users = new List<User>();
                 foreach (var item in userConversationConnections)
                     users.Add(item.User);
@@ -133,8 +124,8 @@ namespace Server
         {
             try
             {
-                IGenericRepository<Friendship> friendshipRepo = work.Repository<Friendship>();
-                return friendshipRepo.FindAll(item => item.Inviter.Id == user.Id || item.Requester.Id == user.Id).ToArray();
+                return Repositories.RFriendShips.FindAll(item => item.Inviter.Id == user.Id || item.Requester.Id == user.Id).ToArray();
+
             }
             catch (Exception)
             {
@@ -146,8 +137,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<Message> friendshipRepo = work.Repository<Message>();
-                return friendshipRepo.FindAll(item => item.Conversation.Id == conversation.Id).ToArray();
+                return Repositories.RMessages.FindAll(item => item.Conversation.Id == conversation.Id).ToArray();
             }
             catch (Exception)
             {
@@ -159,8 +149,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                userRepo.Add(user);
+                Repositories.RUsers.Add(user);
                 Console.WriteLine("user created");
                 return true;
             }
@@ -170,12 +159,25 @@ namespace Server
                 return false;
             }
         }
+        public bool CreateFile(DbFile dbFile)
+        {
+            try
+            {
+                Repositories.RDbFiles.Add(dbFile);
+                Console.WriteLine("file created");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create file");
+                return false;
+            }
+        }
         public Conversation CreateConversation(Conversation conversation)
         {
             try
             {
-                IGenericRepository<Conversation> conversationRepo = work.Repository<Conversation>();
-                conversationRepo.Add(conversation);
+                Repositories.RConversations.Add(conversation);
                 Console.WriteLine("conversation created");
                 return conversation;
             }
@@ -189,8 +191,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<ConversationConnection> conversationConnectionRepo = work.Repository<ConversationConnection>();
-                conversationConnectionRepo.Add(conversationConnection);
+                Repositories.RConversationConnections.Add(conversationConnection);
                 Console.WriteLine("conversationConnection created");
                 return conversationConnection;
             }
@@ -204,8 +205,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<Friendship> friendshipRepo = work.Repository<Friendship>();
-                friendshipRepo.Add(friendship);
+                Repositories.RFriendShips.Add(friendship);
                 Console.WriteLine("friendship created");
                 return friendship;
             }
@@ -220,8 +220,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<Message> messageRepo = work.Repository<Message>();
-                messageRepo.Add(message);
+                Repositories.RMessages.Add(message);
                 Console.WriteLine("message created");
                 return message;
             }
@@ -236,8 +235,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<Friendship> friendshipRepo = work.Repository<Friendship>();
-                friendshipRepo.Update(friendship);
+                Repositories.RFriendShips.Update(friendship);
                 Console.WriteLine("friendship updated");
                 return friendship;
             }
@@ -251,8 +249,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<User> userRepo = work.Repository<User>();
-                userRepo.Update(user);
+                Repositories.RUsers.Update(user);
                 Console.WriteLine("user updated");
                 return user;
             }
@@ -266,8 +263,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<Conversation> conversationRepo = work.Repository<Conversation>();
-                conversationRepo.Update(conversation);
+                Repositories.RConversations.Update(conversation);
                 Console.WriteLine("conversation updated");
                 return conversation;
             }

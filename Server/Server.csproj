@@ -67,18 +67,6 @@
     <Compile Include="Database\Repositories.cs" />
     <Compile Include="DbManager.cs" />
     <Compile Include="Database\Migrations\Configuration.cs" />
-    <Compile Include="Migrations\202105271719378_m1.cs" />
-    <Compile Include="Migrations\202105271719378_m1.designer.cs">
-      <DependentUpon>202105271719378_m1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105281342021_m2.cs" />
-    <Compile Include="Migrations\202105281342021_m2.designer.cs">
-      <DependentUpon>202105281342021_m2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202105281400200_m3.cs" />
-    <Compile Include="Migrations\202105281400200_m3.designer.cs">
-      <DependentUpon>202105281400200_m3.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerClass.cs" />
@@ -91,17 +79,6 @@
   <ItemGroup>
     <Folder Include="Files\MessageFiles\Files\" />
     <Folder Include="Files\MessageFiles\Images\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202105271719378_m1.resx">
-      <DependentUpon>202105271719378_m1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105281342021_m2.resx">
-      <DependentUpon>202105281342021_m2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202105281400200_m3.resx">
-      <DependentUpon>202105281400200_m3.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -20,7 +20,6 @@ namespace Client.Model
                 message.Content = messageContent;
                 //message.Conversation = ?
                 message.IsRead = false;
-                message.MessageType = MessageType.Text;
                 //message.Sender = ?
                 message.SendTime = DateTime.Now;
                 ClientServerMessage csMessage = new ClientServerMessage { Content = message };

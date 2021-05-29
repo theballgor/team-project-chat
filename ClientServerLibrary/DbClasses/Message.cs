@@ -7,14 +7,6 @@ using System.IO;
 
 namespace ClientServerLibrary.DbClasses
 {
-    [Serializable]
-    public enum MessageType
-    {
-        Text,
-        Audio,
-        File,
-        Image
-    }
     [Table("Messages")]
     [Serializable]
     public class Message : INotifyPropertyChanged
@@ -31,9 +23,6 @@ namespace ClientServerLibrary.DbClasses
         public bool IsRead { get { return isRead; } set { isRead = value; OnPropertyChanged("IsRead"); } }
         [NotMapped]
         private bool isRead;
-        public MessageType MessageType { get { return messageType; } set { messageType = value; OnPropertyChanged("MessageType"); } }
-        [NotMapped]
-        private MessageType messageType;
         [Column("sender_id")]
         public virtual User Sender { get; set; }
         [Column("conversation_id")]
