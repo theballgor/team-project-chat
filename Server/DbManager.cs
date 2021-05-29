@@ -170,6 +170,21 @@ namespace Server
                 return false;
             }
         }
+        public bool CreateFile(DbFile dbFile)
+        {
+            try
+            {
+                IGenericRepository<DbFile> fileRepo = work.Repository<DbFile>();
+                fileRepo.Add(dbFile);
+                Console.WriteLine("file created");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create file");
+                return false;
+            }
+        }
         public Conversation CreateConversation(Conversation conversation)
         {
             try

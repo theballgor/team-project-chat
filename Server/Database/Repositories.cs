@@ -11,6 +11,7 @@ namespace Server.Database
         public static IGenericRepository<Message> RMessages { get; set; }
         public static IGenericRepository<Friendship> RFriendShips { get; set; }
         public static IGenericRepository<Conversation> RConversations { get; set; }
+        public static IGenericRepository<DbFile> RDbFiles { get; set; }
 
         public static void InitializeGenericRepositories()
         {
@@ -20,6 +21,7 @@ namespace Server.Database
             RMessages = Work.Repository<Message>();
             RFriendShips = Work.Repository<Friendship>();
             RConversations = Work.Repository<Conversation>();
+            RDbFiles = Work.Repository<DbFile>();
         }
     }
 }

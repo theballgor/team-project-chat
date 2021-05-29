@@ -107,13 +107,18 @@ namespace Server
                     void RegisterUser(User user)
                     {
                         RegistrationResult registrationResult;
-                        User[] users = dbManager.GetAllUsers();     
-                        if (users.Where(item => item.Email == user.Email) != null)
-                            registrationResult = RegistrationResult.EmailAlreadyExists;
-                        else if (users.Where(item => item.Username == user.Username) != null)
-                            registrationResult = RegistrationResult.UserNameAlreadyExists;
-                        else if (users.Where(item => item.PhoneNumber == user.PhoneNumber) != null)
-                            registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
+                        User[] users = dbManager.GetAllUsers();
+                        if (users != null)
+                        {
+                            if (users.Where(item => item.Email == user.Email) != null)
+                                registrationResult = RegistrationResult.EmailAlreadyExists;
+                            else if (users.Where(item => item.Username == user.Username) != null)
+                                registrationResult = RegistrationResult.UserNameAlreadyExists;
+                            else if (users.Where(item => item.PhoneNumber == user.PhoneNumber) != null)
+                                registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
+                        }
+                        else
+                            registrationResult = RegistrationResult.Success;
                         if (dbManager.CreateUser(user))
                             registrationResult = RegistrationResult.Success;
                         else
@@ -183,65 +188,43 @@ namespace Server
                     /// </summary>
                     void SendConversationMessage(Message message)
                     {
-                        message = dbManager.CreateMessage(message);
-                        if (message != null)
+                        object content = null;
+                        if (clientServerMessage.AdditionalContent != null)
                         {
-                 
-                            object content=null;
                             List<KeyValuePair<string, byte[]>> files = (List<KeyValuePair<string, byte[]>>)clientServerMessage.AdditionalContent;
-
-
-
-
-
-
-                            //switch (message.MessageType)
-                            //{
-                            //    case MessageType.Text:
-                            //        {
-                            //            content = message.Content;
-                            //            //additional content logic
-                            //            break;
-                            //        }
-
-                            //    case MessageType.Audio:
-
-                            //        break;
-                            //    case MessageType.File:
-                            //        {
-                            //            string filePath = ConfigurationManager.AppSettings.Get("FilePath");
-
-                            //            byte[] file = (byte[])clientServerMessage.Content;
-                            //            string fileName = clientServerMessage.AdditionalContent.ToString();
-                            //            string newFilePath = filePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
-                            //            File.WriteAllBytes(newFilePath, file);
-                            //            message.Content = newFilePath;
-                            //            break;
-                            //        }                  
-                            //    case MessageType.Image:
-                            //        {
-                            //            string imagePath = ConfigurationManager.AppSettings.Get("ImagePath");
-
-                            //            byte[] file = (byte[])clientServerMessage.Content;
-                            //            string fileName = clientServerMessage.AdditionalContent.ToString();
-                            //            string newFilePath = imagePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
-                            //            File.WriteAllBytes(newFilePath, file);
-                            //            message.Content = newFilePath;
-                            //            break;
-                            //        }
-                            //}
-
-
-                            List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
-                            users.Remove(currentUser);
-                            List<TcpClient> clients = GetClientsByUsers(users.ToArray());
-                            SendMessage(clients, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = content });
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = true });
+                            string filePath = ConfigurationManager.AppSettings["FilePath"];
+                            string imagePath = ConfigurationManager.AppSettings["ImagePath"];
+                            foreach (var file in files)
+                            {
+                                DbFile dbFile = new DbFile() { FileName = file.Key,Message=message};
+                                string newFilePath;
+                                string extention = Path.GetExtension(file.Key);
+                                if (ImageCheck(extention))
+                                {
+                                    dbFile.FileType = FileType.Image;
+                                    newFilePath = imagePath;
+                                }
+                                else
+                                {
+                                    dbFile.FileType = FileType.File;
+                                    newFilePath = filePath;
+                                }
+                                newFilePath = newFilePath + "\\" + $@"{Guid.NewGuid()}" + extention;
+                                //newFilePath = newFilePath + "\\" + Path.GetRandomFileName() + extention;
+                                File.WriteAllBytes(newFilePath, file.Value);
+                                dbManager.CreateFile(dbFile);                  
+                            }      
                         }
-                        else
-                        {
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = false });
-                        }
+                        message.SendTime = DateTime.Now;
+                        message = dbManager.CreateMessage(message);
+
+                        List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
+                        users.Remove(currentUser);
+                        List<TcpClient> clients = GetClientsByUsers(users.ToArray());
+                        SendMessage(clients, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = content });
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = true });
+
+                        //SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = false });
                     }
 
                     /// <summary>
@@ -320,7 +303,7 @@ namespace Server
                                     users[i] = friendships[i].Requester;
                             }
                         }
-                
+
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
                     }
 
