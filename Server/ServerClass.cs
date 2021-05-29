@@ -51,7 +51,7 @@ namespace Server
         {
             try
             {
-                User currentUser = dbManager.GetUserById(GetUserIdByClient(client));
+                User currentUser=null;
                 while (true)
                 {
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
@@ -91,6 +91,9 @@ namespace Server
                         case ActionType.GetUserFriendships:
                             GetUserFriendShips();
                             break;
+                        case ActionType.GetFriendsFromUserFriendships:
+                            GetFriendsFromUserFriendships();
+                            break;
                         case ActionType.GetUserInfo:
                             GetUserInfo();
                             break;
@@ -99,12 +102,23 @@ namespace Server
                             break;
                     }
                     /// <summary>
-                    /// returns Content=bool
+                    /// returns Content=RegistrationResult
                     /// </summary>
                     void RegisterUser(User user)
                     {
-                        bool registerResult = dbManager.CreateUser(user);
-                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registerResult });
+                        RegistrationResult registrationResult;
+                        User[] users = dbManager.GetAllUsers();     
+                        if (users.Where(item => item.Email == user.Email) != null)
+                            registrationResult = RegistrationResult.EmailAlreadyExists;
+                        else if (users.Where(item => item.Username == user.Username) != null)
+                            registrationResult = RegistrationResult.UserNameAlreadyExists;
+                        else if (users.Where(item => item.PhoneNumber == user.PhoneNumber) != null)
+                            registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
+                        if (dbManager.CreateUser(user))
+                            registrationResult = RegistrationResult.Success;
+                        else
+                            registrationResult = RegistrationResult.CreationError;
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
                     }
 
                     /// <summary>
@@ -115,6 +129,7 @@ namespace Server
                         user = dbManager.CheckLoginByEmail(user);
                         if (user != null)
                             connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        currentUser = user;
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                     }
 
@@ -126,6 +141,7 @@ namespace Server
                         user = dbManager.CheckLoginByUsername(user);
                         if (user != null)
                             connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        currentUser = user;
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                     }
 
@@ -170,49 +186,56 @@ namespace Server
                         message = dbManager.CreateMessage(message);
                         if (message != null)
                         {
-                            List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
+                 
                             object content=null;
-                            switch (message.MessageType)
-                            {
-                                case MessageType.Text:
-                                    {
-                                        content = message.Content;
-                                        message = dbManager.CreateMessage(message);
-                                        break;
-                                    }
-                           
-                                case MessageType.Audio:
+                            List<KeyValuePair<string, byte[]>> files = (List<KeyValuePair<string, byte[]>>)clientServerMessage.AdditionalContent;
 
-                                    break;
-                                case MessageType.File:
-                                    {
-                                        string filePath = ConfigurationManager.AppSettings.Get("FilePath");
 
-                                        byte[] file = (byte[])clientServerMessage.Content;
-                                        string fileName = clientServerMessage.AdditionalContent.ToString();
-                                        string newFilePath = filePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
-                                        File.WriteAllBytes(newFilePath, file);
-                                        message.Content = newFilePath;
-                                        message = dbManager.CreateMessage(message);
-                                        break;
-                                    }                  
-                                case MessageType.Image:
-                                    {
-                                        string imagePath = ConfigurationManager.AppSettings.Get("ImagePath");
 
-                                        byte[] file = (byte[])clientServerMessage.Content;
-                                        string fileName = clientServerMessage.AdditionalContent.ToString();
-                                        string newFilePath = imagePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
-                                        File.WriteAllBytes(newFilePath, file);
-                                        message.Content = newFilePath;
-                                        message = dbManager.CreateMessage(message);
-                                        break;
-                                    }
-                            }
+
+
+
+                            //switch (message.MessageType)
+                            //{
+                            //    case MessageType.Text:
+                            //        {
+                            //            content = message.Content;
+                            //            //additional content logic
+                            //            break;
+                            //        }
+
+                            //    case MessageType.Audio:
+
+                            //        break;
+                            //    case MessageType.File:
+                            //        {
+                            //            string filePath = ConfigurationManager.AppSettings.Get("FilePath");
+
+                            //            byte[] file = (byte[])clientServerMessage.Content;
+                            //            string fileName = clientServerMessage.AdditionalContent.ToString();
+                            //            string newFilePath = filePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
+                            //            File.WriteAllBytes(newFilePath, file);
+                            //            message.Content = newFilePath;
+                            //            break;
+                            //        }                  
+                            //    case MessageType.Image:
+                            //        {
+                            //            string imagePath = ConfigurationManager.AppSettings.Get("ImagePath");
+
+                            //            byte[] file = (byte[])clientServerMessage.Content;
+                            //            string fileName = clientServerMessage.AdditionalContent.ToString();
+                            //            string newFilePath = imagePath + "\\" + $@"{Guid.NewGuid()}" + Path.GetExtension(fileName);
+                            //            File.WriteAllBytes(newFilePath, file);
+                            //            message.Content = newFilePath;
+                            //            break;
+                            //        }
+                            //}
+
+
+                            List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
                             users.Remove(currentUser);
                             List<TcpClient> clients = GetClientsByUsers(users.ToArray());
                             SendMessage(clients, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = content });
-
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = true });
                         }
                         else
@@ -279,6 +302,29 @@ namespace Server
                     }
 
                     /// <summary>
+                    /// returns Content=User[]
+                    /// </summary>
+                    void GetFriendsFromUserFriendships()
+                    {
+
+                        Friendship[] friendships= dbManager.GetAllUserFriendShips(currentUser);
+                        User[] users = null;
+                        if (friendships != null)
+                        {
+                            users = new User[friendships.Length];
+                            for (int i = 0; i < friendships.Length; i++)
+                            {
+                                if (friendships[i].Requester == currentUser)
+                                    users[i] = friendships[i].Inviter;
+                                else
+                                    users[i] = friendships[i].Requester;
+                            }
+                        }
+                
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
+                    }
+
+                    /// <summary>
                     /// returns Content=user
                     /// </summary>
                     void GetUserInfo()
@@ -297,7 +343,7 @@ namespace Server
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Send message error");
+                    Console.WriteLine("Can't find user to send message");
                 }
                 AbortConnection(client);
                 Console.WriteLine(client.Client.RemoteEndPoint + "\t disconnected");

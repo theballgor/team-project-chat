@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:Client.Views" xmlns:viewModel="clr-namespace:Client.ViewsModel"
         mc:Ignorable="d"
         Title="RegistrationForm" Height="450" Width="800">
-    <Window.Resources>
-        <viewModel:RegistrationViewModel x:Key="viewSource"></viewModel:RegistrationViewModel>
+    <!--<Window.Resources>
+        --><!--<viewModel:reg x:Key="viewSource"></viewModel:reg>--><!--
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource viewSource}"></Binding>
-    </Window.DataContext>
+    </Window.DataContext>-->
     <Grid Background="#FF18191D">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>

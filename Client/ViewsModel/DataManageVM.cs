@@ -17,9 +17,9 @@ namespace Client.ViewsModel
     /// <summary>
     /// MVVM
     /// </summary>
-    class DataManageVM : INotifyPropertyChanged
+    class DataManageVM : ViewModelBase
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        
     }
 
 }

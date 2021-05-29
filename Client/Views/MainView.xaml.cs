@@ -55,5 +55,17 @@ namespace Client.Views
         {
             PopupBox.IsPopupOpen = false;
         }
+
+        private void buttonOpenContactList_Checked(object sender, RoutedEventArgs e)
+        {
+            var ContactList = (Border)FindName("ContactList");
+            ContactList.Visibility = Visibility.Visible;
+        }
+
+        private void buttonOpenContactList_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var gridContactList = (Border)FindName("ContactList");
+            gridContactList.Visibility = Visibility.Hidden;
+        }
     }
 }

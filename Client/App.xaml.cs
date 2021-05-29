@@ -1,6 +1,5 @@
 ﻿using Client.Model;
 using Client.Store;
-using Client.Stores;
 using Client.ViewsModel;
 using ClientServerLibrary;
 using System;
@@ -20,10 +19,7 @@ namespace Client
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            ClientModel.CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetFreeTcpPort());
-            ClientModel.Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
-            ClientModel.StartListening();
-
+            Connecting();
             NavigationStore navigationStore = new NavigationStore();
             navigationStore.CurrentViewModel = new LoginViewModel(navigationStore);
             MainWindow = new MainWindow()
@@ -33,6 +29,12 @@ namespace Client
             MainWindow.Show();
 
             base.OnStartup(e);
+        }
+        private void Connecting()
+        {
+            ClientModel.GetInstance().CreateClientEndpoint(GlobalVariables.LocalIP, ClientModel.GetInstance().GetFreeTcpPort());
+            ClientModel.GetInstance().Connect(GlobalVariables.LocalIP, GlobalVariables.ServerPort);
+            ClientModel.GetInstance().StartListening();
         }
     }
 }

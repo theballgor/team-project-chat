@@ -49,6 +49,18 @@ namespace Server
             }
         }
         // get
+        public User[] GetAllUsers()
+        {
+            try
+            {
+                IGenericRepository<User> userRepo = work.Repository<User>();
+                return userRepo.GetAll().ToArray();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public Conversation GetConversationById(int conversationId)
         {
             try
@@ -78,7 +90,7 @@ namespace Server
             try
             {
                 IGenericRepository<ConversationConnection> conversationConnectionRepo = work.Repository<ConversationConnection>();
-                return conversationConnectionRepo.FindAll(item => item.User == GetUserById(userId)).ToArray();
+                return conversationConnectionRepo.FindAll(item => item.User.Id == userId).ToArray();
             }
             catch (Exception)
             {
@@ -90,7 +102,7 @@ namespace Server
             try
             {
                 IGenericRepository<ConversationConnection> conversationConnectionRepo = work.Repository<ConversationConnection>();
-                ConversationConnection[] userConversationConnections = conversationConnectionRepo.FindAll(item => item.User == GetUserById(userId)).ToArray();
+                ConversationConnection[] userConversationConnections = conversationConnectionRepo.FindAll(item => item.User.Id == userId).ToArray();
                 List<Conversation> conversations = new List<Conversation>();
                 foreach (var item in userConversationConnections)
                     conversations.Add(item.Conversation);
@@ -106,7 +118,7 @@ namespace Server
             try
             {
                 IGenericRepository<ConversationConnection> conversationConnectionRepo = work.Repository<ConversationConnection>();
-                ConversationConnection[] userConversationConnections = conversationConnectionRepo.FindAll(item => item.Conversation == conversation).ToArray();
+                ConversationConnection[] userConversationConnections = conversationConnectionRepo.FindAll(item => item.Conversation.Id == conversation.Id).ToArray();
                 List<User> users = new List<User>();
                 foreach (var item in userConversationConnections)
                     users.Add(item.User);
@@ -122,7 +134,7 @@ namespace Server
             try
             {
                 IGenericRepository<Friendship> friendshipRepo = work.Repository<Friendship>();
-                return friendshipRepo.FindAll(item => item.Inviter == user || item.Requester == user).ToArray();
+                return friendshipRepo.FindAll(item => item.Inviter.Id == user.Id || item.Requester.Id == user.Id).ToArray();
             }
             catch (Exception)
             {
@@ -135,7 +147,7 @@ namespace Server
             try
             {
                 IGenericRepository<Message> friendshipRepo = work.Repository<Message>();
-                return friendshipRepo.FindAll(item => item.Conversation == conversation).ToArray();
+                return friendshipRepo.FindAll(item => item.Conversation.Id == conversation.Id).ToArray();
             }
             catch (Exception)
             {
@@ -204,6 +216,7 @@ namespace Server
                 return null;
             }
         }
+  
         public Message CreateMessage(Message message)
         {
             try
