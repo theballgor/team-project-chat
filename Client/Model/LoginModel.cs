@@ -73,7 +73,8 @@ namespace Client.Model
                     ClientServerMessage message = new ClientServerMessage { Content = user };
                     message.ActionType = ActionType.LogInUserByEmail;
 
-                    ClientModel.SendMessage(message);
+
+                    ClientModel.GetInstance().SendMessage(message);
 
                 }
                 catch (Exception ex)

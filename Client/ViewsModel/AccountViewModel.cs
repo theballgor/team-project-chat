@@ -14,34 +14,82 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ClientServerLibrary.DbClasses;
-using System.Collections.ObjectModel;
-using Client.Model;
 
 namespace Client.ViewsModel
 {
-    public class AccountViewModel : ViewModelBase
+    public partial class AccountViewModel : ViewModelBase
     {
+        //Constructor
+        public AccountViewModel(NavigationStore navigationStore)
+        {
+            NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
+                navigationStore, () => new LoginViewModel(navigationStore)));
 
-       
-        ObservableCollection<Message> messages;
-        public ObservableCollection<Message> Messages { get { return messages == null ? messages = new ObservableCollection<Message>() : messages; } set { messages = value; } }
+            // Events
+            // ОПИСАНІ В ПАРТІАЛ КЛАСІ НИЖЧЕ
+            AccountModel.LoadConversations += AccountModel_LoadConversations;
+            AccountModel.GetContactsList += AccountModel_GetContactsList1;
+            AccountModel.LoadMessages += AccountModel_LoadMessages;
+            AccountModel.Conversations.CollectionChanged += Conversations_CollectionChanged;
+            AccountModel.Messages.CollectionChanged += AllMessages_CollectionChanged;
 
-        private static List<KeyValuePair<string, byte[]>> messageFiles;
-        public static List<KeyValuePair<string, byte[]>> MessageFiles { get { return messageFiles == null ? messageFiles = new List<KeyValuePair<string, byte[]>>() : messageFiles; } set { messageFiles = value; } }
+            foreach (var messages in Messages)
+                messages.CollectionChanged += Messages_CollectionChanged;
+        }
 
-        public string MessageContent { get { return AccountModel.MessageContent; } set { AccountModel.MessageContent = value; OnPropertyChanged("MessageContent"); } }
+        // Fields
+
+                /// Static fields
+        public ObservableCollection<User> Contacts
+        {
+            get => AccountModel.Contacts;
+        }
+        public ObservableCollection<Conversation> Conversations
+        {
+            get => AccountModel.Conversations;
+        }
+        public ObservableCollection<ObservableCollection<Message>> Messages
+        {
+            get => AccountModel.Messages;
+        }
+        public User User
+        {
+            get => AccountModel.User;
+        }
+
+
+        public string MessageContent
+        {
+            get => AccountModel.MessageContent;
+            set
+            {
+                AccountModel.MessageContent = value; OnPropertyChanged("MessageContent");
+            }
+        }
+        
+        // ???
+        public List<KeyValuePair<string, byte[]>> MessageFiles
+        {
+            get => AccountModel.MessageFiles;
+            set => MessageFiles = value;
+        }
+
+        // Commands
 
         public ICommand NavigateLogOutCommand { get; }
         protected ICommand _sendMessageCommand;
         protected ICommand _selectFileCommand;
-
-
-        public ICommand SendMessageCommand { get { return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter => 
+        // TODO
+        public ICommand SendMessageCommand
         {
-            Message msg = AccountModel.SendMessage(MessageContent, MessageFiles);
-            Messages.Add(msg); 
-        })); } }
+            get
+            {
+                return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter =>
+                {
+                    AccountModel.SendMessage();
+                }));
+            }
+        }
         public ICommand SelectFileCommand
         {
             get
@@ -52,78 +100,46 @@ namespace Client.ViewsModel
                     if (openFileDialog.ShowDialog() == true)
                     {
                         foreach (string path in openFileDialog.FileNames)
-                            MessageFiles.Add(new KeyValuePair<string, byte[]>(Path.GetFileName(path), File.ReadAllBytes(path)));   
+                            MessageFiles.Add(new KeyValuePair<string, byte[]>(Path.GetFileName(path), File.ReadAllBytes(path)));
                     }
                 }));
             }
         }
 
+    }
 
 
+    public partial class AccountViewModel : ViewModelBase
+    {
 
-        #region Contacts
-
-        public ObservableCollection<User> _contacts;
-        public ObservableCollection<User> Contacts
+        private void Messages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            get => _contacts;
-            set
-            {
-                //To change the list
-                if (_contacts == value) return;
-
-                //To update the list
-                _contacts = value;
-
-                OnPropertyChanged("Contacts");
-            }
+            throw new NotImplementedException();
         }
 
-        //Logic
-        private void AccountModel_GetContactsList(object sender, EventArgs e)
+        private void AllMessages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            User[] users = ((e as ViewModelEventArgs).Content as User[]);
-            
-            if (users != null)
-            {
-                Contacts = new ObservableCollection<User>();
-                foreach (var user in users)
-                {
-                    Contacts.Add(user);
-                }
-            }
-            else
-            {
-                Console.WriteLine("User is null");
-            }
-            
+            throw new NotImplementedException();
         }
 
-        #endregion
-
-
-
-
-
-
-        //Constructor
-        public AccountViewModel(NavigationStore navigationStore)
+        private void Conversations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-
-            NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
-                navigationStore, () => new LoginViewModel(navigationStore)));
-
-
-            // Events
-
-            AccountModel.LoadData += AccountModel_LoadData;
-            foreach (var item in Converstaions)
-                item.Value.CollectionChanged += Messages_CollectionsChanged;
-            Converstaions.CollectionChanged += Converstaions_CollectionChanged;
+            throw new NotImplementedException();
         }
 
+        private void AccountModel_LoadMessages(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
+        private void AccountModel_GetContactsList1(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-        //}
+        private void AccountModel_LoadConversations(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -18,20 +18,21 @@ namespace Client.Model
             {
                 case ActionType.SendConversationMessage:
                     Message conversationMessage = SendConversationMessage(message);
-                    AccountModel.Conversations[conversationMessage.Conversation.Id].Value.Add(conversationMessage);
+                    AccountModel.Messages[conversationMessage.Conversation.Id].Add(conversationMessage);
                     break;
 
-                //
                 case ActionType.SendFriendRequest:
-                    break;
-
-                ////
-                case ActionType.RegisterUser:
+                    AccountModel.ContactList.Add(SendFriendRequest(message));
                     break;
 
                 case ActionType.LogInUserByEmail:
                     LoginModel.Notify(Login(message));
                     break;
+
+                // ???
+                case ActionType.RegisterUser:
+                    break;
+
 
                 case ActionType.CreateConversation:
                     AccountModel.Conversations.Add(CreateConversation(message));
@@ -80,33 +81,39 @@ namespace Client.Model
                 return null;
         }
 
-        //static ObservableCollection<KeyValuePair<Conversation, ObservableCollection<Message>>> GetUserConversations(ClientServerMessage message)
-        //{
-        //    if (message.Content != null)
-        //        return message.Content as ObservableCollection<KeyValuePair<Conversation, ObservableCollection<Message>>>;
-        //    else
-        //        return null;
-        //}
-
-        static ObservableCollection<KeyValuePair<Conversation, ObservableCollection<Message>>> GetUserConversations(ClientServerMessage message)
+        static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
         {
-            ObservableCollection<KeyValuePair<Conversation, ObservableCollection<Message>>> collection = new ObservableCollection<KeyValuePair<Conversation, ObservableCollection<Message>>>();
-
-            for (int i = 0; i < 5; i++)
+            if (message.Content != null)
             {
-                ObservableCollection<Message> messages = new ObservableCollection<Message>();
-                Conversation conversation = new Conversation();
-                conversation.Id = i;
+                List<Conversation> messageList = message.Content as List<Conversation>;
 
-                conversation.Name = "Conversation #" + i;
-                for (int j = 0; j < 20; j++)
-                    messages.Add(new Message { Conversation = conversation, Sender = new User { Username = "User #" + (j % 2) }, Content = "Message #" + j });
-                
-                collection.Add(new KeyValuePair<Conversation, ObservableCollection<Message>>(conversation, messages));
+                ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
+
+                foreach (var item in messageList)
+                    conversations.Add(item);
+
+                return conversations;
             }
-
-            return collection;
+            else
+                return null;
         }
+
+
+        ///// HARDCODE
+        //static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
+        //{
+        //    ObservableCollection<Conversation> collection = new ObservableCollection<Conversation>();
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        Conversation conversation = new Conversation();
+        //        conversation.Id = i;
+        //        conversation.Name = "Conversation #" + i;
+
+        //        collection.Add(conversation);
+        //    }
+
+        //    return collection;
+        //}
 
 
         static Message SendConversationMessage(ClientServerMessage message)
@@ -117,16 +124,29 @@ namespace Client.Model
                 return null;
         }
 
-        static KeyValuePair<Conversation, ObservableCollection<Message>> CreateConversation(ClientServerMessage message)
+        static Conversation CreateConversation(ClientServerMessage message)
         {
-            return (KeyValuePair<Conversation, ObservableCollection<Message>>)message.Content;
+            if (message.Content != null)
+                return message.Content as Conversation;
+            else
+                return null;
         }
 
-        static KeyValuePair<Conversation, ObservableCollection<Message>> JoinConversation(ClientServerMessage message)
+        static Conversation JoinConversation(ClientServerMessage message)
         {
-            return (KeyValuePair<Conversation, ObservableCollection<Message>>)message.Content;
+            if (message.Content != null)
+                return message.Content as Conversation;
+            else
+                return null;
         }
 
+        static User SendFriendRequest(ClientServerMessage message)
+        {
+            if (message.Content != null)
+                return message.Content as User;
+            else
+                return null;
+        }
 
 
     }
