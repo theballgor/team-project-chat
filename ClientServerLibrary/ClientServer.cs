@@ -70,6 +70,9 @@ namespace ClientServerLibrary
         public static readonly IPAddress LocalIP = IPAddress.Parse("127.0.0.1");
     }
 
+
+
+
     public static class ClientServerDataManager
     {
         public static ClientServerMessage Deserialize(byte[] data)
@@ -94,6 +97,9 @@ namespace ClientServerLibrary
             }
             return serializedData;
         }
+
+
+
         public static byte[] TcpClientDataReader(TcpClient client)
         {
             NetworkStream stream = client.GetStream();

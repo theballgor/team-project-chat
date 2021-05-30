@@ -12,24 +12,34 @@ namespace Client.Model
 {
     static class LoginModel
     {
-        // Event
-        public static event EventHandler LoginSucces;
-
         // Fields
         private static string email;
         private static string password;
-
         public static string Email
         {
-            get { return email; }
-            set { email = value; }
+            get
+            {
+                return email;
+            }
+            set
+            {
+                email = value;
+            }
         }
-        public static string Password 
+        public static string Password
         {
-            get { return password; }
-            set { password = value; }
+            get
+            {
+                return password;
+            }
+            set
+            {
+                password = value;
+            }
         }
 
+        // Event
+        public static event EventHandler LoginSucces;
 
         // Notyfier
         public static void Notify(User user)
@@ -48,7 +58,7 @@ namespace Client.Model
                     User user = new User
                     {
                         Email = email,
-                        Password = Cryptography.Encrypt(password),
+                        Password = Cryptography.Encrypt(Password),
                         Avatar = null,
                         ConversationConnections = null,
                         Description = null,
@@ -58,8 +68,11 @@ namespace Client.Model
                         Username = null
                     };
 
+                    Console.WriteLine(user.Password);
+
                     ClientServerMessage message = new ClientServerMessage { Content = user };
                     message.ActionType = ActionType.LogInUserByEmail;
+
 
                     ClientModel.GetInstance().SendMessage(message);
 
@@ -84,4 +97,6 @@ namespace Client.Model
             }
         }
     }
+
+
 }
