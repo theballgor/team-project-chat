@@ -39,10 +39,7 @@ namespace Server
                 {
                     TcpClient currentClient = server.AcceptTcpClient();
                     Console.WriteLine("Connnected\t\t" + currentClient.Client.RemoteEndPoint);
-                    Task.Run(() =>
-                    {
-                        ConversationHandler(currentClient);
-                    });
+                    Task.Run(() => ConversationHandler(currentClient));
                 }
             });
         }
@@ -54,8 +51,6 @@ namespace Server
                 while (true)
                 {      
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
-                    Task.Run(() =>
-                    {
                         ClientServerMessage clientServerMessage = ClientServerDataManager.Deserialize(data);
                         switch (clientServerMessage.ActionType)
                         {
@@ -330,7 +325,6 @@ namespace Server
                             currentUser = user;
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                         }
-                    });
                 }
             }
             catch (Exception)

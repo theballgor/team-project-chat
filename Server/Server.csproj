@@ -76,7 +76,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Files\Message\Audio\PlaceHolder.txt" />
     <Content Include="Files\Message\Files\PlaceHolder.txt" />
