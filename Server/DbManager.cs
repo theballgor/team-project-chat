@@ -133,8 +133,7 @@ namespace Server
         {
             try
             {
-                IGenericRepository<Friendship> friendshipRepo = work.Repository<Friendship>();
-                return friendshipRepo.FindAll(item => item.Inviter.Id == user.Id || item.Requester.Id == user.Id).ToArray();
+                return work.Repository<Friendship>().FindAll(item => item.Requester.Id == user.Id).ToArray();
             }
             catch (Exception)
             {

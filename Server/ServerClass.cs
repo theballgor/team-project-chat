@@ -300,15 +300,14 @@ namespace Server
 
                         Friendship[] friendships= dbManager.GetAllUserFriendShips(currentUser);
                         User[] users = null;
+
                         if (friendships != null)
                         {
                             users = new User[friendships.Length];
                             for (int i = 0; i < friendships.Length; i++)
                             {
-                                if (friendships[i].Requester == currentUser)
+                                if (friendships[i].Inviter != currentUser)
                                     users[i] = friendships[i].Inviter;
-                                else
-                                    users[i] = friendships[i].Requester;
                             }
                         }
                 

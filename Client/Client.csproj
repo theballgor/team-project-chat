@@ -115,7 +115,6 @@
     <Compile Include="Services\ParameterNavigationService.cs" />
     <Compile Include="Stores\NavigationStore.cs" />
     <Compile Include="ViewsModel\AccountViewModel.cs" />
-    <Compile Include="ViewsModel\Base\ViewModel.cs" />
     <Compile Include="ViewsModel\MainViewModel.cs" />
     <Compile Include="ViewsModel\ViewModelBase.cs" />
     <Compile Include="Views\CustomerControls\BindablePasswordBox.xaml.cs">
@@ -178,8 +177,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewsModel\Commands\CommandViewModel.cs" />
-    <Compile Include="ViewsModel\Commands\RelayCommand.cs" />
+    <Compile Include="Commands\CommandViewModel.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewsModel\DataManageVM.cs" />
     <Compile Include="ViewsModel\LoginViewModel.cs" />
     <Compile Include="Views\CustomerControls\ChatList.xaml.cs">

@@ -19,8 +19,8 @@ namespace Client.ViewsModel
 {
     public class AccountViewModel : ViewModelBase
     {
+        #region Message
 
-       
         ObservableCollection<Message> messages;
         public ObservableCollection<Message> Messages { get { return messages == null ? messages = new ObservableCollection<Message>() : messages; } set { messages = value; } }
 
@@ -29,7 +29,6 @@ namespace Client.ViewsModel
 
         public string MessageContent { get { return AccountModel.MessageContent; } set { AccountModel.MessageContent = value; OnPropertyChanged("MessageContent"); } }
 
-        public ICommand NavigateLogOutCommand { get; }
         protected ICommand _sendMessageCommand;
         protected ICommand _selectFileCommand;
 
@@ -55,8 +54,7 @@ namespace Client.ViewsModel
             }
         }
 
-
-
+        #endregion
 
         #region Contacts
 
@@ -102,6 +100,7 @@ namespace Client.ViewsModel
 
 
 
+        public ICommand NavigateLogOutCommand { get; }
 
         //Constructor
         public AccountViewModel(NavigationStore navigationStore)
