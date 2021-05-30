@@ -16,7 +16,7 @@ namespace Client.Model
         static AccountModel() 
         {
             conversations = new ObservableCollection<Conversation>();
-            contactList = new ObservableCollection<User>();
+            contacts = new ObservableCollection<User>();
             messages = new ObservableCollection<ObservableCollection<Message>>();
         }
 
@@ -130,7 +130,6 @@ namespace Client.Model
                 message.Content = messageContent;
                 //message.Conversation = ?
                 message.IsRead = false;
-                message.MessageType = MessageType.Text;
                 message.Sender = User;
                 message.SendTime = DateTime.Now;
 
