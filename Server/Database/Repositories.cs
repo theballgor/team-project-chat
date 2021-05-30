@@ -20,6 +20,12 @@ namespace Server.Database
             RMessages = Work.Repository<Message>();
             RFriendShips = Work.Repository<Friendship>();
             RConversations = Work.Repository<Conversation>();
+
+            RUsers.GetAll();
+            RConversationConnections.GetAll();
+            RMessages.GetAll();
+            RFriendShips.GetAll();
+            RConversations.GetAll();
         }
     }
 }

@@ -17,27 +17,64 @@ using System.Windows.Input;
 
 namespace Client.ViewsModel
 {
-    public class AccountViewModel : ViewModelBase
+    public partial class AccountViewModel : ViewModelBase
     {
-        #region Message
-
-        ObservableCollection<Message> messages;
-        public ObservableCollection<Message> Messages { get { return messages == null ? messages = new ObservableCollection<Message>() : messages; } set { messages = value; } }
-
-        private static List<KeyValuePair<string, byte[]>> messageFiles;
-        public static List<KeyValuePair<string, byte[]>> MessageFiles { get { return messageFiles == null ? messageFiles = new List<KeyValuePair<string, byte[]>>() : messageFiles; } set { messageFiles = value; } }
-
-        public string MessageContent { get { return AccountModel.MessageContent; } set { AccountModel.MessageContent = value; OnPropertyChanged("MessageContent"); } }
-
-        protected ICommand _sendMessageCommand;
-        protected ICommand _selectFileCommand;
-
-
-        public ICommand SendMessageCommand { get { return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter => 
+        //Constructor
+        public AccountViewModel(NavigationStore navigationStore)
         {
-            Message msg = AccountModel.SendMessage(MessageContent, MessageFiles);
-            Messages.Add(msg); 
-        })); } }
+            NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
+                navigationStore, () => new LoginViewModel(navigationStore)));
+        }
+
+
+        // Fields
+
+        /// Static fields
+        public ObservableCollection<User> Contacts
+        {
+            get => AccountModel.Contacts;
+        }
+        public ObservableCollection<Conversation> Conversations
+        {
+            get => AccountModel.Conversations;
+        }
+        public ObservableCollection<ObservableCollection<Message>> Messages
+        {
+            get => AccountModel.Messages;
+        }
+        public User User
+        {
+            get => AccountModel.User;
+        }
+
+
+
+
+        public string MessageContent
+        {
+            get => AccountModel.MessageContent;
+            set
+            {
+                AccountModel.MessageContent = value;
+                OnPropertyChanged("MessageContent");
+            }
+        }
+
+        // ???
+        public List<KeyValuePair<string, byte[]>> MessageFiles
+        {
+            get => AccountModel.MessageFiles;
+            set => MessageFiles = value;
+        }
+
+
+        // Commands
+        public ICommand NavigateLogOutCommand { get; }
+        protected ICommand _selectFileCommand;
+        protected ICommand _getConversationMessagesCommand;
+        protected ICommand _sendMessageCommand;
+        protected ICommand _getSelectedChatCommand;
+
         public ICommand SelectFileCommand
         {
             get
@@ -48,68 +85,53 @@ namespace Client.ViewsModel
                     if (openFileDialog.ShowDialog() == true)
                     {
                         foreach (string path in openFileDialog.FileNames)
-                            MessageFiles.Add(new KeyValuePair<string, byte[]>(Path.GetFileName(path), File.ReadAllBytes(path)));   
+                            MessageFiles.Add(new KeyValuePair<string, byte[]>(Path.GetFileName(path), File.ReadAllBytes(path)));
+                    }
+                }));
+            }
+        }
+        public ICommand GetSelectedChatCommand
+        {
+            get
+            {
+                return _getSelectedChatCommand ?? (_getSelectedChatCommand = new RelayCommand(parameter =>
+                {
+                    if (parameter is Conversation currentConversation)
+                    {
+                        LoadConversationMessages(currentConversation);
                     }
                 }));
             }
         }
 
-        #endregion
-
-        #region Contacts
-
-        public ObservableCollection<User> _contacts;
-        public ObservableCollection<User> Contacts
+        private void LoadConversationMessages(Conversation currentConversation)
         {
-            get => _contacts;
-            set
-            {
-                //To change the list
-                if (_contacts == value) return;
-
-                //To update the list
-                _contacts = value;
-
-                OnPropertyChanged("Contacts");
-            }
+            AccountModel.GetConversationMessages(currentConversation.Id);
         }
 
-        //Logic
-        private void AccountModel_GetContactsList(object sender, EventArgs e)
+
+        // Server-commands
+        public ICommand SendMessageCommand
         {
-            User[] users = ((e as ViewModelEventArgs).Content as User[]);
-            
-            if (users != null)
+            get
             {
-                Contacts = new ObservableCollection<User>();
-                foreach (var user in users)
+                return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter =>
                 {
-                    Contacts.Add(user);
-                }
+                    AccountModel.SendMessage();
+                }));
             }
-            else
-            {
-                Console.WriteLine("User is null");
-            }
-            
         }
 
-        #endregion
-
-
-
-
-
-        public ICommand NavigateLogOutCommand { get; }
-
-        //Constructor
-        public AccountViewModel(NavigationStore navigationStore)
+        public ICommand GetConversationMessagesCommand
         {
-            AccountModel.RequestContacts();
-            AccountModel.GetContactsList += AccountModel_GetContactsList;
-
-            NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
-                navigationStore, () => new LoginViewModel(navigationStore)));
+            get
+            {
+                return _getConversationMessagesCommand ?? (_getConversationMessagesCommand = new RelayCommand(parameter =>
+                {
+                    //AccountModel.GetConversationMessages((int)parameter);
+                    AccountModel.GetConversationMessages(0);
+                }));
+            }
         }
 
     }

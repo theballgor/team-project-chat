@@ -146,6 +146,7 @@ namespace Server
             try
             {
                 IGenericRepository<Message> friendshipRepo = work.Repository<Message>();
+                
                 return friendshipRepo.FindAll(item => item.Conversation.Id == conversation.Id).ToArray();
             }
             catch (Exception)
