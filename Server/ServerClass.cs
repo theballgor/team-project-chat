@@ -49,8 +49,6 @@ namespace Server
         }
         private void ConversationHandler(TcpClient client)
         {
-
-
             try
             {
                 User currentUser = null;

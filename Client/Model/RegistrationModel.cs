@@ -75,7 +75,7 @@ namespace Client.Model
                     ClientServerMessage message = new ClientServerMessage { Content = user };
                     message.ActionType = ActionType.RegisterUser;
 
-                    ClientModel.GetInstance().SendMessage(message);
+                    ClientModel.GetInstance().SendMessageAsync(message);
                 }
                 catch (Exception ex)
                 {
