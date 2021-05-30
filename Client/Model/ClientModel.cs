@@ -66,23 +66,36 @@ namespace Client.Model
 
             });
         }
-        public void SendMessage(ClientServerMessage message)
+
+        private void _sendMessage(ClientServerMessage message) 
+        {
+            try
+            {
+                byte[] arr = ClientServerDataManager.Serialize(message);
+                NetworkStream stream = client.GetStream();
+                stream.Write(arr, 0, arr.Length);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Error: " + exc.Message, "Send error");
+            }
+        }
+
+        public void SendMessageAsync(ClientServerMessage message)
         {
             if (client != null && client.Connected)
                 Task.Run(new Action(() =>
                 {
-                    try
-                    {
-                        byte[] arr = ClientServerDataManager.Serialize(message);
-                        NetworkStream stream = client.GetStream();
-                        stream.Write(arr, 0, arr.Length);
-                    }
-                    catch (Exception exc)
-                    {
-                        MessageBox.Show("Error: " + exc.Message, "Send error");
-                    }
+                    _sendMessage(message);
                 }));
         }
+        public void SendMessageSync(ClientServerMessage message)
+        {
+            if (client != null && client.Connected)
+                _sendMessage(message);
+        }
+
+
         public int GetFreeTcpPort()
         {
             TcpListener listener = new TcpListener(IPAddress.Loopback, 0);

@@ -53,10 +53,8 @@ namespace Server
                 User currentUser = null;
                 while (true)
                 {
-                    NetworkStream stream = client.GetStream();
-                    Task.Run(() =>
-                    {
-                        byte[] data = ClientServerDataManager.TcpClientDataReader(stream);
+                    byte[] data = ClientServerDataManager.TcpClientDataReader(client);
+                    
                         ClientServerMessage clientServerMessage = ClientServerDataManager.Deserialize(data);
                         switch (clientServerMessage.ActionType)
                         {
@@ -103,35 +101,38 @@ namespace Server
 
                                 break;
                         }
-                        /// <summary>
-                        /// returns Content=RegistrationResult
-                        /// </summary>
-                        void RegisterUser(User user)
+                    /// <summary>
+                    /// returns Content=RegistrationResult
+                    /// </summary>
+                    void RegisterUser(User user)
+                    {
+                        RegistrationResult registrationResult = RegistrationResult.Success;
+                        User[] users = dbManager.GetAllUsers();
+                        if (users != null)
                         {
-                            RegistrationResult registrationResult;
-                            User[] users = dbManager.GetAllUsers();
-                            if (users != null)
-                            {
-                                if (users.Where(item => item.Email == user.Email) != null)
-                                    registrationResult = RegistrationResult.EmailAlreadyExists;
-                                else if (users.Where(item => item.Username == user.Username) != null)
-                                    registrationResult = RegistrationResult.UserNameAlreadyExists;
-                                else if (users.Where(item => item.PhoneNumber == user.PhoneNumber) != null)
-                                    registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
-                            }
-                            else
-                                registrationResult = RegistrationResult.Success;
-                            if (dbManager.CreateUser(user))
-                                registrationResult = RegistrationResult.Success;
-                            else
-                                registrationResult = RegistrationResult.CreationError;
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
+                            if (users.Where(item => item.Email == user.Email).Count() != 0)
+                                registrationResult = RegistrationResult.EmailAlreadyExists;
+                            else if (users.Where(item => item.Username == user.Username).Count() != 0)
+                                registrationResult = RegistrationResult.UserNameAlreadyExists;
+                            else if (users.Where(item => item.PhoneNumber == user.PhoneNumber).Count() != 0)
+                                registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
                         }
+                        if (registrationResult == RegistrationResult.Success)
+                        {
+                            if (!dbManager.CreateUser(user))
+                            {
+                                registrationResult = RegistrationResult.CreationError;
 
-                        /// <summary>
-                        /// returns Content=User or null
-                        /// </summary>
-                        void LoginUserByEmail(User user)
+                            }
+                        }
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
+                    }
+
+
+                    /// <summary>
+                    /// returns Content=User or null
+                    /// </summary>
+                    void LoginUserByEmail(User user)
                         {
                             user = dbManager.CheckLoginByEmail(user);
                             if (user != null)
@@ -331,7 +332,6 @@ namespace Server
                             currentUser = user;
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                         }
-                    });
                 }
             }
             catch (Exception)

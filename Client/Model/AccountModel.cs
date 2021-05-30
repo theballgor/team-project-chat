@@ -57,7 +57,6 @@ namespace Client.Model
             set
             {
                 conversations = value;
-                LoadConversationsNotify();
             }
         }
 
@@ -72,7 +71,6 @@ namespace Client.Model
             set
             {
                 messages = value;
-                LoadMessagesNotify();
             }
         }
 
@@ -87,7 +85,6 @@ namespace Client.Model
             set
             {
                 contacts = value;
-                GetContactsListNotify();
             }
         }
 
@@ -107,19 +104,7 @@ namespace Client.Model
         public static event EventHandler GetContactsList;
 
 
-        // Notyfiers
-        public static void LoadConversationsNotify()
-        {
-            LoadConversations(null, new ViewModelEventArgs());
-        }
-        public static void LoadMessagesNotify()
-        {
-            LoadMessages(null, new ViewModelEventArgs());
-        }
-        public static void GetContactsListNotify()
-        {
-            GetContactsList(null, new ViewModelEventArgs());
-        }
+       
 
 
         // Methods
@@ -145,7 +130,7 @@ namespace Client.Model
 
                 ClientServerMessage csMessage = new ClientServerMessage { Content = message };
                 csMessage.AdditionalContent = messageFiles;
-                ClientModel.GetInstance().SendMessage(csMessage);
+                ClientModel.GetInstance().SendMessageSync(csMessage);
 
                 Messages[message.Conversation.Id].Add(message);
             });
@@ -159,7 +144,7 @@ namespace Client.Model
                     ClientServerMessage message = new ClientServerMessage { Content = User };
                     message.ActionType = ActionType.GetFriendsFromUserFriendships;
 
-                    ClientModel.GetInstance().SendMessage(message);
+                    ClientModel.GetInstance().SendMessageSync(message);
                 }
                 catch (Exception ex)
                 {
@@ -169,17 +154,11 @@ namespace Client.Model
         }
         public static void GetConversationMessages(int conversationId)
         {
-            Task.Run(() =>
-            {
-                ClientModel.GetInstance().SendMessage(new ClientServerMessage { Content = new Conversation { Id = conversationId }, ActionType = ActionType.GetConversationMessages });
-            });
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = new Conversation { Id = conversationId }, ActionType = ActionType.GetConversationMessages });
         }
         public static void GetUserConversations()
         {
-            Task.Run(() =>
-            {
-                ClientModel.GetInstance().SendMessage(new ClientServerMessage { Content = User, ActionType = ActionType.GetUserConversations });
-            });
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = User, ActionType = ActionType.GetUserConversations });
         }
 
     }

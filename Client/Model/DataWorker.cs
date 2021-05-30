@@ -10,9 +10,9 @@ using ClientServerLibrary.DbClasses;
 
 namespace Client.Model
 {
+
     public static class DataWorker
     {
-
         public static void Handle(ClientServerMessage message)
         {
             switch (message.ActionType)
@@ -75,19 +75,10 @@ namespace Client.Model
                 return null;
         }
 
-        static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
+        static User Login(ClientServerMessage message)
         {
             if (message.Content != null)
-            {
-                List<Conversation> messageList = message.Content as List<Conversation>;
-
-                ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
-
-                foreach (var item in messageList)
-                    conversations.Add(item);
-
-                return conversations;
-            }
+                return message.Content as User;
             else
                 return null;
         }
@@ -169,4 +160,5 @@ namespace Client.Model
 
 
     }
+
 }
