@@ -52,11 +52,10 @@ namespace Server
             {
                 User currentUser = null;
                 while (true)
-                {
-                    NetworkStream stream = client.GetStream();
+                {      
+                    byte[] data = ClientServerDataManager.TcpClientDataReader(client);
                     Task.Run(() =>
                     {
-                        byte[] data = ClientServerDataManager.TcpClientDataReader(stream);
                         ClientServerMessage clientServerMessage = ClientServerDataManager.Deserialize(data);
                         switch (clientServerMessage.ActionType)
                         {
