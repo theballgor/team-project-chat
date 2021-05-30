@@ -39,10 +39,7 @@ namespace Server
                 {
                     TcpClient currentClient = server.AcceptTcpClient();
                     Console.WriteLine("Connnected\t\t" + currentClient.Client.RemoteEndPoint);
-                    Task.Run(() =>
-                    {
-                        ConversationHandler(currentClient);
-                    });
+                    Task.Run(() => ConversationHandler(currentClient);
                 }
             });
         }
@@ -52,11 +49,8 @@ namespace Server
             {
                 User currentUser = null;
                 while (true)
-                {
-                    NetworkStream stream = client.GetStream();
-                    Task.Run(() =>
-                    {
-                        byte[] data = ClientServerDataManager.TcpClientDataReader(stream);
+                {      
+                    byte[] data = ClientServerDataManager.TcpClientDataReader(client);
                         ClientServerMessage clientServerMessage = ClientServerDataManager.Deserialize(data);
                         switch (clientServerMessage.ActionType)
                         {
@@ -158,7 +152,7 @@ namespace Server
                         void CreateConversation(Conversation conversation)
                         {
                             //not ended 
-                            if (!dbManager.CreateConversation(conversation)) ;
+                            if (!dbManager.CreateConversation(conversation))
                             conversation = null;
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversation });
                         }
@@ -331,7 +325,6 @@ namespace Server
                             currentUser = user;
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                         }
-                    });
                 }
             }
             catch (Exception)
