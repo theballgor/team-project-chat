@@ -46,6 +46,7 @@ namespace Client.Model
 
                 // ???
                 case ActionType.RegisterUser:
+                    RegistrationModel.Notify(Register(message));
                     break;
 
                 // ???
@@ -80,6 +81,11 @@ namespace Client.Model
                 return message.Content as User;
             else
                 return null;
+        }
+
+        static RegistrationResult Register(ClientServerMessage message)
+        {
+            return (RegistrationResult)message.Content;
         }
 
         static ObservableCollection<User> GetFriendsFromUserFriendships(ClientServerMessage message)

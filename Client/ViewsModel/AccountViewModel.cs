@@ -24,17 +24,6 @@ namespace Client.ViewsModel
         {
             NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
                 navigationStore, () => new LoginViewModel(navigationStore)));
-
-            // Events
-            // ОПИСАНІ В ПАРТІАЛ КЛАСІ НИЖЧЕ
-            AccountModel.LoadConversations += AccountModel_LoadConversations;
-            AccountModel.GetContactsList += AccountModel_GetContactsList1;
-            AccountModel.LoadMessages += AccountModel_LoadMessages;
-            AccountModel.Conversations.CollectionChanged += Conversations_CollectionChanged;
-            AccountModel.Messages.CollectionChanged += AllMessages_CollectionChanged;
-
-            foreach (var messages in Messages)
-                messages.CollectionChanged += Messages_CollectionChanged;
         }
 
         // Fields
@@ -56,9 +45,6 @@ namespace Client.ViewsModel
         {
             get => AccountModel.User;
         }
-
-
-
 
         public string MessageContent
         {
