@@ -173,104 +173,104 @@ namespace Server
                 return false;
             }
         }
-        public Conversation CreateConversation(Conversation conversation)
+        public bool CreateConversation(Conversation conversation)
         {
             try
             {
                 Repositories.RConversations.Add(conversation);
                 Console.WriteLine("conversation created");
-                return conversation;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to create conversation");
-                return null;
+                return false;
             }
         }
-        public ConversationConnection CreateConversationConnection(ConversationConnection conversationConnection)
+        public bool CreateConversationConnection(ConversationConnection conversationConnection)
         {
             try
             {
                 Repositories.RConversationConnections.Add(conversationConnection);
                 Console.WriteLine("conversationConnection created");
-                return conversationConnection;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to create conversationConnection");
-                return null;
+                return false;
             }
         }
-        public Friendship CreateFriendship(Friendship friendship)
+        public bool CreateFriendship(Friendship friendship)
         {
             try
             {
                 Repositories.RFriendShips.Add(friendship);
                 Console.WriteLine("friendship created");
-                return friendship;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to create friendship");
-                return null;
+                return false;
             }
         }
   
-        public Message CreateMessage(Message message)
+        public bool CreateMessage(Message message)
         {
             try
             {
                 Repositories.RMessages.Add(message);
                 Console.WriteLine("message created");
-                return message;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to create message");
-                return null;
+                return false;
             }
         }
         // update
-        public Friendship ChangeFriendshipStatus(Friendship friendship)
+        public bool UpdateFriendship(Friendship friendship)
         {
             try
             {
                 Repositories.RFriendShips.Update(friendship);
                 Console.WriteLine("friendship updated");
-                return friendship;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to update friendship");
-                return null;
+                return false;
             }
         }
-        public User ChangeUserStatus(User user)
+        public bool UpdateUser(User user)
         {
             try
             {
                 Repositories.RUsers.Update(user);
                 Console.WriteLine("user updated");
-                return user;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to update user");
-                return null;
+                return false;
             }
         }
-        public Conversation ChangeConversationStatus(Conversation conversation)
+        public bool UpdateConversation(Conversation conversation)
         {
             try
             {
                 Repositories.RConversations.Update(conversation);
                 Console.WriteLine("conversation updated");
-                return conversation;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to update conversation");
-                return null;
+                return false;
             }
         }
     }

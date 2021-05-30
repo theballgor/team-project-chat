@@ -33,7 +33,8 @@ namespace ClientServerLibrary.DbClasses
         private FileType fileType;
         [Column("message_id")]
         public virtual Message Message { get; set; }
-
+        [NotMapped]
+        public  byte fileData;
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

@@ -155,8 +155,10 @@ namespace Server
                     /// </summary>
                     void CreateConversation(Conversation conversation)
                     {
-                        Conversation dbConversation = dbManager.CreateConversation(conversation);
-                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = dbConversation });
+                        //not ended 
+                        if(!dbManager.CreateConversation(conversation));
+                        conversation = null;
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversation });
                     }
 
                     /// <summary>
@@ -169,7 +171,9 @@ namespace Server
                         if (conversation != null)
                         {
                             User user = dbManager.GetUserById(GetUserIdByClient(client));
-                            conversationConnection = dbManager.CreateConversationConnection(new ConversationConnection() { Conversation = conversation, User = user });
+                            //not ended 
+                            if (!dbManager.CreateConversationConnection(new ConversationConnection() { Conversation = conversation, User = user }))
+                                conversationConnection = null;
                         }
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversationConnection });
                     }
@@ -189,42 +193,52 @@ namespace Server
                     void SendConversationMessage(Message message)
                     {
                         object content = null;
-                        if (clientServerMessage.AdditionalContent != null)
+                        try
                         {
-                            List<KeyValuePair<string, byte[]>> files = (List<KeyValuePair<string, byte[]>>)clientServerMessage.AdditionalContent;
-                            string filePath = ConfigurationManager.AppSettings["FilePath"];
-                            string imagePath = ConfigurationManager.AppSettings["ImagePath"];
-                            foreach (var file in files)
+                            if (clientServerMessage.AdditionalContent != null)
                             {
-                                DbFile dbFile = new DbFile() { FileName = file.Key,Message=message};
-                                string newFilePath;
-                                string extention = Path.GetExtension(file.Key);
-                                if (ImageCheck(extention))
+                                List<KeyValuePair<string, byte[]>> files = (List<KeyValuePair<string, byte[]>>)clientServerMessage.AdditionalContent;
+                                string filePath = ConfigurationManager.AppSettings["FilePath"];
+                                string imagePath = ConfigurationManager.AppSettings["ImagePath"];
+                                foreach (var file in files)
                                 {
-                                    dbFile.FileType = FileType.Image;
-                                    newFilePath = imagePath;
+                                    DbFile dbFile = new DbFile() { FileName = file.Key, Message = message };
+                                    string newFilePath;
+                                    string extention = Path.GetExtension(file.Key);
+                                    if (ImageCheck(extention))
+                                    {
+                                        dbFile.FileType = FileType.Image;
+                                        newFilePath = imagePath;
+                                    }
+                                    else
+                                    {
+                                        dbFile.FileType = FileType.File;
+                                        newFilePath = filePath;
+                                    }
+                                    newFilePath = newFilePath + "\\" + $@"{Guid.NewGuid()}" + extention;
+                                    //newFilePath = newFilePath + "\\" + Path.GetRandomFileName() + extention;
+                                    File.WriteAllBytes(newFilePath, file.Value);
+                                    dbFile.FilePath = newFilePath;
+                                    dbManager.CreateFile(dbFile);
                                 }
-                                else
-                                {
-                                    dbFile.FileType = FileType.File;
-                                    newFilePath = filePath;
-                                }
-                                newFilePath = newFilePath + "\\" + $@"{Guid.NewGuid()}" + extention;
-                                //newFilePath = newFilePath + "\\" + Path.GetRandomFileName() + extention;
-                                File.WriteAllBytes(newFilePath, file.Value);
-                                dbManager.CreateFile(dbFile);                  
-                            }      
+                            }
+                            message.SendTime = DateTime.Now;
+                            dbManager.CreateMessage(message);
+
+                            List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
+                            users.Remove(currentUser);
+                            List<TcpClient> clients = GetClientsByUsers(users.ToArray());
+                            SendMessage(clients, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = content });
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = true });
                         }
-                        message.SendTime = DateTime.Now;
-                        message = dbManager.CreateMessage(message);
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = false });
+                        }
+                       
 
-                        List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
-                        users.Remove(currentUser);
-                        List<TcpClient> clients = GetClientsByUsers(users.ToArray());
-                        SendMessage(clients, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = content });
-                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = true });
-
-                        //SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = false });
+                        
                     }
 
                     /// <summary>
