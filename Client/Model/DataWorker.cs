@@ -75,10 +75,19 @@ namespace Client.Model
                 return null;
         }
 
-        static User Login(ClientServerMessage message)
+        static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
         {
             if (message.Content != null)
-                return message.Content as User;
+            {
+                List<Conversation> messageList = message.Content as List<Conversation>;
+
+                ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
+
+                foreach (var item in messageList)
+                    conversations.Add(item);
+
+                return conversations;
+            }
             else
                 return null;
         }
@@ -157,5 +166,7 @@ namespace Client.Model
             else
                 return null;
         }
+
+
     }
 }

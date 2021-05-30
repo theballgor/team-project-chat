@@ -9,7 +9,8 @@
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
+            MigrationsDirectory = "Database\\Migrations";
         }
 
         protected override void Seed(Server.Database.ChatDBContext context)

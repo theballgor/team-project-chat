@@ -108,6 +108,7 @@
     <Compile Include="Commands\RegisterCommand.cs" />
     <Compile Include="Commands\RegistrationCommand.cs" />
     <Compile Include="Model\AccountModel.cs" />
+    <Compile Include="Model\AccountModel.cs" />
     <Compile Include="Model\DataWorker.cs" />
     <Compile Include="Model\LoginModel.cs" />
     <Compile Include="Model\RegistrationModel.cs" />

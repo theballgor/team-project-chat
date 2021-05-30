@@ -622,11 +622,9 @@
                             BorderThickness="1" 
                             Background="#FF191919" 
                             Opacity="0.995" 
-                            Visibility="Visible" HorizontalAlignment="Left" >
+                            Visibility="Collapsed" HorizontalAlignment="Left" >
                         <Grid x:Name="GridContactList" Width="270" Margin="3 5">
-
                             <customcontrols:ContactList></customcontrols:ContactList>
-
                         </Grid>
                         
                     </Border>

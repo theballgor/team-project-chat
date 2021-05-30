@@ -17,5 +17,6 @@ namespace Server.Database
         public DbSet<Message> Messages { get; set; }
         public DbSet<Friendship> FriendShips { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<DbFile> DbFiles { get; set; }
     }
 }

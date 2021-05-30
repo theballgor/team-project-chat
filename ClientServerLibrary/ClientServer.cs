@@ -66,9 +66,12 @@ namespace ClientServerLibrary
 
     public static class GlobalVariables
     {
-        public static readonly int ServerPort = 40000;
+        public static readonly int ServerPort = 40001;
         public static readonly IPAddress LocalIP = IPAddress.Parse("127.0.0.1");
     }
+
+
+
 
     public static class ClientServerDataManager
     {
@@ -94,9 +97,16 @@ namespace ClientServerLibrary
             }
             return serializedData;
         }
+
+
+
         public static byte[] TcpClientDataReader(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
+            return TcpClientDataReader(stream);
+        }
+        public static byte[] TcpClientDataReader(NetworkStream stream)
+        {
             byte[] data = new byte[128];
             List<byte> messageInBytes = new List<byte>();
             do
@@ -106,6 +116,6 @@ namespace ClientServerLibrary
             } while (stream.DataAvailable);
             return messageInBytes.ToArray();
         }
-        
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -14,12 +15,24 @@ namespace Server
     public partial class ServerClass
     {
         private void SendMessage(TcpClient receiverClient, byte[] message) => receiverClient.GetStream().Write(message, 0, message.Length);
-
-
-        
         private void SendMessage(TcpClient receiverClient, ClientServerMessage message) => SendMessage(receiverClient, ClientServerDataManager.Serialize(message));
         private void SendMessage(List<TcpClient> receiverClients, ClientServerMessage message) => SendMessage(receiverClients, ClientServerDataManager.Serialize(message));
         private int GetUserIdByClient(TcpClient client) => connectedClients.Find(u => u.Value == client).Key;
+        private void SendMessage(List<TcpClient> receiverClients, byte[] message)
+        {
+            foreach (TcpClient receiverClient in receiverClients)
+            {
+                foreach (KeyValuePair<int, TcpClient> client in connectedClients)
+                {
+                    TcpClient tmpClient = client.Value;
+                    if (receiverClient == tmpClient)
+                    {
+                        tmpClient.GetStream().Write(message, 0, message.Length);
+                        break;
+                    }
+                }
+            }
+        }
         private TcpClient GetClientByUserId(int userId) => connectedClients.Find(u => u.Key == userId).Value;
         private List<TcpClient> GetClientsByUsers(User[] users)
         {
@@ -36,22 +49,16 @@ namespace Server
             }
             return clients;
         }
-        private void SendMessage(List<TcpClient> receiverClients, byte[] message)
+        private bool ImageCheck(string extention)
         {
-            foreach (TcpClient receiverClient in receiverClients)
+            string[] extentions = ConfigurationManager.AppSettings["ImageExtenctions"].Split(',');
+            foreach (var ext in extentions)
             {
-                foreach (KeyValuePair<int, TcpClient> client in connectedClients)
-                {
-                    TcpClient tmpClient = client.Value;
-                    if (receiverClient == tmpClient)
-                    {
-                        tmpClient.GetStream().Write(message, 0, message.Length);
-                        break;
-                    }
-                }
+                if (extention == ext)
+                    return true;
             }
+            return false;
         }
-
         public void AbortConnection(TcpClient client)
         {
             try
