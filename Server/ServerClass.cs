@@ -39,7 +39,7 @@ namespace Server
                 {
                     TcpClient currentClient = server.AcceptTcpClient();
                     Console.WriteLine("Connnected\t\t" + currentClient.Client.RemoteEndPoint);
-                    Task.Run(() => ConversationHandler(currentClient);
+                    Task.Run(() => ConversationHandler(currentClient));
                 }
             });
         }
