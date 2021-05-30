@@ -13,6 +13,7 @@ namespace Server
 {
     class DbManager
     {
+
         public DbManager()
         {
             Repositories.InitializeGenericRepositories();

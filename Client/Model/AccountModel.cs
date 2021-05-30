@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Client.Model
@@ -13,24 +14,30 @@ namespace Client.Model
     static class AccountModel
     {
         // Constructor
-        static AccountModel() 
+        static AccountModel()
         {
             conversations = new ObservableCollection<Conversation>();
             contacts = new ObservableCollection<User>();
             messages = new ObservableCollection<ObservableCollection<Message>>();
+
+            Task.Run(() =>
+            {
+                RequestContacts();
+                GetUserConversations();
+            });
         }
 
         // Fields
 
-                /// Message from textbox
+        /// Message from textbox
         private static string messageContent;
-        public static string MessageContent 
+        public static string MessageContent
         {
             get => messageContent;
-            set { messageContent = value; } 
+            set { messageContent = value; }
         }
 
-                /// Current logged user
+        /// Current logged user
         private static User user;
         public static User User
         {
@@ -44,7 +51,7 @@ namespace Client.Model
             }
         }
 
-                /// All conversations
+        /// All conversations
         private static ObservableCollection<Conversation> conversations;
         public static ObservableCollection<Conversation> Conversations
         {
@@ -55,11 +62,10 @@ namespace Client.Model
             set
             {
                 conversations = value;
-                LoadConversationsNotify();
             }
         }
 
-                /// All messages
+        /// All messages
         private static ObservableCollection<ObservableCollection<Message>> messages;
         public static ObservableCollection<ObservableCollection<Message>> Messages
         {
@@ -70,11 +76,10 @@ namespace Client.Model
             set
             {
                 messages = value;
-                LoadMessagesNotify();
             }
         }
 
-                /// Contact list
+        /// Contact list
         private static ObservableCollection<User> contacts;
         public static ObservableCollection<User> Contacts
         {
@@ -85,11 +90,10 @@ namespace Client.Model
             set
             {
                 contacts = value;
-                GetContactsListNotify();
             }
         }
 
-                /// Files 
+        /// Files 
         // ???
         private static List<KeyValuePair<string, byte[]>> messageFiles;
         public static List<KeyValuePair<string, byte[]>> MessageFiles
@@ -99,62 +103,55 @@ namespace Client.Model
         }
 
 
-        // Event handlers
-        public static event EventHandler LoadConversations;
-        public static event EventHandler LoadMessages;
-        public static event EventHandler GetContactsList;
-
-
-        // Notyfiers
-        public static void LoadConversationsNotify()
-        {
-            LoadConversations(null, new ViewModelEventArgs());
-        }
-        public static void LoadMessagesNotify()
-        {
-            LoadMessages(null, new ViewModelEventArgs());
-        }
-        public static void GetContactsListNotify()
-        {
-            GetContactsList(null, new ViewModelEventArgs());
-        }
-
 
         // Methods
-        // TODO
-        public static  void SendMessage()
+        public static void LogOut()
         {
-            Task.Run(() =>
-            {
-                Message message = new Message();
-                message.Content = messageContent;
-                //message.Conversation = ?
-                message.IsRead = false;
-                message.Sender = User;
-                message.SendTime = DateTime.Now;
+            MessageContent = null;
+            User = null;
+            Conversations = null;
+            Messages = null;
+            Contacts = null;
+            MessageFiles = null;
+        }
+        public static void SendMessage()
+        {
+            Message message = new Message();
+            message.Content = messageContent;
+            //message.Conversation = ?
+            message.IsRead = false;
+            message.Sender = User;
+            message.SendTime = DateTime.Now;
 
-                ClientServerMessage csMessage = new ClientServerMessage { Content = message };
-                csMessage.AdditionalContent = messageFiles;
-                ClientModel.GetInstance().SendMessage(csMessage);
-                Messages[message.Conversation.Id].Add(message);
-            });
+            ClientServerMessage csMessage = new ClientServerMessage { Content = message };
+            csMessage.AdditionalContent = messageFiles;
+            ClientModel.GetInstance().SendMessageSync(csMessage);
+
+            Messages[message.Conversation.Id].Add(message);
         }
         public static void RequestContacts()
         {
-            Task.Run(() =>
+            try
             {
-                try
-                {
-                    ClientServerMessage message = new ClientServerMessage { };
-                    message.ActionType = ActionType.GetFriendsFromUserFriendships;
+               ClientServerMessage message = new ClientServerMessage { Content = User };
+                message.ActionType = ActionType.GetFriendsFromUserFriendships;
 
-                    ClientModel.GetInstance().SendMessage(message);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
-            });
+                ClientModel.GetInstance().SendMessageSync(message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
+        public static void GetConversationMessages(int conversationId)
+        {
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = new Conversation { Id = conversationId }, ActionType = ActionType.GetConversationMessages });
+        }
+        public static void GetUserConversations()
+        {
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = User, ActionType = ActionType.GetUserConversations });
+        }
+
     }
+
 }

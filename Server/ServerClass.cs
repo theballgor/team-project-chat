@@ -102,25 +102,27 @@ namespace Server
                         /// </summary>
                         void RegisterUser(User user)
                         {
-                            RegistrationResult registrationResult;
-                            User[] users = dbManager.GetAllUsers();
-                            if (users != null)
-                            {
-                                if (users.Where(item => item.Email == user.Email) != null)
-                                    registrationResult = RegistrationResult.EmailAlreadyExists;
-                                else if (users.Where(item => item.Username == user.Username) != null)
-                                    registrationResult = RegistrationResult.UserNameAlreadyExists;
-                                else if (users.Where(item => item.PhoneNumber == user.PhoneNumber) != null)
-                                    registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
-                            }
-                            else
-                                registrationResult = RegistrationResult.Success;
-                            if (dbManager.CreateUser(user))
-                                registrationResult = RegistrationResult.Success;
-                            else
-                                registrationResult = RegistrationResult.CreationError;
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
+                        RegistrationResult registrationResult = RegistrationResult.Success;
+                        User[] users = dbManager.GetAllUsers();
+                        if (users != null)
+                        {
+                            if (users.Where(item => item.Email == user.Email).Count() != 0)
+                                registrationResult = RegistrationResult.EmailAlreadyExists;
+                            else if (users.Where(item => item.Username == user.Username).Count() != 0)
+                                registrationResult = RegistrationResult.UserNameAlreadyExists;
+                            //else if (users.Where(item => item.PhoneNumber == user.PhoneNumber).Count() != 0)
+                            //    registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
                         }
+                        if (registrationResult == RegistrationResult.Success)
+                        {
+                            if (!dbManager.CreateUser(user))
+                            {
+                                registrationResult = RegistrationResult.CreationError;
+
+                            }
+                        }
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
+                    }
 
                         /// <summary>
                         /// returns Content=User or null
@@ -326,6 +328,7 @@ namespace Server
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                         }
                 }
+
             }
             catch (Exception)
             {

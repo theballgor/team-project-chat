@@ -64,6 +64,7 @@ namespace Client.ViewsModel
             User user = ((e as ViewModelEventArgs).Content as User);
             if (user != null)
             {
+                AccountModel.User = user;
                 navigationService.Navigate();
                 Console.WriteLine("Logined: " + user.Email);
             }
