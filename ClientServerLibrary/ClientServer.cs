@@ -97,6 +97,10 @@ namespace ClientServerLibrary
         public static byte[] TcpClientDataReader(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
+            return TcpClientDataReader(stream);
+        }
+        public static byte[] TcpClientDataReader(NetworkStream stream)
+        {
             byte[] data = new byte[128];
             List<byte> messageInBytes = new List<byte>();
             do
@@ -106,6 +110,6 @@ namespace ClientServerLibrary
             } while (stream.DataAvailable);
             return messageInBytes.ToArray();
         }
-        
+
     }
 }
