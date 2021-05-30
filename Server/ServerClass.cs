@@ -158,7 +158,7 @@ namespace Server
                         void CreateConversation(Conversation conversation)
                         {
                             //not ended 
-                            if (!dbManager.CreateConversation(conversation)) ;
+                            if (!dbManager.CreateConversation(conversation))
                             conversation = null;
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversation });
                         }

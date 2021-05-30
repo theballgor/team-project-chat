@@ -22,7 +22,6 @@ namespace Client.Model
                     break;
 
                 case ActionType.SendFriendRequest:
-                    AccountModel.ContactList.Add(SendFriendRequest(message));
                     break;
 
                 case ActionType.LogInUserByEmail:
