@@ -106,16 +106,14 @@ namespace Client.Model
                 Conversation[] messageList = message.Content as Conversation[];
                 ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
 
-                if(messageList.Length != 0)
+                if(messageList!=null)
                     foreach (var item in messageList)
                         conversations.Add(item);
-
                 return conversations;
             }
             else
                 return null;
         }
-
         static ObservableCollection<Message> GetConversationMessages(ClientServerMessage message)
         {
             if (message.Content != null)
