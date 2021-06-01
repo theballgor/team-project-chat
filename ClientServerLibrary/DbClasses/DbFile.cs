@@ -19,7 +19,7 @@ namespace ClientServerLibrary.DbClasses
     public class DbFile : INotifyPropertyChanged
     {
         public int Id { get; set; }
-        [StringLength(4000)]
+        [StringLength(128)]
         public string FileName { get { return fileName; } set { fileName = value; FileExtenction = Path.GetExtension(value); OnPropertyChanged("FileName"); } }
         [NotMapped]
         private string fileName;
@@ -30,6 +30,7 @@ namespace ClientServerLibrary.DbClasses
         public FileType FileType { get { return fileType; } set { fileType = value; OnPropertyChanged("FileType"); } }
         [NotMapped]
         private FileType fileType;
+
         [Column("message_id")]
         public virtual Message Message { get; set; }
         [NotMapped]
