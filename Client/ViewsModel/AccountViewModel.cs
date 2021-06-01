@@ -17,7 +17,7 @@ using System.Windows.Input;
 
 namespace Client.ViewsModel
 {
-    public class AccountViewModel : ViewModelBase
+    public partial class AccountViewModel : ViewModelBase
     {
         //Constructor
         public AccountViewModel(NavigationStore navigationStore)
@@ -33,18 +33,19 @@ namespace Client.ViewsModel
         {
             get => AccountModel.Contacts;
         }
-        public ObservableCollection<KeyValuePair<Conversation, Message>> Conversations
+        public ObservableCollection<Conversation> Conversations
         {
             get => AccountModel.Conversations;
         }
-        public ObservableCollection<Message> ActiveMessages
+        public ObservableCollection<ObservableCollection<Message>> Messages
         {
-            get => AccountModel.ActiveMessages;
+            get => AccountModel.Messages;
         }
         public User User
         {
             get => AccountModel.User;
         }
+
         public string MessageContent
         {
             get => AccountModel.MessageContent;
@@ -56,7 +57,7 @@ namespace Client.ViewsModel
         }
         
         // ???
-        public ObservableCollection<KeyValuePair<string, byte[]>> MessageFiles
+        public List<KeyValuePair<string, byte[]>> MessageFiles
         {
             get => AccountModel.MessageFiles;
             set => MessageFiles = value;
@@ -93,14 +94,20 @@ namespace Client.ViewsModel
                 {
                     if(parameter is Conversation currentConversation)
                     {
-                        //LoadConversationMessages(currentConversation);
+                        LoadConversationMessages(currentConversation);
                     }
                 }));
             }
         }
 
+        private void LoadConversationMessages(Conversation currentConversation)
+        {
+            AccountModel.GetConversationMessages(currentConversation.Id);
+        }
+
         // Server-commands
-        
+
+
         public ICommand SendMessageCommand
         {
             get
@@ -124,6 +131,45 @@ namespace Client.ViewsModel
             }
         }
 
+
+
+
+
+
     }
 
+
+    public partial class AccountViewModel : ViewModelBase
+    {
+
+        private void Messages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+
+        }
+
+        private void AllMessages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Conversations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+
+        }
+
+        private void AccountModel_LoadMessages(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AccountModel_GetContactsList1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AccountModel_LoadConversations(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

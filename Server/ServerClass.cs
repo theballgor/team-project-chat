@@ -237,7 +237,7 @@ namespace Server
                         /// </summary>
                         void GetUserConversations(User user)
                         {
-                        KeyValuePair<Conversation, Message>[] conversations = dbManager.GetAllUserConversations(user.Id);
+                            Conversation[] conversations = dbManager.GetAllUserConversations(user.Id);
 
                             if (conversations != null)
                                 SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversations });
