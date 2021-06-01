@@ -49,16 +49,6 @@ namespace Server
             }
             return clients;
         }
-        private bool ImageCheck(string extention)
-        {
-            string[] extentions = ConfigurationManager.AppSettings["ImageExtenctions"].Split(',');
-            foreach (var ext in extentions)
-            {
-                if (extention == ext)
-                    return true;
-            }
-            return false;
-        }
         public void AbortConnection(TcpClient client)
         {
             try

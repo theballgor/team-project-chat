@@ -201,7 +201,7 @@ namespace Server
                                 {
 
                                     string newFilePath;
-                                    if (ImageCheck(file.FileExtenction))
+                                    if (file.ImageCheck())
                                     {
                                         file.FileType = FileType.Image;
                                         newFilePath = ConfigurationManager.AppSettings["ImagePath"];
@@ -212,6 +212,7 @@ namespace Server
                                         newFilePath = ConfigurationManager.AppSettings["FilePath"];
                                     }
                                     newFilePath = newFilePath + "\\" + Path.GetRandomFileName() + file.FileExtenction;
+                                    file.FilePath = newFilePath;
                                     if (!file.SaveFileByPath())
                                         throw new Exception();
                                     file.Message = message;

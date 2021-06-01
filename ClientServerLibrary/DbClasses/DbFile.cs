@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Configuration;
 using System.IO;
 
 namespace ClientServerLibrary.DbClasses
@@ -79,6 +80,16 @@ namespace ClientServerLibrary.DbClasses
             {
                 return false;
             }
+        }
+        public bool ImageCheck()
+        {
+            string[] extentions = ConfigurationManager.AppSettings["ImageExtenctions"].Split(',');
+            foreach (var ext in extentions)
+            {
+                if (FileExtenction == ext)
+                    return true;
+            }
+            return false;
         }
         private void OnPropertyChanged(string propertyName)
         {
