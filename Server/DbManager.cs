@@ -69,6 +69,17 @@ namespace Server
                 return null;
             }
         }
+        public DbFile[] GetAllMessageFiles (Message message)
+        {
+            try
+            {
+                return Repositories.RDbFiles.FindAll(item=>item.Message.Id==message.Id).ToArray();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public User GetUserById(int userId)
         {
             try
