@@ -25,6 +25,14 @@ namespace ClientServerLibrary.DbClasses
         private bool isRead;
         [Column("sender_id")]
         public virtual User Sender { get; set; }
+        [NotMapped]
+        public bool isMessageReceived;
+        [NotMapped]
+        public bool IsMessageReceived
+        {
+            get => isMessageReceived;
+            set => isMessageReceived = value;
+        }
         [Column("conversation_id")]
         public virtual Conversation Conversation { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;

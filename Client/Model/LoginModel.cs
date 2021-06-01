@@ -44,6 +44,7 @@ namespace Client.Model
         // Notyfier
         public static void Notify(User user)
         {
+            AccountModel.User = user;
             LoginSucces(null, new ViewModelEventArgs { Content = user });
         }
 
@@ -74,7 +75,7 @@ namespace Client.Model
                     message.ActionType = ActionType.LogInUserByEmail;
 
 
-                    ClientModel.GetInstance().SendMessage(message);
+                    ClientModel.GetInstance().SendMessageAsync(message);
 
                 }
                 catch (Exception ex)

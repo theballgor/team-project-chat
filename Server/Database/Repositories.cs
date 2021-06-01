@@ -24,7 +24,8 @@ namespace Server.Database
             RConversations = Work.Repository<Conversation>();
             RDbFiles = Work.Repository<DbFile>();
 
-            Task.Run(()=>{
+            Task.Run(() =>
+            {
                 RUsers.GetAll();
                 RConversationConnections.GetAll();
                 RMessages.GetAll();
@@ -32,7 +33,6 @@ namespace Server.Database
                 RConversations.GetAll();
                 RDbFiles.GetAll();
             });
-
         }
     }
 }
