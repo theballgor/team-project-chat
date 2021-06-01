@@ -19,43 +19,43 @@ namespace Client.Model
                 case ActionType.LogInUserByEmail:
                     LoginModel.Notify(Login(message));
                     break;
-
-                case ActionType.CreateConversation:
-                    AccountModel.Conversations.Add(CreateConversation(message));
+                case ActionType.RegisterUser:
+                    RegistrationModel.Notify(Register(message));
                     break;
-
-                case ActionType.JoinConversation:
-                    AccountModel.Conversations.Add(JoinConversation(message));
+                case ActionType.GetUserInfo:
+                    AccountModel.User = GetUserInfo(message);
                     break;
-
-                case ActionType.GetConversationMessages:
-                    AccountModel.Messages.Add(GetConversationMessages(message));
-                    break;
-
                 case ActionType.GetUserConversations:
                     AccountModel.Conversations = GetUserConversations(message);
                     break;
+
+
+                //case ActionType.CreateConversation:
+                //    AccountModel.Conversations.Add(CreateConversation(message));
+                //    break;
+
+                //case ActionType.JoinConversation:
+                //    AccountModel.Conversations.Add(JoinConversation(message));
+                //    break;
+
+                //case ActionType.GetConversationMessages:
+                //    AccountModel.Messages.Add(GetConversationMessages(message));
+                //    break;
+
 
                 case ActionType.GetUserFriendships:
                     //AccountModel.Contacts.Add(SendFriendRequest(message));
                     break;
 
-                case ActionType.GetUserInfo:
-                    AccountModel.User = GetUserInfo(message);
-                    break;
 
-                // ???
-                case ActionType.RegisterUser:
-                    RegistrationModel.Notify(Register(message));
-                    break;
-
-                // ???
                 case ActionType.GetConversationUsers:
                     break;
 
                 case ActionType.GetFriendsFromUserFriendships:
                     AccountModel.Contacts = GetFriendsFromUserFriendships(message);
                     break;
+
+
 
 
                 case ActionType.FatalError:
@@ -105,13 +105,13 @@ namespace Client.Model
                 return null;
         }
 
-        static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
+        static ObservableCollection<KeyValuePair<Conversation, Message>> GetUserConversations(ClientServerMessage message)
         {
             if (message.Content != null)
             {
-                Conversation[] messageList = message.Content as Conversation[];
+                KeyValuePair<Conversation, Message>[] messageList = message.Content as KeyValuePair<Conversation, Message>[];
 
-                ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
+                ObservableCollection<KeyValuePair<Conversation, Message>> conversations = new ObservableCollection<KeyValuePair<Conversation, Message>>();
 
                 foreach (var item in messageList)
                     conversations.Add(item);

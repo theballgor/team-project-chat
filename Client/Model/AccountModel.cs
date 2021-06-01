@@ -16,9 +16,9 @@ namespace Client.Model
         // Constructor
         static AccountModel()
         {
-            conversations = new ObservableCollection<Conversation>();
+            conversations = new ObservableCollection<KeyValuePair<Conversation, Message>>();
             contacts = new ObservableCollection<User>();
-            messages = new ObservableCollection<ObservableCollection<Message>>();
+            activeMessages = new ObservableCollection<Message>();
 
             Task.Run(() =>
             {
@@ -26,7 +26,7 @@ namespace Client.Model
                 GetUserConversations();
             });
         }
-
+            
         // Fields
 
         /// Message from textbox
@@ -52,8 +52,8 @@ namespace Client.Model
         }
 
         /// All conversations
-        private static ObservableCollection<Conversation> conversations;
-        public static ObservableCollection<Conversation> Conversations
+        private static ObservableCollection<KeyValuePair<Conversation, Message>> conversations;
+        public static ObservableCollection<KeyValuePair<Conversation, Message>> Conversations
         {
             get
             {
@@ -66,16 +66,17 @@ namespace Client.Model
         }
 
         /// All messages
-        private static ObservableCollection<ObservableCollection<Message>> messages;
-        public static ObservableCollection<ObservableCollection<Message>> Messages
+
+        public static ObservableCollection<Message> activeMessages;
+        public static ObservableCollection<Message> ActiveMessages
         {
             get
             {
-                return messages;
+                return activeMessages;
             }
             set
             {
-                messages = value;
+                activeMessages = value;
             }
         }
 
@@ -95,13 +96,12 @@ namespace Client.Model
 
         /// Files 
         // ???
-        private static List<KeyValuePair<string, byte[]>> messageFiles;
-        public static List<KeyValuePair<string, byte[]>> MessageFiles
+        private static ObservableCollection<KeyValuePair<string, byte[]>> messageFiles;
+        public static ObservableCollection<KeyValuePair<string, byte[]>> MessageFiles
         {
-            get => messageFiles == null ? messageFiles = new List<KeyValuePair<string, byte[]>>() : messageFiles;
+            get => messageFiles == null ? messageFiles = new ObservableCollection<KeyValuePair<string, byte[]>>() : messageFiles;
             set => messageFiles = value;
         }
-
 
 
         // Methods
@@ -110,7 +110,6 @@ namespace Client.Model
             MessageContent = null;
             User = null;
             Conversations = null;
-            Messages = null;
             Contacts = null;
             MessageFiles = null;
         }
@@ -127,7 +126,7 @@ namespace Client.Model
             csMessage.AdditionalContent = messageFiles;
             ClientModel.GetInstance().SendMessageSync(csMessage);
 
-            Messages[message.Conversation.Id].Add(message);
+            ActiveMessages.Add(message);
         }
         public static void RequestContacts()
         {
@@ -152,5 +151,4 @@ namespace Client.Model
             ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = User, ActionType = ActionType.GetUserConversations });
         }
     }
-
 }

@@ -91,14 +91,21 @@ namespace Server
                 return null;
             }
         }
-        public Conversation[] GetAllUserConversations(int userId)
+        /// REWORKED
+        public KeyValuePair<Conversation, Message>[] GetAllUserConversations(int userId)
         {
             try
             {
                 ConversationConnection[] userConversationConnections = Repositories.RConversationConnections.FindAll(item => item.User.Id == userId).ToArray();
-                List<Conversation> conversations = new List<Conversation>();
+                List<KeyValuePair<Conversation, Message>> conversations = new List<KeyValuePair<Conversation, Message>>();
+
                 foreach (var item in userConversationConnections)
-                    conversations.Add(item.Conversation);
+                {
+                    Conversation conversation = item.Conversation;
+                    Message message = Repositories.RMessages.FindAll(i => i.Conversation.Id == conversation.Id).Last();
+                    conversations.Add(new KeyValuePair<Conversation, Message>(conversation, message));
+                }
+
                 return conversations.ToArray();
             }
             catch (Exception)
