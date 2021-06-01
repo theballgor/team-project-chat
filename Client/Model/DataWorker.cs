@@ -104,7 +104,6 @@ namespace Client.Model
             if (message.Content != null)
             {
                 Conversation[] messageList = message.Content as Conversation[];
-
                 ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
 
                 if(messageList.Length != 0)
