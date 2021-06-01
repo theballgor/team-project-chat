@@ -95,10 +95,10 @@ namespace Client.Model
 
         /// Files 
         // ???
-        private static List<KeyValuePair<string, byte[]>> messageFiles;
-        public static List<KeyValuePair<string, byte[]>> MessageFiles
+        private static List<DbFile> messageFiles;
+        public static List<DbFile> MessageFiles
         {
-            get => messageFiles == null ? messageFiles = new List<KeyValuePair<string, byte[]>>() : messageFiles;
+            get => messageFiles == null ? messageFiles = new List<DbFile>() : messageFiles;
             set => messageFiles = value;
         }
 
@@ -118,7 +118,7 @@ namespace Client.Model
         {
             Message message = new Message();
             message.Content = messageContent;
-            //message.Conversation = ?
+            //message.Conversation = !!!!!; 
             message.IsRead = false;
             message.Sender = User;
             message.SendTime = DateTime.Now;
@@ -127,7 +127,7 @@ namespace Client.Model
             csMessage.AdditionalContent = messageFiles;
             ClientModel.GetInstance().SendMessageSync(csMessage);
 
-            Messages[message.Conversation.Id].Add(message);
+            //Messages[message.Conversation.Id].Add(message);
         }
         public static void RequestContacts()
         {

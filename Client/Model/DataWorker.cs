@@ -107,8 +107,9 @@ namespace Client.Model
 
                 ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
 
-                foreach (var item in messageList)
-                    conversations.Add(item);
+                if(messageList.Length != 0)
+                    foreach (var item in messageList)
+                        conversations.Add(item);
 
                 return conversations;
             }

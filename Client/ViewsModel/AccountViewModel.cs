@@ -60,7 +60,7 @@ namespace Client.ViewsModel
         }
         
         // ???
-        public List<KeyValuePair<string, byte[]>> MessageFiles
+        public List<DbFile> MessageFiles
         {
             get => AccountModel.MessageFiles;
             set => MessageFiles = value;
@@ -84,7 +84,7 @@ namespace Client.ViewsModel
                     if (openFileDialog.ShowDialog() == true)
                     {
                         foreach (string path in openFileDialog.FileNames)
-                            MessageFiles.Add(new KeyValuePair<string, byte[]>(Path.GetFileName(path), File.ReadAllBytes(path)));
+                            MessageFiles.Add(new DbFile(Path.GetFileName(path), File.ReadAllBytes(path)));
                     }
                 }));
             }

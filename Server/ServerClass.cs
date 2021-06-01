@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ClientServerLibrary;
 using ClientServerLibrary.DbClasses;
@@ -245,7 +246,7 @@ namespace Server
                         /// </summary>
                         void GetUserConversations()
                         {
-
+                            while(currentUser != null) { Thread.Sleep(200); } //wait for initialization currentUser
                             Conversation[] conversations = dbManager.GetAllUserConversations(currentUser.Id);
                             if (conversations != null)
                             {

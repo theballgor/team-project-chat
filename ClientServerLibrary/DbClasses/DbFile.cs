@@ -30,6 +30,14 @@ namespace ClientServerLibrary.DbClasses
         public FileType FileType { get { return fileType; } set { fileType = value; OnPropertyChanged("FileType"); } }
         [NotMapped]
         private FileType fileType;
+
+        public DbFile() { }
+        public DbFile(string filePath, byte[] fileData)
+        {
+            FilePath = filePath;
+            FileData = fileData;
+        }
+
         [Column("message_id")]
         public virtual Message Message { get; set; }
         [NotMapped]
