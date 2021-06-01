@@ -217,6 +217,7 @@ namespace Server
                                         //newFilePath = newFilePath + "\\" + Path.GetRandomFileName() + extention;
                                         File.WriteAllBytes(newFilePath, file.Value);
                                         dbFile.FilePath = newFilePath;
+                                        dbFile.Message = message;
                                         dbManager.CreateFile(dbFile);
                                     }
                                 }

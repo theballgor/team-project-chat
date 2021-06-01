@@ -10,7 +10,6 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public enum FileType
     {
-        Text,
         Audio,
         File,
         Image
@@ -21,11 +20,11 @@ namespace ClientServerLibrary.DbClasses
     {
         public int Id { get; set; }
         [StringLength(4000)]
-        public string FileName { get { return fileName; } set { fileName = value; OnPropertyChanged("FileName"); } }
+        public string FileName { get { return fileName; } set { fileName = value; FileExtenction = Path.GetExtension(value); OnPropertyChanged("FileName"); } }
         [NotMapped]
         private string fileName;
         [Required]
-        public string FilePath { get { return filePath; } set { filePath = value; OnPropertyChanged("FilePath"); } }
+        public string FilePath { get { return filePath; } set { filePath = value;fileName = Path.GetFileName(value);  OnPropertyChanged("FilePath"); } }
         [NotMapped]
         private string filePath;
         public FileType FileType { get { return fileType; } set { fileType = value; OnPropertyChanged("FileType"); } }
@@ -34,12 +33,50 @@ namespace ClientServerLibrary.DbClasses
         [Column("message_id")]
         public virtual Message Message { get; set; }
         [NotMapped]
-        public  byte fileData;
+        public  byte[] FileData { get; set; }
+        [NotMapped]
+        public string FileExtenction { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
+        public bool GetFileFromPath()
+        {
+            try
+            {
+                if (Directory.Exists(FilePath))
+                {
+                   FileData= File.ReadAllBytes(FilePath);
+                    return true;
+                }
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public bool SaveFileByPath()
+        {
+            try
+            {
+                if (Directory.Exists(FilePath))
+                {
+                    File.WriteAllBytes(FilePath, FileData);
+                    return true;
+                }
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         private void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }
