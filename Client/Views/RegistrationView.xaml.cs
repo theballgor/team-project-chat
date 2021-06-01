@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Client.Views
 {
     /// <summary>
-    /// Логика взаимодействия для RegistrationForm.xaml
+    /// Interaction logic for RegistrationView.xaml
     /// </summary>
-    public partial class LoginForm : Window
+    public partial class RegistrationView : UserControl
     {
-        public LoginForm()
+        public RegistrationView()
         {
             InitializeComponent();
         }

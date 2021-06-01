@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Threading.Tasks;
 using ClientServerLibrary.DbClasses;
 
 namespace Server.Database
@@ -7,19 +8,28 @@ namespace Server.Database
     {
         public static GenericUnitOfWork Work { get; set; }
         public static IGenericRepository<User> RUsers;
-        public static IGenericRepository<UserConversation> RUserConversations { get; set; }
+        public static IGenericRepository<ConversationConnection> RConversationConnections { get; set; }
         public static IGenericRepository<Message> RMessages { get; set; }
         public static IGenericRepository<Friendship> RFriendShips { get; set; }
         public static IGenericRepository<Conversation> RConversations { get; set; }
+        public static IGenericRepository<DbFile> RDbFiles { get; set; }
 
         public static void InitializeGenericRepositories()
         {
             Work = new GenericUnitOfWork(new ChatDBContext(ConfigurationManager.ConnectionStrings["conStr"].ConnectionString));
             RUsers = Work.Repository<User>();
-            RUserConversations = Work.Repository<UserConversation>();
+            RConversationConnections = Work.Repository<ConversationConnection>();
             RMessages = Work.Repository<Message>();
             RFriendShips = Work.Repository<Friendship>();
             RConversations = Work.Repository<Conversation>();
+            RDbFiles = Work.Repository<DbFile>();
+
+            RUsers.GetAll();
+            RConversationConnections.GetAll();
+            RMessages.GetAll();
+            RFriendShips.GetAll();
+            RConversations.GetAll();
+            RDbFiles.GetAll();
         }
     }
 }

@@ -3,16 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Client.Views" 
-        xmlns:viewModel="clr-namespace:Client.ViewsModel"
+        xmlns:local="clr-namespace:Client.Views" xmlns:viewModel="clr-namespace:Client.ViewsModel"
         mc:Ignorable="d"
-        Title="Registration" Height="450" Width="800">
-    <Window.Resources>
-        <viewModel:RegistrationViewModel x:Key="viewSource"></viewModel:RegistrationViewModel>
+        Title="RegistrationForm" Height="450" Width="800">
+    <!--<Window.Resources>
+        --><!--<viewModel:reg x:Key="viewSource"></viewModel:reg>--><!--
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource viewSource}"></Binding>
-    </Window.DataContext>
+    </Window.DataContext>-->
     <Grid Background="#FF18191D">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"></RowDefinition>
@@ -44,7 +43,8 @@
         <RadioButton x:Name="radioButtonLogOn" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center"    VerticalAlignment="Center" IsChecked="True"  Foreground="White">SingUp</RadioButton>
 
         <Button x:Name="buttonNext" Grid.Row="6" Grid.ColumnSpan="2" Margin="10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             Background="#FF282E33" Foreground="Gray" BorderThickness="0" Command="{Binding Register}" >Next</Button>
+                             Background="#FF282E33" Foreground="Gray" BorderThickness="0" Click="buttonNext_Click" Command="{Binding RegisterButton}" >Next</Button>
     </Grid>
 </Window>
+
 

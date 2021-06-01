@@ -1,21 +1,47 @@
-﻿using System;
+﻿using ClientServerLibrary.DbClasses;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace ClientServer
+
+namespace ClientServerLibrary
 {
     [Serializable]
-    public enum MessageType
+    public enum ActionType
     {
-        Text,
-        Audio,
-        File
+        SendConversationMessage,
+        SendFriendRequest,
+        RegisterUser,
+        LogInUserByEmail,
+        LogInUserByUsername,
+        CreateConversation,
+        JoinConversation,
+        GetConversationMessages,
+        GetUserConversations,
+        GetConversationUsers,
+        GetUserFriendships,
+        GetFriendsFromUserFriendships,
+        GetUserInfo,
+        FatalError,
     }
+
+    [Serializable]
+    public enum RegistrationResult
+    { 
+        Success,
+        EmailAlreadyExists,
+        UserNameAlreadyExists,
+        PhoneNumberAlreadyExists,
+        CreationError,
+    }
+
 
     [Serializable]
     public struct ClientServerMessage
@@ -23,29 +49,31 @@ namespace ClientServer
         public ClientServerMessage(
             object content,
             object additionalContent,
-            MessageType messageType,
+            ActionType actionType,
             DateTime date)
         {
             Content = content;
             AdditionalContent = additionalContent;
-            MessageType = messageType;
+            ActionType = actionType;
             Date = date;
-        }
 
+        }
         public object Content { get; set; }
         public object AdditionalContent { get; set; }
-        public MessageType MessageType { get; set; }
+        public ActionType ActionType { get; set; }
         public DateTime Date { get; set; }
     }
 
     public static class GlobalVariables
     {
-        public static readonly int ServerPort = 40000;
+        public static readonly int ServerPort = 40001;
         public static readonly IPAddress LocalIP = IPAddress.Parse("127.0.0.1");
     }
 
 
-    public static class ClientServerMessageFormatter
+
+
+    public static class ClientServerDataManager
     {
         public static ClientServerMessage Deserialize(byte[] data)
         {
@@ -70,5 +98,20 @@ namespace ClientServer
             return serializedData;
         }
 
+
+
+        public static byte[] TcpClientDataReader(TcpClient client)
+        {
+            NetworkStream stream = client.GetStream();
+            byte[] data = new byte[128];
+            List<byte> messageInBytes = new List<byte>();
+            do
+            {
+                stream.Read(data, 0, data.Length);
+                messageInBytes.AddRange(data);
+            } while (stream.DataAvailable);
+            return messageInBytes.ToArray();
+        }
+        
     }
 }

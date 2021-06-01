@@ -6,23 +6,29 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
+using Client.Model;
+using ClientServerLibrary.DbClasses;
+using Client.Store;
+using ClientLibrary;
+using Client.Services;
+using System.Windows.Input;
 
 namespace Client.ViewsModel
 {
-    class LoginViewModel : INotifyPropertyChanged
+    class LoginViewModel : ViewModelBase
     {
-        private string email;
-        private string password;
+        private readonly NavigationService<AccountViewModel> navigationService;
 
+        // Fields
         public string Email
         {
             get
             {
-                return email;
+                return LoginModel.Email;
             }
             set
             {
-                email = value;
+                LoginModel.Email = value;
                 OnPropertyChanged("Email");
             }
         }
@@ -30,69 +36,42 @@ namespace Client.ViewsModel
         {
             get
             {
-                return password;
+                return LoginModel.Password;
             }
             set
             {
-                password = value;
+                LoginModel.Password = value;
                 OnPropertyChanged("Password");
             }
         }
 
+        public ICommand LoginCommand { get; }
+        public ICommand RegistrationCommand { get; }
 
-        public RelayCommand Login
+        // Constructor
+        public LoginViewModel(NavigationStore navigationStore)
         {
-            get
+            LoginModel.LoginSucces += LoginModel_LoginSucces;
+            navigationService = new NavigationService<AccountViewModel>(navigationStore, () => new AccountViewModel(navigationStore));
+
+            LoginCommand = new LoginCommand(this, navigationService);
+            RegistrationCommand = new RegistrationCommand(this, new NavigationService<RegistrationViewModel>(navigationStore, () => new RegistrationViewModel(navigationStore)));
+        }
+
+        // Callback
+        private void LoginModel_LoginSucces(object sender, EventArgs e)
+        {
+            User user = ((e as ViewModelEventArgs).Content as User);
+            if (user != null)
             {
-                return new RelayCommand(obj =>
-                {
-                    try
-                    {
-                        Validate();
-                        Send();
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                });
+                AccountModel.User = user;
+                navigationService.Navigate();
+                Console.WriteLine("Logined: " + user.Email);
             }
-        }
-
-        private void Send()
-        {
-            MessageBox.Show("Ok");
-        }
-
-        private void Validate()
-        {
-            ValidateString(password, "Invalid data", 8, 16);
-            ValidateEmail("Invalid data");
-        }
-
-        private void ValidateString(string str, string exceptionMessage, int from, int to)
-        {
-            if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-                throw new ArgumentException(exceptionMessage);
-        }
-
-        private void ValidateEmail(string exceptionMessage)
-        {
-            try
+            else
             {
-                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
+                Console.WriteLine("Failed to login");
             }
-            catch (Exception)
-            {
-                throw new ArgumentException(exceptionMessage);
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string PropertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
         }
     }
 }

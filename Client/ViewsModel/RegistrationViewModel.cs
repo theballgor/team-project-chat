@@ -6,130 +6,105 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Client.Commands;
 using System.Windows;
+using Client.Model;
+using ClientServerLibrary;
+using ClientServerLibrary.DbClasses;
+using ClientLibrary;
+using Client.Store;
+using Client.Services;
+using System.Windows.Input;
 
 namespace Client.ViewsModel
 {
-    class RegistrationViewModel : INotifyPropertyChanged
+    class RegistrationViewModel : ViewModelBase
     {
-        private string email;
-        private string nickname;
-        private string password;
-        private string verifyPassword;
+        private readonly NavigationService<LoginViewModel> navigationService;
 
+        // Fields
         public string Email
         {
             get
             {
-                return email;
+                return RegistrationModel.Email;
             }
             set
             {
-                email = value;
+                RegistrationModel.Email = value;
                 OnPropertyChanged("Email");
             }
         }
-
-        public string Nickname
-        {
-            get
-            {
-                return nickname;
-            }
-            set
-            {
-                nickname = value;
-                OnPropertyChanged("Nickname");
-            }
-        }
-
         public string Password
         {
             get
             {
-                return password;
+                return RegistrationModel.Password;
             }
             set
             {
-                password = value;
+                RegistrationModel.Password = value;
                 OnPropertyChanged("Password");
             }
         }
-
+        public string Username
+        {
+            get
+            {
+                return RegistrationModel.Username;
+            }
+            set
+            {
+                RegistrationModel.Username = value;
+                OnPropertyChanged("Username");
+            }
+        }  
         public string VerifyPassword
         {
             get
             {
-                return verifyPassword;
+                return RegistrationModel.VerifyPassword;
             }
             set
             {
-                verifyPassword = value;
+                RegistrationModel.VerifyPassword = value;
                 OnPropertyChanged("VerifyPassword");
             }
         }
 
-        public RelayCommand Register
+        public ICommand RegisterCommand { get; }
+        public ICommand CloseViewCommand { get; }
+
+        // Constructor
+        public RegistrationViewModel(NavigationStore navigationStore)
         {
-            get
+            RegistrationModel.RegisterSucces += RegistrationModel_RegistrationSucces;
+            navigationService = new NavigationService<LoginViewModel>(navigationStore, () => new LoginViewModel(navigationStore));
+            RegisterCommand = new RegisterCommand(this, navigationService);
+            CloseViewCommand = new CloseViewCommand(this, navigationService);
+        }
+
+        // Callback
+        private void RegistrationModel_RegistrationSucces(object sender, EventArgs e)
+        {
+            if ((e as ViewModelEventArgs).Content == null) throw new ArgumentNullException("failed to register");
+            switch ((RegistrationResult)(e as ViewModelEventArgs).Content)
             {
-                return new RelayCommand(obj =>
-                {
-                    try
-                    {
-                        Validate();
-                        Send();
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                });
+                case RegistrationResult.Success:
+                     Console.WriteLine("user succesfylly refistered");
+                     navigationService.Navigate();
+                     break;
+
+                case RegistrationResult.UserNameAlreadyExists:
+                     Console.WriteLine("user already exist");
+                     break;
+
+                case RegistrationResult.EmailAlreadyExists:
+                     Console.WriteLine("email already exist");
+                     break;
+
+                default:
+                     Console.WriteLine("failed to register");
+                     break;
             }
         }
-
-        private void Send()
-        {
-            System.Windows.MessageBox.Show(nickname);
-        }
-
-        private void Validate()
-        {
-            ValidateString(nickname, 4, 25, "Invalid Nickname");
-            ValidateString(password, 8, 16, "Invalid Password");
-
-            if (password != verifyPassword)
-                throw new ArgumentException("Verify the password");
-
-            if (!ValidateEmail())
-                throw new ArgumentException("Invalid Email");
-        }
-
-        private bool ValidateString(string str, int from, int to, string errorMessage)
-        {
-            if (string.IsNullOrEmpty(str) || (str.Length < from || str.Length > to))
-                throw new ArgumentException(errorMessage);
-            return true;
-        }
-
-        private bool ValidateEmail()
-        {
-            try
-            {
-                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(email);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string PropertyName)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
-        }
-
     }
 }
