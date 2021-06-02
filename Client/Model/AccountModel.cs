@@ -4,7 +4,9 @@ using ClientServerLibrary.DbClasses;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -129,6 +131,38 @@ namespace Client.Model
 
             //Messages[message.Conversation.Id].Add(message);
         }
+
+        [DllImport("winmm.dll", EntryPoint = "mciSendStringA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        private static extern int mciSendString(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
+        public static void StartRecordingVoiceMessage()
+        {
+            mciSendString("open new Type waveaudio Alias recsound", "", 0, 0);
+            mciSendString("record recsound", "", 0, 0);
+
+            /*ClientServerMessage csMessage = new ClientServerMessage { Content = message };
+            csMessage.AdditionalContent = messageFiles.ToArray();
+            ClientModel.GetInstance().SendMessageSync(csMessage);*/
+
+            //Messages[message.Conversation.Id].Add(message);
+
+        }
+
+        public static void StopRecordingVoiceMessage()
+        {
+            string fileName = "lastVoiceMessage.wav";
+            mciSendString($"save recsound {fileName}", "", 0, 0);
+            mciSendString("close recsound ", "", 0, 0);
+
+
+            MessageFiles.Add(new DbFile(Path.GetFileName(fileName), File.ReadAllBytes(fileName)));
+            /*ClientServerMessage csMessage = new ClientServerMessage { Content = message };
+            csMessage.AdditionalContent = messageFiles.ToArray();
+            ClientModel.GetInstance().SendMessageSync(csMessage);*/
+
+            //Messages[message.Conversation.Id].Add(message);
+
+        }
+
         public static void RequestContacts()
         {
             try

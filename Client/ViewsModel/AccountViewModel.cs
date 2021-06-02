@@ -72,6 +72,7 @@ namespace Client.ViewsModel
         protected ICommand _selectFileCommand;
         protected ICommand _getConversationMessagesCommand;
         protected ICommand _sendMessageCommand;
+        protected ICommand _startRecording;
         protected ICommand _getSelectedChatCommand;
 
         public ICommand SelectFileCommand
@@ -90,6 +91,7 @@ namespace Client.ViewsModel
                 }));
             }
         }
+
         public ICommand GetSelectedChatCommand
         {
             get
@@ -119,6 +121,28 @@ namespace Client.ViewsModel
                 return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter =>
                 {
                     AccountModel.SendMessage();
+                }));
+            }
+        }
+
+        bool isMessageRecording;
+
+        public ICommand StartRecording
+        {
+            get
+            {
+                return _startRecording ?? (_startRecording = new RelayCommand(parameter =>
+                {
+                    if (!isMessageRecording)
+                    {
+                        isMessageRecording = true;
+                        AccountModel.StartRecordingVoiceMessage();
+                    }
+                    else
+                    {
+                        isMessageRecording = false;
+                        AccountModel.StopRecordingVoiceMessage();
+                    }
                 }));
             }
         }
