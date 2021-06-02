@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,14 +21,23 @@ namespace Client
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Connecting();
-            NavigationStore navigationStore = new NavigationStore();
-            navigationStore.CurrentViewModel = new LoginViewModel(navigationStore);
-            MainWindow = new MainWindow()
+            Thread.Sleep(1500);
+            try
             {
-                DataContext = new MainViewModel(navigationStore)
-            };
-            MainWindow.Show();
+                Connecting();
+                NavigationStore navigationStore = new NavigationStore();
+                navigationStore.CurrentViewModel = new LoginViewModel(navigationStore);
+                MainWindow = new MainWindow()
+                {
+                    DataContext = new MainViewModel(navigationStore)
+                };
+                MainWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText("errorlog.txt", $"[{DateTime.Now.ToString("T")}]" + ex.Message);
+                throw;
+            }
 
             base.OnStartup(e);
         }
