@@ -124,7 +124,7 @@ namespace Client.Model
             message.SendTime = DateTime.Now;
 
             ClientServerMessage csMessage = new ClientServerMessage { Content = message };
-            csMessage.AdditionalContent = messageFiles;
+            csMessage.AdditionalContent = messageFiles.ToArray();
             ClientModel.GetInstance().SendMessageSync(csMessage);
 
             //Messages[message.Conversation.Id].Add(message);
