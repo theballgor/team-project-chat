@@ -29,7 +29,10 @@ namespace ClientServerLibrary
         GetUserFriendships,
         GetFriendsFromUserFriendships,
         GetUserInfo,
+        UpdateUserInfo,
+        UpdateConversationInfo,
         FatalError,
+
     }
 
     [Serializable]

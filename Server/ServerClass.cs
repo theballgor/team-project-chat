@@ -94,6 +94,12 @@ namespace Server
                         case ActionType.GetUserInfo:
                             GetUserInfo();
                             break;
+                        case ActionType.UpdateUserInfo:
+                            UpdateUserInfo((User)clientServerMessage.Content);
+                            break;
+                        case ActionType.UpdateConversationInfo:
+                            UpdateConversationInfo((Conversation)clientServerMessage.Content);
+                            break;
                         case ActionType.FatalError:
 
                             break;
@@ -201,7 +207,12 @@ namespace Server
                                 {
 
                                     string newFilePath;
-                                    if (file.ImageCheck())
+                                    if (file.FileExtenction == ".wav")
+                                    {
+                                        file.FileType = FileType.Audio;
+                                        newFilePath = ConfigurationManager.AppSettings["AudioPath"];
+                                    }
+                                    else if (file.ImageCheck())
                                     {
                                         file.FileType = FileType.Image;
                                         newFilePath = ConfigurationManager.AppSettings["ImagePath"];
@@ -342,6 +353,15 @@ namespace Server
                         User user = dbManager.GetUserById(currentUser.Id);
                         currentUser = user;
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
+                    }
+                    void UpdateUserInfo(User user)
+                    {
+
+                    }
+
+                    void UpdateConversationInfo(Conversation conversation)
+                    {
+
                     }
                 }
             }
