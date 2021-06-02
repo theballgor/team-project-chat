@@ -72,13 +72,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbClasses\Conversation.cs" />
+    <Compile Include="DbClasses\ConversationImage.cs" />
     <Compile Include="DbClasses\DbFile.cs" />
     <Compile Include="DbClasses\Friendship.cs" />
     <Compile Include="DbClasses\Message.cs" />
+    <Compile Include="DbClasses\MessageFile.cs" />
     <Compile Include="DbClasses\User.cs" />
     <Compile Include="DbClasses\ConversationConnection.cs" />
     <Compile Include="ClientServer.cs" />
     <Compile Include="DbClasses\UserConversation.cs" />
+    <Compile Include="DbClasses\UserImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

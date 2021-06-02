@@ -60,7 +60,7 @@ namespace Client.ViewsModel
         }
         
         // ???
-        public List<DbFile> MessageFiles
+        public List<MessageFile> MessageFiles
         {
             get => AccountModel.MessageFiles;
             set => MessageFiles = value;
@@ -81,10 +81,11 @@ namespace Client.ViewsModel
                 return _selectFileCommand ?? (_selectFileCommand = new RelayCommand(parameter =>
                 {
                     OpenFileDialog openFileDialog = new OpenFileDialog();
+                    openFileDialog.Multiselect = true;
                     if (openFileDialog.ShowDialog() == true)
                     {
                         foreach (string path in openFileDialog.FileNames)
-                            MessageFiles.Add(new DbFile(Path.GetFileName(path), File.ReadAllBytes(path)));
+                            MessageFiles.Add(new MessageFile(Path.GetFileName(path), File.ReadAllBytes(path)));
                     }
                 }));
             }

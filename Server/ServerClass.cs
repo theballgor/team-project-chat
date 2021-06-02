@@ -202,10 +202,9 @@ namespace Server
                         {
                             if (clientServerMessage.AdditionalContent != null)
                             {
-                                DbFile[] dbFiles = (DbFile[])clientServerMessage.AdditionalContent;
+                                MessageFile[] dbFiles = (MessageFile[])clientServerMessage.AdditionalContent;
                                 foreach (var file in dbFiles)
                                 {
-
                                     string newFilePath;
                                     if (file.FileExtenction == ".wav")
                                     {
@@ -226,7 +225,7 @@ namespace Server
                                     file.FilePath = newFilePath;
                                     if (!file.SaveFileByPath())
                                         throw new Exception();
-                                    file.Message = message;
+                                    //file.Message = message;
                                     dbManager.CreateFile(file);
                                 }
                             }
@@ -249,28 +248,28 @@ namespace Server
 
                     }
 
-                        /// <summary>
-                        /// returns Content=List<KeyValuePair<Conversation, Message[]>>
-                        /// </summary>
-                        void GetUserConversations()
+                    /// <summary>
+                    /// returns Content=List<KeyValuePair<Conversation, Message[]>>
+                    /// </summary>
+                    void GetUserConversations()
+                    {
+                        while (currentUser == null) { } //wait for initialization currentUser
+                        Conversation[] conversations = dbManager.GetAllUserConversations(currentUser.Id);
+                        if (conversations != null)
                         {
-                            while(currentUser == null) { } //wait for initialization currentUser
-                            Conversation[] conversations = dbManager.GetAllUserConversations(currentUser.Id);
-                            if (conversations != null)
+                            List<KeyValuePair<Conversation, Message[]>> ConversationMessagesValuePairs = new List<KeyValuePair<Conversation, Message[]>>();
+                            foreach (var conversation in conversations)
                             {
-                                List<KeyValuePair<Conversation, Message[]>> ConversationMessagesValuePairs = new List<KeyValuePair<Conversation, Message[]>>();
-                                foreach (var conversation in conversations)
-                                {
-                                    Message[] messages = dbManager.GetAllConversationMessages(conversation);
-                                    ConversationMessagesValuePairs.Add(new KeyValuePair<Conversation, Message[]>(conversation, messages));
-                                }
-                                SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = ConversationMessagesValuePairs });
+                                Message[] messages = dbManager.GetAllConversationMessages(conversation);
+                                ConversationMessagesValuePairs.Add(new KeyValuePair<Conversation, Message[]>(conversation, messages));
                             }
-                            else
-                            {
-                                SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = null });
-                            }
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = ConversationMessagesValuePairs });
                         }
+                        else
+                        {
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = null });
+                        }
+                    }
 
                     /// <summary>
                     /// returns List<KeyValuePair<Message, DbFile[]>>
@@ -279,13 +278,13 @@ namespace Server
                     {
                         Message[] messages = dbManager.GetAllConversationMessages(conversation);
 
-                        List<KeyValuePair<Message, DbFile[]>> messageFilePair = null;
+                        List<KeyValuePair<Message, MessageFile[]>> messageFilePair = null;
                         if (messages != null)
                         {
-                            messageFilePair = new List<KeyValuePair<Message, DbFile[]>>();
+                            messageFilePair = new List<KeyValuePair<Message, MessageFile[]>>();
                             foreach (Message message in messages)
                             {
-                                DbFile[] dbFiles = dbManager.GetAllMessageFiles(message);
+                                MessageFile[] dbFiles = dbManager.GetAllMessageFiles(message);
                                 foreach (var dbFile in dbFiles)
                                 {
                                     if (dbFile.GetFileFromPath())
@@ -297,7 +296,7 @@ namespace Server
                                         Console.WriteLine("Faile to read file");
                                     }
                                 }
-                                messageFilePair.Add(new KeyValuePair<Message, DbFile[]>(message, dbFiles));
+                                messageFilePair.Add(new KeyValuePair<Message, MessageFile[]>(message, dbFiles));
                             }
                         }
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = messageFilePair });

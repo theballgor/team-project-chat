@@ -95,10 +95,10 @@ namespace Client.Model
 
         /// Files 
         // ???
-        private static List<DbFile> messageFiles;
-        public static List<DbFile> MessageFiles
+        private static List<MessageFile> messageFiles;
+        public static List<MessageFile> MessageFiles
         {
-            get => messageFiles == null ? messageFiles = new List<DbFile>() : messageFiles;
+            get => messageFiles == null ? messageFiles = new List<MessageFile>() : messageFiles;
             set => messageFiles = value;
         }
 

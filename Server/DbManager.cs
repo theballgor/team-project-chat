@@ -69,11 +69,11 @@ namespace Server
                 return null;
             }
         }
-        public DbFile[] GetAllMessageFiles (Message message)
+        public MessageFile[] GetAllMessageFiles (Message message)
         {
             try
             {
-                return Repositories.RDbFiles.FindAll(item=>item.Message.Id==message.Id).ToArray();
+                return Repositories.RMessageFiles.FindAll(item => item.Message.Id == message.Id).ToArray();
             }
             catch (Exception)
             {
@@ -172,11 +172,39 @@ namespace Server
                 return false;
             }
         }
-        public bool CreateFile(DbFile dbFile)
+        public bool CreateFile(MessageFile dbFile)
         {
             try
             {
-                Repositories.RDbFiles.Add(dbFile);
+                Repositories.RMessageFiles.Add(dbFile);
+                Console.WriteLine("file created");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create file");
+                return false;
+            }
+        }
+        public bool CreateFile(UserImage dbFile)
+        {
+            try
+            {
+                Repositories.RUserImages.Add(dbFile);
+                Console.WriteLine("file created");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create file");
+                return false;
+            }
+        }
+        public bool CreateFile(ConversationImage dbFile)
+        {
+            try
+            {
+                Repositories.RConversationImages.Add(dbFile);
                 Console.WriteLine("file created");
                 return true;
             }
@@ -277,6 +305,20 @@ namespace Server
             try
             {
                 Repositories.RConversations.Update(conversation);
+                Console.WriteLine("conversation updated");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to update conversation");
+                return false;
+            }
+        }
+        public bool UpdateConverвsation(Conversation conversation)
+        {
+            try
+            {
+                //Repositories.R.Update(conversation);
                 Console.WriteLine("conversation updated");
                 return true;
             }

@@ -64,13 +64,8 @@
     <Compile Include="Database\EFGenericRepository.cs" />
     <Compile Include="Database\GenericUnitOfWork.cs" />
     <Compile Include="Database\IGenericRepository.cs" />
-    <Compile Include="Database\Migrations\202106020954045_m1.cs" />
-    <Compile Include="Database\Migrations\202106020954045_m1.designer.cs">
-      <DependentUpon>202106020954045_m1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Database\Repositories.cs" />
     <Compile Include="DbManager.cs" />
-    <Compile Include="Database\Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerClass.cs" />
@@ -84,11 +79,6 @@
     <Content Include="Files\Message\Audio\PlaceHolder.txt" />
     <Content Include="Files\Message\Files\PlaceHolder.txt" />
     <Content Include="Files\Message\Images\PlaceHolder.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Database\Migrations\202106020954045_m1.resx">
-      <DependentUpon>202106020954045_m1.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
