@@ -225,7 +225,6 @@ namespace Server
                                     file.FilePath = newFilePath;
                                     if (!file.SaveFileByPath())
                                         throw new Exception();
-                                    //file.Message = message;
                                     dbManager.CreateFile(file);
                                 }
                             }
@@ -276,15 +275,14 @@ namespace Server
                     /// </summary>
                     void GetConversationMessages(Conversation conversation)
                     {
-                        Message[] messages = dbManager.GetAllConversationMessages(conversation);
-
-                        List<KeyValuePair<Message, MessageFile[]>> messageFilePair = null;
+                        KeyValuePair<Conversation, Message> messageFilePair = new KeyValuePair<Conversation, Message>();
+                        MessageFile[] dbFiles = null;
+                        IEnumerable<Message> messages = dbManager.GetAllConversationMessages(conversation).OrderBy(item => item.SendTime);
                         if (messages != null)
                         {
-                            messageFilePair = new List<KeyValuePair<Message, MessageFile[]>>();
-                            foreach (Message message in messages)
-                            {
-                                MessageFile[] dbFiles = dbManager.GetAllMessageFiles(message);
+                            Message message = messages.First();
+                            dbFiles = dbManager.GetAllMessageFiles(message);
+                            if (dbFiles != null)
                                 foreach (var dbFile in dbFiles)
                                 {
                                     if (dbFile.GetFileFromPath())
@@ -293,13 +291,12 @@ namespace Server
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Faile to read file");
+                                        Console.WriteLine("Failed to read file");
                                     }
                                 }
-                                messageFilePair.Add(new KeyValuePair<Message, MessageFile[]>(message, dbFiles));
-                            }
+                            messageFilePair = new KeyValuePair<Conversation, Message>(conversation, message);
                         }
-                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = messageFilePair });
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = messageFilePair, AdditionalContent = dbFiles });
                     }
 
                     /// <summary>
