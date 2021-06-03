@@ -11,6 +11,17 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public class Message : INotifyPropertyChanged
     {
+        public Message() { }
+        public Message(Message message)
+        {
+            Id = message.Id;
+            Content = message.Content;
+            SendTime = message.SendTime;
+            IsRead = message.IsRead;
+            Sender = message.Sender;
+            IsMessageReceived = message.IsMessageReceived;
+            Conversation = message.Conversation;
+        }
         public int Id { get; set; }
         [StringLength(4000)]
         [Required]
@@ -23,6 +34,7 @@ namespace ClientServerLibrary.DbClasses
         public bool IsRead { get { return isRead; } set { isRead = value; OnPropertyChanged("IsRead"); } }
         [NotMapped]
         private bool isRead;
+
         [Column("sender_id")]
         public virtual User Sender { get; set; }
 
@@ -30,6 +42,7 @@ namespace ClientServerLibrary.DbClasses
         public bool IsMessageReceived { get; set; }
         [Column("conversation_id")]
         public virtual Conversation Conversation { get; set; }
+        [field: NonSerializedAttribute()]
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

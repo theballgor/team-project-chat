@@ -69,7 +69,7 @@ namespace ClientServerLibrary
 
     public static class GlobalVariables
     {
-        public static readonly int ServerPort = 40003;
+        public static readonly int ServerPort = 40001;
         public static readonly IPAddress LocalIP = IPAddress.Parse("127.0.0.1");
     }
 
