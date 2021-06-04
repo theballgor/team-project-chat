@@ -58,7 +58,7 @@ namespace Server
                 return null;
             }
         }
-        public Conversation GetConversationById(int conversationId)
+        public ConversationModel GetConversationById(int conversationId)
         {
             try
             {
@@ -102,12 +102,12 @@ namespace Server
                 return null;
             }
         }
-        public Conversation[] GetAllUserConversations(int userId)
+        public ConversationModel[] GetAllUserConversations(int userId)
         {
             try
             {
                 ConversationConnection[] userConversationConnections = Repositories.RConversationConnections.FindAll(item => item.User.Id == userId).ToArray();
-                List<Conversation> conversations = new List<Conversation>();
+                List<ConversationModel> conversations = new List<ConversationModel>();
                 foreach (var item in userConversationConnections)
                     conversations.Add(item.Conversation);
                 return conversations.ToArray();
@@ -117,7 +117,7 @@ namespace Server
                 return null;
             }
         }
-        public User[] GetAllUsersFromConversation(Conversation conversation)
+        public User[] GetAllUsersFromConversation(ConversationModel conversation)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace Server
             }
       
         }
-        public Message[] GetAllConversationMessages(Conversation conversation)
+        public Message[] GetAllConversationMessages(ConversationModel conversation)
         {
             try
             {
@@ -214,7 +214,7 @@ namespace Server
                 return false;
             }
         }
-        public bool CreateConversation(Conversation conversation)
+        public bool CreateConversation(ConversationModel conversation)
         {
             try
             {
@@ -314,7 +314,7 @@ namespace Server
                 return false;
             }
         }
-        public bool UpdateConversation(Conversation conversation)
+        public bool UpdateConversation(ConversationModel conversation)
         {
             try
             {
@@ -328,7 +328,7 @@ namespace Server
                 return false;
             }
         }
-        public bool UpdateConverвsation(Conversation conversation)
+        public bool UpdateConverвsation(ConversationModel conversation)
         {
             try
             {

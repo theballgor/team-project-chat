@@ -72,7 +72,7 @@ namespace Server
                         //    LoginUserByUsername((User)clientServerMessage.Content);
                         //    break;
                         case ActionType.CreateConversation:
-                            CreateConversation((Conversation)clientServerMessage.Content);
+                            CreateConversation((ConversationModel)clientServerMessage.Content);
                             break;
                         case ActionType.JoinConversation:
                             JoinConversation((int)clientServerMessage.Content);
@@ -81,7 +81,7 @@ namespace Server
                             AddFriend((int)clientServerMessage.Content);
                             break;
                         case ActionType.GetConversationMessages:
-                            GetConversationMessages((Conversation)clientServerMessage.Content);
+                            GetConversationMessages((ConversationModel)clientServerMessage.Content);
                             break;
                         case ActionType.GetUserConversations:
                             GetUserConversations();
@@ -162,7 +162,7 @@ namespace Server
                     /// <summary>
                     /// returns Content=Conversation or null
                     /// </summary>
-                    void CreateConversation(Conversation conversation)
+                    void CreateConversation(ConversationModel conversation)
                     {
                         //not ended 
                         if (!dbManager.CreateConversation(conversation))
@@ -175,7 +175,7 @@ namespace Server
                     /// </summary>
                     void JoinConversation(int conversationId)
                     {
-                        Conversation conversation = dbManager.GetConversationById(conversationId);
+                        ConversationModel conversation = dbManager.GetConversationById(conversationId);
                         ConversationConnection conversationConnection = null;
                         if (conversation != null)
                         {
@@ -233,9 +233,12 @@ namespace Server
                                     dbManager.CreateFile(file);
                                 }
                             }
-                            dbManager.CreateMessage(message);
+                            
+                            Message tmp = message;
+                            tmp.Conversation = dbManager.GetConversationById(message.Conversation.Id);
+                            dbManager.CreateMessage(tmp);
 
-                            List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
+                            List<User> users = dbManager.GetAllUsersFromConversation(tmp.Conversation).ToList();
                             users.Remove(currentUser);
                             List<TcpClient> clients = GetClientsByUsers(users.ToArray());
                             SendMessage(clients, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = content });
@@ -257,17 +260,17 @@ namespace Server
                     void GetUserConversations()
                     {
                         while (currentUser == null) { Thread.Sleep(200); } //wait for initialization currentUser
-                        Conversation[] conversations = dbManager.GetAllUserConversations(currentUser.Id);
+                        ConversationModel[] conversations = dbManager.GetAllUserConversations(currentUser.Id);
                         if (conversations != null)
                         {
-                            List<KeyValuePair<Conversation, Message>> ConversationMessagesValuePairs = new List<KeyValuePair<Conversation, Message>>();
+                            List<KeyValuePair<ConversationModel, Message>> ConversationMessagesValuePairs = new List<KeyValuePair<ConversationModel, Message>>();
                             foreach (var conversation in conversations)
                             {
                                 Message message = null;
                                 Message[] messages = dbManager.GetAllConversationMessages(conversation);
                                 if (messages.Length != 0)
-                                    message = messages.OrderBy(item => item.SendTime).First();
-                                ConversationMessagesValuePairs.Add(new KeyValuePair<Conversation, Message>(conversation, message));
+                                    message = messages.OrderBy(item => item.SendTime).Last();
+                                ConversationMessagesValuePairs.Add(new KeyValuePair<ConversationModel, Message>(conversation, message));
                             }
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = ConversationMessagesValuePairs.ToArray() });
                         }
@@ -280,7 +283,7 @@ namespace Server
                     /// <summary>
                     /// returns List<KeyValuePair<Message, DbFile[]>>
                     /// </summary>
-                    void GetConversationMessages(Conversation conversation)
+                    void GetConversationMessages(ConversationModel conversation)
                     {
                         Message[] messages = dbManager.GetAllConversationMessages(conversation);
 
@@ -313,7 +316,7 @@ namespace Server
                     /// </summary>
                     void GetConversationUsers(int conversationId)
                     {
-                        Conversation conversation = dbManager.GetConversationById(conversationId);
+                        ConversationModel conversation = dbManager.GetConversationById(conversationId);
                         User[] users = null;
                         if (conversation != null)
                             users = dbManager.GetAllUsersFromConversation(conversation);
@@ -359,12 +362,13 @@ namespace Server
                         currentUser = user;
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
                     }
+
                     void UpdateUserInfo(User user)
                     {
 
                     }
 
-                    void UpdateConversationInfo(Conversation conversation)
+                    void UpdateConversationInfo(ConversationModel conversation)
                     {
 
                     }

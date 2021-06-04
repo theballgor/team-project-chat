@@ -38,21 +38,21 @@ namespace Client.ViewsModel
 
         /// Список чатів та останніх повідомлень в цих чатах
         /// Прив"язка до форми
-        public ObservableCollection<KeyValuePair<Conversation, Message>> Conversations
+        public ObservableCollection<KeyValuePair<ConversationModel, Message>> Conversations
         {
             get => AccountModel.Conversations;
             /// Список контаків
         }
 
         /// Активний чат
-        public Conversation ActiveConversation
+        public ConversationModel ActiveConversation
         {
             get => AccountModel.ActiveConversation;
         }
 
         /// Список повідомлень в активному чаті та булівське яке показує чи повідолення наше, чи чиєсь
         /// Прив"язка до форми
-        public ObservableCollection<KeyValuePair<Message, bool>> ActiveMessages
+        public ObservableCollection<KeyValuePair<Message, ObservableCollection<MessageFile>>> ActiveMessages
         {
             get => AccountModel.ActiveMessages;
         }
@@ -150,7 +150,7 @@ namespace Client.ViewsModel
                 return _onConversationChanged ?? (_onConversationChanged = new RelayCommand(parameter =>
                 {
 
-                    if (parameter is Conversation currentConversation && currentConversation != AccountModel.ActiveConversation)
+                    if (parameter is ConversationModel currentConversation && currentConversation != AccountModel.ActiveConversation)
                     {
                         AccountModel.ActiveMessages.Clear();
                         AccountModel.ActiveConversation = currentConversation;
@@ -250,6 +250,22 @@ namespace Client.ViewsModel
                 }));
             }
         }
+
+        protected ICommand _startConversation;
+        public ICommand StartConversation
+        {
+            get
+            {
+                return _startConversation ?? (_startConversation = new RelayCommand(parameter =>
+                {
+                    if (parameter is User userToChat)
+                    {
+                        AccountModel.ActiveConversation = new ConversationModel { Name = userToChat.Username, Creator = AccountModel.User };
+                    }
+                }));
+            }
+        }
+        
 
     }
 }

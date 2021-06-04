@@ -11,7 +11,7 @@ namespace Server.Database
         public static IGenericRepository<ConversationConnection> RConversationConnections { get; set; }
         public static IGenericRepository<Message> RMessages { get; set; }
         public static IGenericRepository<Friendship> RFriendShips { get; set; }
-        public static IGenericRepository<Conversation> RConversations { get; set; }
+        public static IGenericRepository<ConversationModel> RConversations { get; set; }
         public static IGenericRepository<MessageFile> RMessageFiles { get; set; }
         public static IGenericRepository<UserImage> RUserImages { get; set; }
         public static IGenericRepository<ConversationImage> RConversationImages { get; set; }
@@ -23,7 +23,7 @@ namespace Server.Database
             RConversationConnections = Work.Repository<ConversationConnection>();
             RMessages = Work.Repository<Message>();
             RFriendShips = Work.Repository<Friendship>();
-            RConversations = Work.Repository<Conversation>();
+            RConversations = Work.Repository<ConversationModel>();
             RMessageFiles = Work.Repository<MessageFile>();
             RUserImages = Work.Repository<UserImage>();
             RConversationImages = Work.Repository<ConversationImage>();

@@ -20,12 +20,12 @@
             <Setter Property="HorizontalAlignment" Value="Center"></Setter>
             <Setter Property="TextWrapping" Value="Wrap"></Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Value}" Value="True">
+                <DataTrigger Binding="{Binding Key.IsSend}" Value="True">
                     <Setter Property="Text" Value="{Binding Key.Content}"></Setter>
                 </DataTrigger>
                 
                 <!--Content ?? must be binding to model -->
-                <DataTrigger Binding="{Binding Value}" Value="False">
+                <DataTrigger Binding="{Binding Key.IsSend}" Value="False">
                     <Setter Property="Text" Value="{Binding Key.Content}"></Setter>
                 </DataTrigger>
             </Style.Triggers>
@@ -110,7 +110,7 @@
 
                                                             <!--For change position and color bubble our message-->
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Value}" Value="true">
+                                                                <DataTrigger Binding="{Binding Key.IsSend}" Value="true">
                                                                     <Setter Property="CornerRadius" Value="14 14 0 18"></Setter>
                                                                     <Setter Property="Background" Value="#607D8B"></Setter>
                                                                     <Setter Property="HorizontalAlignment" Value="Right"></Setter>
@@ -145,14 +145,14 @@
                                                         <Setter Property="FontSize" Value="10"></Setter>
                                                         <Style.Triggers>
                                                             <!--if message is received, show time on left-->
-                                                            <DataTrigger Binding="{Binding Value}" Value="True">
+                                                            <DataTrigger Binding="{Binding Key.IsSend}" Value="True">
                                                                 <Setter Property="Text" Value="{Binding Key.Content}"></Setter>
                                                                 <Setter Property="HorizontalAlignment" Value="Left"></Setter>
                                                                 <Setter Property="Margin" Value="0 5 5 0"></Setter>
                                                             </DataTrigger>
 
                                                             <!--else, show time right-->
-                                                            <DataTrigger Binding="{Binding Value}" Value="False">
+                                                            <DataTrigger Binding="{Binding Key.IsSend}" Value="False">
                                                                 <Setter Property="Text" Value="{Binding Key.Content}"></Setter>
                                                                 <Setter Property="HorizontalAlignment" Value="Right"></Setter>
                                                                 <Setter Property="Margin" Value="0 5 5 0"></Setter>
@@ -164,7 +164,7 @@
                                         </Grid>
                                     </Border>
                                     <ControlTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding Value}" Value="False">
+                                        <DataTrigger Binding="{Binding Key.IsSend}" Value="False">
                                             <Setter TargetName="ReplyButton" Property="Grid.Column" Value="0"></Setter> 
                                         </DataTrigger>
                                         <Trigger Property="IsMouseOver" Value="True">

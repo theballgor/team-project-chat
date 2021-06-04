@@ -29,10 +29,10 @@ namespace Client.Model
                     GetUserFriendships(message);
                     break;
                 case ActionType.GetConversationMessages:
-                    GetConversationMessages(message);    
+                    GetConversationMessages(message);
                     break;
                 case ActionType.CreateConversation:
-                    AccountModel.Conversations.Add(new KeyValuePair<Conversation, Message>(CreateConversation(message), null));
+                    AccountModel.Conversations.Add(new KeyValuePair<ConversationModel, Message>(CreateConversation(message), null));
                     break;
 
                 case ActionType.GetUsersByUsername:
@@ -96,9 +96,9 @@ namespace Client.Model
                 return null;
         }
 
-        static bool Register(ClientServerMessage message)
+        static RegistrationResult Register(ClientServerMessage message)
         {
-            return (bool)message.Content;
+            return (RegistrationResult)message.Content;
         }
 
         static void GetUserFriendships(ClientServerMessage message)
@@ -107,21 +107,22 @@ namespace Client.Model
 
             App.Current.Dispatcher.Invoke(() =>
             {
-            if (userList != null)
-                foreach (var item in userList)
-                    AccountModel.Contacts.Add(item);
+                if (userList != null)
+                    foreach (var item in userList)
+                        AccountModel.Contacts.Add(item);
             });
         }
 
         static void GetUserConversations(ClientServerMessage message)
         {
-            KeyValuePair<Conversation, Message>[] messageList = message.Content as KeyValuePair<Conversation, Message>[];
+            KeyValuePair<ConversationModel, Message>[] messageList = message.Content as KeyValuePair<ConversationModel, Message>[];
+
 
             App.Current.Dispatcher.Invoke(() =>
             {
                 if (messageList != null)
                     foreach (var item in messageList)
-                    AccountModel.Conversations.Add(item);
+                        AccountModel.Conversations.Add(item);
             });
         }
 
@@ -133,9 +134,15 @@ namespace Client.Model
             {
                 if (messageList != null)
                     foreach (var item in messageList)
-                {
-                    AccountModel.ActiveMessages.Add(new KeyValuePair<Message, bool>(item, item.Sender.Id == AccountModel.User.Id));
-                }
+                    {
+                        ObservableCollection<MessageFile> files = new ObservableCollection<MessageFile>();
+                        foreach (var item_file in item.Value)
+                            files.Add(item_file);
+
+                        item.Key.IsSend = (item.Key.Sender.Id != AccountModel.User.Id);
+
+                        AccountModel.ActiveMessages.Add(new KeyValuePair<Message, ObservableCollection<MessageFile>>(item.Key, files));
+                    }
             });
         }
 
@@ -153,10 +160,10 @@ namespace Client.Model
             });
         }
 
-        static Conversation CreateConversation(ClientServerMessage message)
+        static ConversationModel CreateConversation(ClientServerMessage message)
         {
             if (message.Content != null)
-                return message.Content as Conversation;
+                return message.Content as ConversationModel;
             else
                 return null;
         }

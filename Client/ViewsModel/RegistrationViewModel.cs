@@ -104,11 +104,23 @@ namespace Client.ViewsModel
         // Callback
         private void RegistrationModel_RegistrationSucces(object sender, EventArgs e)
         {
-            if ((bool)(e as ViewModelEventArgs).Content)
+            switch ((RegistrationResult)(e as ViewModelEventArgs).Content)
             {
-                Console.WriteLine("Succes registration");
-                navigationService.Navigate();
-            }    
+                case RegistrationResult.Success:
+                    Console.WriteLine("Succes registration");
+                    navigationService.Navigate();
+                    break;
+                case RegistrationResult.EmailAlreadyExists:
+                    break;
+                case RegistrationResult.UserNameAlreadyExists:
+                    break;
+                case RegistrationResult.PhoneNumberAlreadyExists:
+                    break;
+                case RegistrationResult.CreationError:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

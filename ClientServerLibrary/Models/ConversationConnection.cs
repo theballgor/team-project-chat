@@ -9,11 +9,11 @@ namespace ClientServerLibrary.DbClasses
     public class ConversationConnection : INotifyPropertyChanged
     {
         public int Id { get; set; }
-        public virtual Conversation Conversation { get; set; }
+        public virtual ConversationModel Conversation { get; set; }
         public virtual User User { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
         [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)

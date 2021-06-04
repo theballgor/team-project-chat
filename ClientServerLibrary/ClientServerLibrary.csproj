@@ -72,15 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientServer.cs" />
-    <Compile Include="DbClasses\Conversation.cs" />
-    <Compile Include="DbClasses\ConversationConnection.cs" />
-    <Compile Include="DbClasses\ConversationImage.cs" />
-    <Compile Include="DbClasses\FriendShip.cs" />
-    <Compile Include="DbClasses\Message.cs" />
-    <Compile Include="DbClasses\MessageFile.cs" />
-    <Compile Include="DbClasses\User.cs" />
-    <Compile Include="DbClasses\UserConversation.cs" />
-    <Compile Include="DbClasses\UserImage.cs" />
+    <Compile Include="Models\ConversationModel.cs" />
+    <Compile Include="Models\ConversationConnection.cs" />
+    <Compile Include="Models\FriendShip.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\MessageFile.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Errors.cs" />
     <Compile Include="GlobalVariables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

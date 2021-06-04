@@ -19,10 +19,10 @@ namespace Client.Model
         /// Constructor
         static AccountModel()
         {
-            conversations = new ObservableCollection<KeyValuePair<Conversation, Message>>();
+            conversations = new ObservableCollection<KeyValuePair<ConversationModel, Message>>();
             contacts = new ObservableCollection<User>();
-            activeMessages = new ObservableCollection<KeyValuePair<Message, bool>>();
-            activeConversation = new Conversation();
+            activeMessages = new ObservableCollection<KeyValuePair<Message, ObservableCollection<MessageFile>>>();
+            activeConversation = new ConversationModel();
 
             Task.Run(() =>
             {
@@ -60,8 +60,8 @@ namespace Client.Model
 
         /// All conversations
         /// Колекція KeyValuePair з усіма чатами та останнім повідомленням у них
-        private static ObservableCollection<KeyValuePair<Conversation, Message>> conversations;
-        public static ObservableCollection<KeyValuePair<Conversation, Message>> Conversations
+        private static ObservableCollection<KeyValuePair<ConversationModel, Message>> conversations;
+        public static ObservableCollection<KeyValuePair<ConversationModel, Message>> Conversations
         {
             get
             {
@@ -75,8 +75,8 @@ namespace Client.Model
 
         /// All messages
         /// KeyValuePair з вибраним чатом та усі повідомлення у ньому
-        private static Conversation activeConversation;
-        public static Conversation ActiveConversation
+        private static ConversationModel activeConversation;
+        public static ConversationModel ActiveConversation
         {
             get
             {
@@ -89,8 +89,8 @@ namespace Client.Model
         }
 
 
-        private static ObservableCollection<KeyValuePair<Message, bool>> activeMessages;
-        public static ObservableCollection<KeyValuePair<Message, bool>> ActiveMessages
+        private static ObservableCollection<KeyValuePair<Message, ObservableCollection<MessageFile>>> activeMessages;
+        public static ObservableCollection<KeyValuePair<Message, ObservableCollection<MessageFile>>> ActiveMessages
         {
             get
             {
@@ -177,7 +177,10 @@ namespace Client.Model
                 clientMessage.AdditionalContent = messageFiles.ToArray();
             messageFiles = null;
 
-            ActiveMessages.Add(new KeyValuePair<Message,bool>(message,false));
+            ActiveMessages.Add(new KeyValuePair<Message, ObservableCollection<MessageFile>>(message, messageFiles));
+
+
+            Conversations[Conversations.Count - 1] = new KeyValuePair<ConversationModel, Message>(Conversations[Conversations.Count - 1].Key, message);
             ClientModel.GetInstance().SendMessageAsync(clientMessage);
         }
 
@@ -219,7 +222,7 @@ namespace Client.Model
         /// Contacts
         public static void RequestContacts()
         {
-            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage {  ActionType = ActionType.GetFriendsFromUserFriendships });
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { ActionType = ActionType.GetFriendsFromUserFriendships });
             Console.WriteLine("requested contacts");
         }
 
@@ -247,7 +250,7 @@ namespace Client.Model
 
         public static void CreateConversation()
         {
-            Conversation conversation = new Conversation
+            ConversationModel conversation = new ConversationModel
             {
                 Creator = User,
                 Name = "TEST CONVERSATION",
@@ -256,10 +259,6 @@ namespace Client.Model
 
             ClientModel.GetInstance().SendMessageAsync(new ClientServerMessage { Content = conversation, ActionType = ActionType.CreateConversation });
         }
-
-
-
-
 
         public static void GetUserFriendRequests()
         {
@@ -297,6 +296,10 @@ namespace Client.Model
             ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = friendship, ActionType = ActionType.FriendRequestResult });
             Console.WriteLine("FRIEND REQUEST DECLINED FOR " + userToDecline.Username);
         }
-    }
 
+        public static void JoinCoversation(User userToChat)
+        {
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = userToChat, ActionType = ActionType.JoinConversation });
+        }
+    }
 }
