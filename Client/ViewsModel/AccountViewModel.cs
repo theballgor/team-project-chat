@@ -185,6 +185,7 @@ namespace Client.ViewsModel
             {
                 return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter =>
                 {
+                    AccountModel.SendMessage();
 
                     //if (FindFriends.Count == 0)
                     //    AccountModel.GetUsersByUsername();

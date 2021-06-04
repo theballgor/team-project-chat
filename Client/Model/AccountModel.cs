@@ -165,8 +165,8 @@ namespace Client.Model
         {
             Message message = new Message();
             message.Content = messageContent;
-            message.Conversation = new Conversation { Id = ActiveConversation.Id };
-            message.Sender = new User { Id = User.Id };
+            message.Conversation = ActiveConversation;
+            message.Sender = User;
             message.IsRead = false;
             message.SendTime = DateTime.Now;
 
@@ -177,7 +177,8 @@ namespace Client.Model
                 clientMessage.AdditionalContent = messageFiles.ToArray();
             messageFiles = null;
 
-            //Messages[message.Conversation.Id].Add(message);
+            ActiveMessages.Add(new KeyValuePair<Message,bool>(message,false));
+            ClientModel.GetInstance().SendMessageAsync(clientMessage);
         }
 
         [DllImport("winmm.dll", EntryPoint = "mciSendStringA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
@@ -218,7 +219,7 @@ namespace Client.Model
         /// Contacts
         public static void RequestContacts()
         {
-            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = User, ActionType = ActionType.GetFriendsFromUserFriendships });
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage {  ActionType = ActionType.GetFriendsFromUserFriendships });
             Console.WriteLine("requested contacts");
         }
 
@@ -229,7 +230,7 @@ namespace Client.Model
         /// ActiveMessages
         public static void GetConversationMessages()
         {
-            ClientModel.GetInstance().SendMessageAsync(new ClientServerMessage { Content = new Conversation { Id = activeConversation.Id }, ActionType = ActionType.GetConversationMessages });
+            ClientModel.GetInstance().SendMessageAsync(new ClientServerMessage { Content = activeConversation, ActionType = ActionType.GetConversationMessages });
         }
 
 
@@ -239,7 +240,7 @@ namespace Client.Model
         /// Conversations
         public static void GetUserConversations()
         {
-            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = User, ActionType = ActionType.GetUserConversations });
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { ActionType = ActionType.GetUserConversations });
             Console.WriteLine("conversations requested");
         }
 

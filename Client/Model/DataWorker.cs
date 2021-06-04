@@ -29,10 +29,10 @@ namespace Client.Model
                     GetUserFriendships(message);
                     break;
                 case ActionType.GetConversationMessages:
-                    GetConversationMessages(message);
+                    GetConversationMessages(message);    
                     break;
-                    AccountModel.Conversations.Add(new KeyValuePair<Conversation, Message>(CreateConversation(message), null));
                 case ActionType.CreateConversation:
+                    AccountModel.Conversations.Add(new KeyValuePair<Conversation, Message>(CreateConversation(message), null));
                     break;
 
                 case ActionType.GetUsersByUsername:
@@ -127,7 +127,7 @@ namespace Client.Model
 
         static void GetConversationMessages(ClientServerMessage message)
         {
-            Message[] messageList = message.Content as Message[];
+            KeyValuePair<Message, MessageFile[]>[] messageList = message.Content as KeyValuePair<Message, MessageFile[]>[];
 
             App.Current.Dispatcher.Invoke(() =>
             {
