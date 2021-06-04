@@ -54,8 +54,8 @@ namespace Client.Model
         }
 
         /// All conversations
-        private static ObservableCollection<Conversation> conversations;
-        public static ObservableCollection<Conversation> Conversations
+        private static ObservableCollection<KeyValuePair<Conversation, Message>> conversations;
+        public static ObservableCollection<KeyValuePair<Conversation, Message>> Conversations
         {
             get
             {
@@ -154,7 +154,7 @@ namespace Client.Model
             mciSendString("close recsound ", "", 0, 0);
 
 
-            MessageFiles.Add(new DbFile(Path.GetFileName(fileName), File.ReadAllBytes(fileName)));
+            MessageFiles.Add(new MessageFile(Path.GetFileName(fileName), File.ReadAllBytes(fileName)));
             /*ClientServerMessage csMessage = new ClientServerMessage { Content = message };
             csMessage.AdditionalContent = messageFiles.ToArray();
             ClientModel.GetInstance().SendMessageSync(csMessage);*/
@@ -183,7 +183,7 @@ namespace Client.Model
         }
         public static void GetUserConversations()
         {
-            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = User, ActionType = ActionType.GetUserConversations });
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { ActionType = ActionType.GetUserConversations });
         }
 
     }

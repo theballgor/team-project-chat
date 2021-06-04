@@ -99,16 +99,16 @@ namespace Client.Model
                 return null;
         }
 
-        static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
+        static ObservableCollection<KeyValuePair<Conversation, Message>> GetUserConversations(ClientServerMessage message)
         {
             if (message.Content != null)
             {
-                Conversation[] messageList = message.Content as Conversation[];
-                ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
+                List<KeyValuePair<Conversation, Message>> messageList = message.Content as List<KeyValuePair<Conversation, Message>>;
 
-                if(messageList!=null)
-                    foreach (var item in messageList)
-                        conversations.Add(item);
+                ObservableCollection<KeyValuePair<Conversation, Message>> conversations = new ObservableCollection<KeyValuePair<Conversation, Message>>();
+
+                foreach (KeyValuePair<Conversation, Message> item in messageList)
+                    conversations.Add(item);
                 return conversations;
             }
             else
