@@ -48,9 +48,9 @@
                         Foreground="#9E9E9E"
                         FontFamily="Fonts/#Gudea" Grid.RowSpan="2">
                         <!--name-->
-                            <!--Text="{Binding ContactName, FallbackValue='Djon Travolta', TargetNullValue='Contact Name', UpdateSourceTrigger=PropertyChanged}"-->
+                            
                         <Run 
-                            Text="Djon Travolta"
+                            Text="{Binding ContactName}"
                             FontWeight="Bold"
                             FontSize="16"> 
                         </Run>
@@ -101,8 +101,8 @@
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
-    
-    
+
+
     <Grid>
         <!--Log out Button-->
         <StackPanel Grid.Row="1"
@@ -314,17 +314,18 @@
                                       Checked="ButtonOpenMenu_Checked"
                                       Unchecked="ButtonOpenMenu_Unchecked">
                         </ToggleButton>
-                        
+
                         <!--Create chat-->
                         <Button Grid.Column="1"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                                     Margin="25 0"
                                     Background="Transparent"
                                     BorderBrush="Transparent"
-                                    Foreground="#00897B">
+                                    Foreground="#00897B"
+                                    Command="{Binding CreateConversation}">
                             <materialDesign:PackIcon Kind="Forum" Width="28" Height="28"></materialDesign:PackIcon>
                         </Button>
-                        
+
                         <!--Contact list-->
                         <ToggleButton x:Name="buttonOpenContactList"
                                       Grid.Column="2"
@@ -488,7 +489,7 @@
                     </Border>
 
                     <!--Conversation Messages Body-->
-                    <customcontrols:Conversation Grid.Row="1" Margin="10 8 10 0"/>
+                    <customcontrols:Conversation Grid.Row="1" Margin="10 8 10 0" Loaded="Conversation_Loaded"/>
 
                     <!--D label-->
                     <Label Grid.Row="1" 
@@ -523,7 +524,7 @@
                                     Margin="8 0"
                                     FontSize="18"
                                     BorderThickness="0"
-                                    Text="{Binding MessageContent}"            
+                                    Text="{Binding FindFriendByUsername}"            
                                     Background="Transparent"
                                     Foreground="WhiteSmoke"
                                     VerticalAlignment="Center"
@@ -611,8 +612,8 @@
                                                     FontFamily="Fonts/#Audiowide"
                                                     Grid.RowSpan="2"/>
                     <!--#endregion-->
-                    
-                    
+
+
                     <!--#region Contact list-->
                     <Border x:Name="ContactList"
                         Grid.RowSpan="4" 
@@ -626,11 +627,11 @@
                         <Grid x:Name="GridContactList" Width="270" Margin="3 5">
                             <customcontrols:ContactList></customcontrols:ContactList>
                         </Grid>
-                        
+
                     </Border>
                     <!--#endregion-->
-                    
-                    
+
+
 
                 </Grid>
                 <!--#endregion-->

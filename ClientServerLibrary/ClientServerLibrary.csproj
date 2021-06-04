@@ -79,6 +79,8 @@
     <Compile Include="DbClasses\ConversationConnection.cs" />
     <Compile Include="ClientServer.cs" />
     <Compile Include="DbClasses\UserConversation.cs" />
+    <Compile Include="Errors.cs" />
+    <Compile Include="GlobalVariables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

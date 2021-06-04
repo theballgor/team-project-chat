@@ -2,75 +2,127 @@
 using Client.Model;
 using Client.Services;
 using Client.Store;
-using ClientLibrary;
 using ClientServerLibrary.DbClasses;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Client.ViewsModel
 {
     public partial class AccountViewModel : ViewModelBase
     {
+        private readonly NavigationStore navigationStore;
         //Constructor
         public AccountViewModel(NavigationStore navigationStore)
         {
-            NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
-                navigationStore, () => new LoginViewModel(navigationStore)));
+            this.navigationStore = navigationStore;
         }
 
-        // Fields
 
-                /// Static fields
-        public ObservableCollection<User> Contacts
-        {
-            get => AccountModel.Contacts;
-        }
-        public ObservableCollection<Conversation> Conversations
-        {
-            get => AccountModel.Conversations;
-        }
-        public ObservableCollection<ObservableCollection<Message>> Messages
-        {
-            get => AccountModel.Messages;
-        }
+        /// Залогінений користувач
+        /// Прив"язка до форми
         public User User
         {
             get => AccountModel.User;
         }
 
+        /// Список контаків
+        /// Прив"язка до форми
+        public ObservableCollection<User> Contacts
+        {
+            get => AccountModel.Contacts;
+        }
+
+        /// Список чатів та останніх повідомлень в цих чатах
+        /// Прив"язка до форми
+        public ObservableCollection<KeyValuePair<Conversation, Message>> Conversations
+        {
+            get => AccountModel.Conversations;
+            /// Список контаків
+        }
+
+        /// Активний чат
+        public Conversation ActiveConversation
+        {
+            get => AccountModel.ActiveConversation;
+        }
+
+        /// Список повідомлень в активному чаті та булівське яке показує чи повідолення наше, чи чиєсь
+        /// Прив"язка до форми
+        public ObservableCollection<KeyValuePair<Message, bool>> ActiveMessages
+        {
+            get => AccountModel.ActiveMessages;
+        }
+
+        /// Повідомлення яке ми вписуємо в чаті
+        /// Відправка по кліку
+        /// Двостороння прив"язка між формою та моделлю
         public string MessageContent
         {
             get => AccountModel.MessageContent;
             set
             {
-                AccountModel.MessageContent = value; 
+                AccountModel.MessageContent = value;
                 OnPropertyChanged("MessageContent");
             }
         }
-        
-        // ???
-        public List<KeyValuePair<string, byte[]>> MessageFiles
+
+        /// Колекція файлових повідомлень, 1-назва(шлях), 2-байтовий масив
+        /// Відправка по кліку разом з текстовим повідомелнням
+        /// Двостороння прив"язка між формою та моделлю
+        public ObservableCollection<KeyValuePair<string, byte[]>> MessageFiles
         {
             get => AccountModel.MessageFiles;
             set => MessageFiles = value;
         }
 
-        // Commands
+        /// Ім"я активного чату
+        /// Прив"язка до форми
+        public string ContactName { get => ActiveConversation.Name; set { } }
 
-        public ICommand NavigateLogOutCommand { get; }
+        /// Текстобокс в якому ми вводимо ім"я користувача якого ми шукаємо для додавання в друзі
+        /// Відправка по кліку
+        /// Двостороння прив"язка між формою та моделлю
+        public string FindFriendByUsername
+        {
+            get => AccountModel.FindFriendByUsername;
+            set { AccountModel.FindFriendByUsername = value; OnPropertyChanged("FindFriendByUsername"); }
+        }
+
+        /// Список людей який сервер підшукав нам за пошуком по нікнейму
+        /// Прив"язка до форми
+        ObservableCollection<User> FindFriends
+        {
+            get => AccountModel.FindFriends;
+        }
+
+        /// Запити на дружбу які відправили нам
+        /// Прив"язка до форми
+        public ObservableCollection<User> FriendRequests
+        {
+            get => AccountModel.FriendRequests;
+        }
+
+
+
+        /// Кнопка розлогінитись
+        protected ICommand _navigateLogOutCommand;
+        public ICommand NavigateLogOutCommand
+        {
+            get
+            {
+                return _navigateLogOutCommand ?? (_navigateLogOutCommand = new RelayCommand(parameter =>
+                {
+                    new NavigationService<LoginViewModel>(navigationStore, () => new LoginViewModel(navigationStore)).Navigate();
+                }));
+            }
+        }
+
+        /// Кнопка вибрати файл
         protected ICommand _selectFileCommand;
-        protected ICommand _getConversationMessagesCommand;
-        protected ICommand _sendMessageCommand;
-        protected ICommand _getSelectedChatCommand;
-
         public ICommand SelectFileCommand
         {
             get
@@ -86,90 +138,119 @@ namespace Client.ViewsModel
                 }));
             }
         }
-        public ICommand GetSelectedChatCommand
+
+        /// Зміна активного чату
+        /// Потрібно передавати параметром чат на який було натиснуто
+        protected ICommand _onConversationChanged;
+        public ICommand OnConversationChanged
         {
             get
             {
-                return _getSelectedChatCommand ?? (_getSelectedChatCommand = new RelayCommand(parameter =>
+                return _onConversationChanged ?? (_onConversationChanged = new RelayCommand(parameter =>
                 {
-                    if(parameter is Conversation currentConversation)
+
+                    if (parameter is Conversation currentConversation && currentConversation != AccountModel.ActiveConversation)
                     {
-                        LoadConversationMessages(currentConversation);
+                        AccountModel.ActiveMessages.Clear();
+                        AccountModel.ActiveConversation = currentConversation;
+                        AccountModel.GetConversationMessages();
                     }
                 }));
             }
         }
 
-        private void LoadConversationMessages(Conversation currentConversation)
+        /// Кнопка створення нового чату
+        /// TODO
+        protected ICommand _createConversation;
+        public ICommand CreateConversation
         {
-            AccountModel.GetConversationMessages(currentConversation.Id);
+            get
+            {
+                return _createConversation ?? (_createConversation = new RelayCommand(parameter =>
+                {
+                    // HARDCODE
+                    Console.WriteLine("CRFEATE");
+                    AccountModel.CreateConversation();
+                }));
+            }
         }
 
-        // Server-commands
-
-
+        /// Кнопка відправлення повідомлення
+        /// TODO
+        protected ICommand _sendMessageCommand;
         public ICommand SendMessageCommand
         {
             get
             {
                 return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter =>
                 {
-                    AccountModel.SendMessage();
+
+                    //if (FindFriends.Count == 0)
+                    //    AccountModel.GetUsersByUsername();
+                    //else
+                    //{
+                    //    AccountModel.SendFriendRequest(FindFriends[0]);
+                    //}
+
+                    if (FriendRequests.Count > 0)
+                        AccountModel.ConfirmFriendRequestCommand(FriendRequests[0]);
+
                 }));
             }
         }
 
-        public ICommand GetConversationMessagesCommand
+        /// Кнопка надіслати запит на дружбу
+        /// Потрібно передавати параметром на формі юзера біля якого була натиснута кнопка
+        protected ICommand _sendFriendRequest;
+        public ICommand SendFriendRequest
         {
             get
             {
-                return _getConversationMessagesCommand ?? (_getConversationMessagesCommand = new RelayCommand(parameter =>
+                return _sendMessageCommand ?? (_sendMessageCommand = new RelayCommand(parameter =>
                 {
-                    //AccountModel.GetConversationMessages((int)parameter);
-                    AccountModel.GetConversationMessages(0);
+                    if (parameter is User userToRequest)
+                    {
+                        AccountModel.SendFriendRequest(userToRequest);
+                    }
+                }));
+            }
+        }
+
+        /// Кнопка прийняти запит на дружбу
+        /// Потрібно передавати параметром на формі юзера біля якого була натиснута кнопка
+        protected ICommand _confirmFriendRequestCommand;
+        public ICommand ConfirmFriendRequestCommand
+        {
+            get
+            {
+                return _confirmFriendRequestCommand ?? (_confirmFriendRequestCommand = new RelayCommand(parameter =>
+                {
+                    if (parameter is User userToRequest)
+                    {
+                        AccountModel.ConfirmFriendRequestCommand(userToRequest);
+                    }
                 }));
             }
         }
 
 
-
-
-
-
-    }
-
-
-    public partial class AccountViewModel : ViewModelBase
-    {
-
-        private void Messages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        /// Кнопка відхилити запит на дружбу
+        /// Потрібно передавати параметром на формі юзера біля якого була натиснута кнопка
+        protected ICommand _declineFriendRequestCommand;
+        public ICommand DeclineFriendRequestCommand
         {
-
+            get
+            {
+                return _declineFriendRequestCommand ?? (_declineFriendRequestCommand = new RelayCommand(parameter =>
+                {
+                    if (parameter is User userToRequest)
+                    {
+                        AccountModel.DeclineFriendRequestCommand(userToRequest);
+                        AccountModel.FriendRequests.Remove(userToRequest);
+                    }
+                }));
+            }
         }
 
-        private void AllMessages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-
-        }
-
-        private void Conversations_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-
-        }
-
-        private void AccountModel_LoadMessages(object sender, EventArgs e)
-        {
-
-        }
-
-        private void AccountModel_GetContactsList1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void AccountModel_LoadConversations(object sender, EventArgs e)
-        {
-
-        }
     }
 }

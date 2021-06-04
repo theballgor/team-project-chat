@@ -16,11 +16,12 @@ namespace ClientServerLibrary
     [Serializable]
     public enum ActionType
     {
+        SendMessage,
         SendConversationMessage,
         SendFriendRequest,
+        FriendRequestResult,
         RegisterUser,
         LogInUserByEmail,
-        LogInUserByUsername,
         CreateConversation,
         JoinConversation,
         GetConversationMessages,
@@ -28,7 +29,10 @@ namespace ClientServerLibrary
         GetConversationUsers,
         GetUserFriendships,
         GetFriendsFromUserFriendships,
+        GetUserFriendRequests,
         GetUserInfo,
+        GetUsersByUsername,
+        Error,
         FatalError,
     }
 
@@ -63,14 +67,6 @@ namespace ClientServerLibrary
         public ActionType ActionType { get; set; }
         public DateTime Date { get; set; }
     }
-
-    public static class GlobalVariables
-    {
-        public static readonly int ServerPort = 40001;
-        public static readonly IPAddress LocalIP = IPAddress.Parse("127.0.0.1");
-    }
-
-
 
 
     public static class ClientServerDataManager

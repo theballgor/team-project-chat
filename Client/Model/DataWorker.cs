@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Windows;
 using ClientServerLibrary;
 using ClientServerLibrary.DbClasses;
 
@@ -19,52 +16,68 @@ namespace Client.Model
                 case ActionType.LogInUserByEmail:
                     LoginModel.Notify(Login(message));
                     break;
-
-                case ActionType.CreateConversation:
-                    AccountModel.Conversations.Add(CreateConversation(message));
-                    break;
-
-                case ActionType.JoinConversation:
-                    AccountModel.Conversations.Add(JoinConversation(message));
-                    break;
-
-                case ActionType.GetConversationMessages:
-                    AccountModel.Messages.Add(GetConversationMessages(message));
-                    break;
-
-                case ActionType.GetUserConversations:
-                    AccountModel.Conversations = GetUserConversations(message);
-                    break;
-
-                case ActionType.GetUserFriendships:
-                    //AccountModel.Contacts.Add(SendFriendRequest(message));
-                    break;
-
-                case ActionType.GetUserInfo:
-                    AccountModel.User = GetUserInfo(message);
-                    break;
-
-                // ???
                 case ActionType.RegisterUser:
                     RegistrationModel.Notify(Register(message));
                     break;
+                case ActionType.GetUserInfo:
+                    AccountModel.User = GetUserInfo(message);
+                    break;
+                case ActionType.GetUserConversations:
+                    GetUserConversations(message);
+                    break;
+                case ActionType.GetUserFriendships:
+                    GetUserFriendships(message);
+                    break;
+                case ActionType.GetConversationMessages:
+                    GetConversationMessages(message);
+                    break;
+                    AccountModel.Conversations.Add(new KeyValuePair<Conversation, Message>(CreateConversation(message), null));
+                case ActionType.CreateConversation:
+                    break;
 
-                // ???
+                case ActionType.GetUsersByUsername:
+                    GetUsersByUsername(message);
+                    break;
+
+                case ActionType.GetUserFriendRequests:
+                    GetUserFriendRequests(message);
+                    break;
+
+                //case ActionType.JoinConversation:
+                //    AccountModel.Conversations.Add(JoinConversation(message));
+                //    break;
+
+                //case ActionType.GetConversationMessages:
+                //    AccountModel.Messages.Add(GetConversationMessages(message));
+                //    break;
+
+
+                //case ActionType.GetUserFriendships:
+                //    //AccountModel.Contacts.Add(SendFriendRequest(message));
+                //    break;
+
+
                 case ActionType.GetConversationUsers:
                     break;
 
-                case ActionType.GetFriendsFromUserFriendships:
-                    AccountModel.Contacts = GetFriendsFromUserFriendships(message);
+                case ActionType.Error:
+                    MessageBox.Show(Error(message).Message);
                     break;
 
-
                 case ActionType.FatalError:
-                    Console.WriteLine("FATAL ERROR");
+                    //ClientModel.GetInstance().Disconnect();
                     break;
 
                 default:
                     break;
             }
+        }
+
+        static InvalidDataError Error(ClientServerMessage message)
+        {
+            if (message.Content != null)
+                return message.Content as InvalidDataError;
+            else return null;
         }
 
         static User GetUserInfo(ClientServerMessage message)
@@ -83,60 +96,58 @@ namespace Client.Model
                 return null;
         }
 
-        static RegistrationResult Register(ClientServerMessage message)
+        static bool Register(ClientServerMessage message)
         {
-            return (RegistrationResult)message.Content;
+            return (bool)message.Content;
         }
 
-        static ObservableCollection<User> GetFriendsFromUserFriendships(ClientServerMessage message)
+        static void GetUserFriendships(ClientServerMessage message)
         {
-            if (message.Content != null)
+            User[] userList = message.Content as User[];
+
+            App.Current.Dispatcher.Invoke(() =>
             {
-                User[] userList = message.Content as User[];
-
-                ObservableCollection<User> contacts = new ObservableCollection<User>();
-
                 foreach (var item in userList)
-                    contacts.Add(item);
-
-                return contacts;
-            }
-            else
-                return null;
+                    AccountModel.Contacts.Add(item);
+            });
         }
 
-        static ObservableCollection<Conversation> GetUserConversations(ClientServerMessage message)
+        static void GetUserConversations(ClientServerMessage message)
         {
-            if (message.Content != null)
+            KeyValuePair<Conversation, Message>[] messageList = message.Content as KeyValuePair<Conversation, Message>[];
+
+            App.Current.Dispatcher.Invoke(() =>
             {
-                Conversation[] messageList = message.Content as Conversation[];
-
-                ObservableCollection<Conversation> conversations = new ObservableCollection<Conversation>();
-
                 foreach (var item in messageList)
-                    conversations.Add(item);
-
-                return conversations;
-            }
-            else
-                return null;
+                    AccountModel.Conversations.Add(item);
+            });
         }
 
-        static ObservableCollection<Message> GetConversationMessages(ClientServerMessage message)
+        static void GetConversationMessages(ClientServerMessage message)
         {
-            if (message.Content != null)
+            Message[] messageList = message.Content as Message[];
+
+            App.Current.Dispatcher.Invoke(() =>
             {
-                Message[] messageList = message.Content as Message[];
-
-                ObservableCollection<Message> messages = new ObservableCollection<Message>();
-
                 foreach (var item in messageList)
-                    messages.Add(item);
+                {
+                    AccountModel.ActiveMessages.Add(new KeyValuePair<Message, bool>(item, item.Sender.Id == AccountModel.User.Id));
+                }
+            });
+        }
 
-                return messages;
-            }
-            else
-                return null;
+        static void GetUsersByUsername(ClientServerMessage message)
+        {
+            User[] userList = message.Content as User[];
+
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                foreach (var item in userList)
+                {
+                    AccountModel.FindFriends.Add(item);
+                    System.Console.WriteLine(item.Username);
+                }
+            });
         }
 
         static Conversation CreateConversation(ClientServerMessage message)
@@ -147,22 +158,19 @@ namespace Client.Model
                 return null;
         }
 
-        static Conversation JoinConversation(ClientServerMessage message)
+        static void GetUserFriendRequests(ClientServerMessage message)
         {
-            if (message.Content != null)
-                return message.Content as Conversation;
-            else
-                return null;
+            Console.WriteLine("FRIEND REQUESTS");
+            User[] userList = message.Content as User[];
+
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                foreach (var item in userList)
+                {
+                    AccountModel.FriendRequests.Add(item);
+                    Console.WriteLine(item.Username);
+                }
+            });
         }
-
-        static User SendFriendRequest(ClientServerMessage message)
-        {
-            if (message.Content != null)
-                return message.Content as User;
-            else
-                return null;
-        }
-
-
     }
 }
