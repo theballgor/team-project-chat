@@ -35,8 +35,13 @@ namespace ClientServerLibrary.DbClasses
         public string FileExtenction { get; set; }
         [Column("conversation_id")]
         public virtual Conversation Conversation { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;     
+        private void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
         public bool GetFileFromPath()
         {
             try
@@ -80,11 +85,6 @@ namespace ClientServerLibrary.DbClasses
                     return true;
             }
             return false;
-        }
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
