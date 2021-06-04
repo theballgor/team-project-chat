@@ -81,6 +81,8 @@
     <Compile Include="DbClasses\User.cs" />
     <Compile Include="DbClasses\UserConversation.cs" />
     <Compile Include="DbClasses\UserImage.cs" />
+    <Compile Include="Errors.cs" />
+    <Compile Include="GlobalVariables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

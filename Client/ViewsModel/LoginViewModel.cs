@@ -17,6 +17,7 @@ namespace Client.ViewsModel
 {
     class LoginViewModel : ViewModelBase
     {
+        private readonly NavigationStore navigationStore;
         private readonly NavigationService<AccountViewModel> navigationService;
 
         // Fields
@@ -45,17 +46,37 @@ namespace Client.ViewsModel
             }
         }
 
-        public ICommand LoginCommand { get; }
-        public ICommand RegistrationCommand { get; }
+        private ICommand _loginCommand;
+        private ICommand _registrationCommand;
+
+
+        public ICommand LoginCommand
+        {
+            get
+            {
+                return _loginCommand ?? (_loginCommand = new RelayCommand(parameter =>
+                {
+                    LoginModel.TryLogin();
+                }));
+            }
+        }
+        public ICommand RegistrationCommand
+        {
+            get
+            {
+                return _registrationCommand ?? (_registrationCommand = new RelayCommand(parameter =>
+                {
+                    new NavigationService<RegistrationViewModel>(navigationStore, () => new RegistrationViewModel(navigationStore)).Navigate();
+                }));
+            }
+        }
 
         // Constructor
         public LoginViewModel(NavigationStore navigationStore)
         {
+            this.navigationStore = navigationStore;
             LoginModel.LoginSucces += LoginModel_LoginSucces;
             navigationService = new NavigationService<AccountViewModel>(navigationStore, () => new AccountViewModel(navigationStore));
-
-            LoginCommand = new LoginCommand(this, navigationService);
-            RegistrationCommand = new RegistrationCommand(this, new NavigationService<RegistrationViewModel>(navigationStore, () => new RegistrationViewModel(navigationStore)));
         }
 
         // Callback

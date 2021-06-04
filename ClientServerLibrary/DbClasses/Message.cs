@@ -26,9 +26,6 @@ namespace ClientServerLibrary.DbClasses
 
         [Column("sender_id")]
         public virtual User Sender { get; set; }
-
-        [NotMapped]
-        public bool IsMessageReceived { get; set; }
         [Column("conversation_id")]
         public virtual Conversation Conversation { get; set; }
         [field: NonSerialized]

@@ -1,19 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
 
 namespace ClientServerLibrary.DbClasses
 {
-    [Table("ConversationConnections")]
-    [Serializable]
-    public class ConversationConnection : INotifyPropertyChanged
+    public class UserConversation : INotifyPropertyChanged
     {
         public int Id { get; set; }
         public virtual Conversation Conversation { get; set; }
         public virtual User User { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        [field: NonSerialized]
         private void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
