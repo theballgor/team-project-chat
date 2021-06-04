@@ -25,14 +25,14 @@ namespace Client.Model
                 case ActionType.GetUserConversations:
                     GetUserConversations(message);
                     break;
-                case ActionType.GetUserFriendships:
+                case ActionType.GetFriendsFromUserFriendships:
                     GetUserFriendships(message);
                     break;
                 case ActionType.GetConversationMessages:
-                    GetConversationMessages(message);
+                    GetConversationMessages(message);    
                     break;
-                    AccountModel.Conversations.Add(new KeyValuePair<Conversation, Message>(CreateConversation(message), null));
                 case ActionType.CreateConversation:
+                    AccountModel.Conversations.Add(new KeyValuePair<Conversation, Message>(CreateConversation(message), null));
                     break;
 
                 case ActionType.GetUsersByUsername:
@@ -107,6 +107,7 @@ namespace Client.Model
 
             App.Current.Dispatcher.Invoke(() =>
             {
+            if (userList != null)
                 foreach (var item in userList)
                     AccountModel.Contacts.Add(item);
             });
@@ -118,18 +119,20 @@ namespace Client.Model
 
             App.Current.Dispatcher.Invoke(() =>
             {
-                foreach (var item in messageList)
+                if (messageList != null)
+                    foreach (var item in messageList)
                     AccountModel.Conversations.Add(item);
             });
         }
 
         static void GetConversationMessages(ClientServerMessage message)
         {
-            Message[] messageList = message.Content as Message[];
+            KeyValuePair<Message, MessageFile[]>[] messageList = message.Content as KeyValuePair<Message, MessageFile[]>[];
 
             App.Current.Dispatcher.Invoke(() =>
             {
-                foreach (var item in messageList)
+                if (messageList != null)
+                    foreach (var item in messageList)
                 {
                     AccountModel.ActiveMessages.Add(new KeyValuePair<Message, bool>(item, item.Sender.Id == AccountModel.User.Id));
                 }

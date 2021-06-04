@@ -16,7 +16,6 @@ namespace ClientServerLibrary
     [Serializable]
     public enum ActionType
     {
-        SendMessage,
         SendConversationMessage,
         SendFriendRequest,
         FriendRequestResult,

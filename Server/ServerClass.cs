@@ -233,7 +233,6 @@ namespace Server
                                     dbManager.CreateFile(file);
                                 }
                             }
-                            message.SendTime = DateTime.Now;
                             dbManager.CreateMessage(message);
 
                             List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
@@ -257,17 +256,20 @@ namespace Server
                     /// </summary>
                     void GetUserConversations()
                     {
-                        while (currentUser == null) { } //wait for initialization currentUser
+                        while (currentUser == null) { Thread.Sleep(200); } //wait for initialization currentUser
                         Conversation[] conversations = dbManager.GetAllUserConversations(currentUser.Id);
                         if (conversations != null)
                         {
-                            List<KeyValuePair<Conversation, Message[]>> ConversationMessagesValuePairs = new List<KeyValuePair<Conversation, Message[]>>();
+                            List<KeyValuePair<Conversation, Message>> ConversationMessagesValuePairs = new List<KeyValuePair<Conversation, Message>>();
                             foreach (var conversation in conversations)
                             {
+                                Message message = null;
                                 Message[] messages = dbManager.GetAllConversationMessages(conversation);
-                                ConversationMessagesValuePairs.Add(new KeyValuePair<Conversation, Message[]>(conversation, messages));
+                                if (messages.Length != 0)
+                                    message = messages.OrderBy(item => item.SendTime).First();
+                                ConversationMessagesValuePairs.Add(new KeyValuePair<Conversation, Message>(conversation, message));
                             }
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = ConversationMessagesValuePairs });
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = ConversationMessagesValuePairs.ToArray() });
                         }
                         else
                         {
@@ -303,7 +305,7 @@ namespace Server
                                 messageFilePair.Add(new KeyValuePair<Message, MessageFile[]>(message, dbFiles));
                             }
                         }
-                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = messageFilePair });
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = messageFilePair.ToArray() });
                     }
 
                     /// <summary>
@@ -368,7 +370,7 @@ namespace Server
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 try
                 {
