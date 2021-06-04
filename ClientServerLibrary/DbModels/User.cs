@@ -49,7 +49,7 @@ namespace ClientServerLibrary.DbClasses
         private UserStatus status;
 
         public virtual ICollection<ConversationConnection> ConversationConnections { get; set; }
-        [field: NonSerialized]
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

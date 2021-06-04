@@ -28,7 +28,7 @@ namespace ClientServerLibrary.DbClasses
         public FriendshipStatus FriendshipStatus { get { return friendshipStatus; } set { friendshipStatus = value; OnPropertyChanged("FriendshipStatus"); } }
         [NotMapped]
         private FriendshipStatus friendshipStatus;
-        [field: NonSerialized]
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

@@ -64,9 +64,9 @@ namespace Server
                         case ActionType.LogInUserByEmail:
                             LoginUserByEmail((User)clientServerMessage.Content);
                             break;
-                        case ActionType.LogInUserByUsername:
-                            LoginUserByUsername((User)clientServerMessage.Content);
-                            break;
+                        //case ActionType.LogInUserByUsername:
+                        //    LoginUserByUsername((User)clientServerMessage.Content);
+                        //    break;
                         case ActionType.CreateConversation:
                             CreateConversation((Conversation)clientServerMessage.Content);
                             break;
@@ -94,12 +94,12 @@ namespace Server
                         case ActionType.GetUserInfo:
                             GetUserInfo();
                             break;
-                        case ActionType.UpdateUserInfo:
-                            UpdateUserInfo((User)clientServerMessage.Content);
-                            break;
-                        case ActionType.UpdateConversationInfo:
-                            UpdateConversationInfo((Conversation)clientServerMessage.Content);
-                            break;
+                        //case ActionType.UpdateUserInfo:
+                        //    UpdateUserInfo((User)clientServerMessage.Content);
+                        //    break;
+                        //case ActionType.UpdateConversationInfo:
+                        //    UpdateConversationInfo((Conversation)clientServerMessage.Content);
+                        //    break;
                         case ActionType.FatalError:
 
                             break;

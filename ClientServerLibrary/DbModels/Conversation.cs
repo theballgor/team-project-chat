@@ -15,6 +15,7 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public class Conversation : INotifyPropertyChanged
     {
+
         public int Id { get; set; }
         [Required]
         [StringLength(32)]
@@ -38,15 +39,11 @@ namespace ClientServerLibrary.DbClasses
         public string StreamingPort { get { return streamingPort; } set { streamingPort = value; OnPropertyChanged("StreamingPort"); } }
         [NotMapped]
         private string streamingPort;
-
-
-
         [Column("userCreator_id")]
         public virtual User Creator { get; set; }
         public virtual ICollection<ConversationConnection> ConversationConnections { get; set; }
-        [field: NonSerialized]
+
         public event PropertyChangedEventHandler PropertyChanged;
-  
         private void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
