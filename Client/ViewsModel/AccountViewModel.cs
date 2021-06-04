@@ -193,8 +193,8 @@ namespace Client.ViewsModel
                     //    AccountModel.SendFriendRequest(FindFriends[0]);
                     //}
 
-                    if (FriendRequests.Count > 0)
-                        AccountModel.ConfirmFriendRequestCommand(FriendRequests[0]);
+                    //if (FriendRequests.Count > 0)
+                    //    AccountModel.ConfirmFriendRequestCommand(FriendRequests[0]);
 
                 }));
             }

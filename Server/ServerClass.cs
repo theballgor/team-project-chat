@@ -103,6 +103,14 @@ namespace Server
                         case ActionType.FatalError:
 
                             break;
+                        case ActionType.FriendRequestResult:
+                            break;
+                        case ActionType.GetUserFriendRequests:
+                            break;
+                        case ActionType.GetUsersByUsername:
+                            break;
+                        case ActionType.Error:
+                            break;
                     }
                     /// <summary>
                     /// returns Content=RegistrationResult
@@ -243,9 +251,6 @@ namespace Server
                             Console.WriteLine(e.Message);
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = false });
                         }
-
-
-
                     }
 
                     /// <summary>
@@ -257,13 +262,16 @@ namespace Server
                         Conversation[] conversations = dbManager.GetAllUserConversations(currentUser.Id);
                         if (conversations != null)
                         {
-                            List<KeyValuePair<Conversation, Message[]>> ConversationMessagesValuePairs = new List<KeyValuePair<Conversation, Message[]>>();
+                            List<KeyValuePair<Conversation, Message>> ConversationMessagesValuePairs = new List<KeyValuePair<Conversation, Message>>();
                             foreach (var conversation in conversations)
                             {
                                 Message[] messages = dbManager.GetAllConversationMessages(conversation);
-                                ConversationMessagesValuePairs.Add(new KeyValuePair<Conversation, Message[]>(conversation, messages));
+                                Message message=null;
+                                if (messages.Length != 0)
+                                     message = messages.OrderBy(item => item.SendTime).First();
+                                ConversationMessagesValuePairs.Add(new KeyValuePair<Conversation, Message>(conversation, message));
                             }
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = ConversationMessagesValuePairs });
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = ConversationMessagesValuePairs.ToArray() });
                         }
                         else
                         {

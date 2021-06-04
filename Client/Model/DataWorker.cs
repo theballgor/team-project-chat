@@ -25,7 +25,7 @@ namespace Client.Model
                 case ActionType.GetUserConversations:
                     GetUserConversations(message);
                     break;
-                case ActionType.GetUserFriendships:
+                case ActionType.GetFriendsFromUserFriendships:
                     GetUserFriendships(message);
                     break;
                 case ActionType.GetConversationMessages:
@@ -107,6 +107,7 @@ namespace Client.Model
 
             App.Current.Dispatcher.Invoke(() =>
             {
+            if (userList != null)
                 foreach (var item in userList)
                     AccountModel.Contacts.Add(item);
             });
@@ -118,7 +119,8 @@ namespace Client.Model
 
             App.Current.Dispatcher.Invoke(() =>
             {
-                foreach (var item in messageList)
+                if (messageList != null)
+                    foreach (var item in messageList)
                     AccountModel.Conversations.Add(item);
             });
         }
@@ -129,7 +131,8 @@ namespace Client.Model
 
             App.Current.Dispatcher.Invoke(() =>
             {
-                foreach (var item in messageList)
+                if (messageList != null)
+                    foreach (var item in messageList)
                 {
                     AccountModel.ActiveMessages.Add(new KeyValuePair<Message, bool>(item, item.Sender.Id == AccountModel.User.Id));
                 }

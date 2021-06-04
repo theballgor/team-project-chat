@@ -170,7 +170,7 @@ namespace Client.Model
             message.IsRead = false;
             message.SendTime = DateTime.Now;
 
-            ClientServerMessage clientMessage = new ClientServerMessage { Content = message, ActionType = ActionType.SendMessage };
+            ClientServerMessage clientMessage = new ClientServerMessage { Content = message, ActionType = ActionType.SendConversationMessage };
 
 
             if (messageFiles != null)
@@ -218,7 +218,7 @@ namespace Client.Model
         /// Contacts
         public static void RequestContacts()
         {
-            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = User, ActionType = ActionType.GetUserFriendships });
+            ClientModel.GetInstance().SendMessageSync(new ClientServerMessage { Content = User, ActionType = ActionType.GetFriendsFromUserFriendships });
             Console.WriteLine("requested contacts");
         }
 
