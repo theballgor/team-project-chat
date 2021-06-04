@@ -56,12 +56,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClientLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ClientLibrary">
       <HintPath>..\ClientLibrary\bin\Debug\ClientLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="ClientServerLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ClientServerLibrary">
       <HintPath>..\ClientServerLibrary\bin\Debug\ClientServerLibrary.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
