@@ -71,6 +71,7 @@ namespace ClientServerLibrary
     {
         public static readonly int ServerPort = 40001;
         public static readonly IPAddress LocalIP = IPAddress.Parse("127.0.0.1");
+
     }
 
 
@@ -87,6 +88,7 @@ namespace ClientServerLibrary
                 serializedData = (ClientServerMessage)formatter.Deserialize(stream);
             }
             return serializedData;
+
         }
 
         public static byte[] Serialize(ClientServerMessage data)
