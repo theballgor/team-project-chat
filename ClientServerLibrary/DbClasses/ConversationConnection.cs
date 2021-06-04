@@ -13,6 +13,7 @@ namespace ClientServerLibrary.DbClasses
         public virtual User User { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        [field: NonSerialized]
         private void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)

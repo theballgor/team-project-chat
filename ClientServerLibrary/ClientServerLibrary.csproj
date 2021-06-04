@@ -73,7 +73,6 @@
   <ItemGroup>
     <Compile Include="DbClasses\Conversation.cs" />
     <Compile Include="DbClasses\ConversationImage.cs" />
-    <Compile Include="DbClasses\DbFile.cs" />
     <Compile Include="DbClasses\Friendship.cs" />
     <Compile Include="DbClasses\Message.cs" />
     <Compile Include="DbClasses\MessageFile.cs" />
