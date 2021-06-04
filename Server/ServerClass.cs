@@ -16,9 +16,13 @@ namespace Server
     public partial class ServerClass
     {
         private DbManager dbManager;
+
         private TcpListener server;
+
         private List<KeyValuePair<int, TcpClient>> connectedClients;
+
         private readonly object locker;
+
         public ServerClass(IPEndPoint serverIEP)
         {
             server = new TcpListener(serverIEP);
