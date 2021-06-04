@@ -15,18 +15,6 @@ namespace ClientServerLibrary.DbClasses
     [Serializable]
     public class Conversation : INotifyPropertyChanged
     {
-        public Conversation(){ }
-        public Conversation(Conversation conversation)
-        {
-            Id = conversation.Id;
-            Name = conversation.Name;
-            Description = conversation.Description;
-            Avatar = conversation.Avatar;
-            ConversationAccessibility = conversation.ConversationAccessibility;
-            StreamingPort = conversation.StreamingPort;
-            Creator = conversation.Creator;
-            ConversationConnections = conversation.ConversationConnections;
-        }
         public int Id { get; set; }
         [Required]
         [StringLength(32)]
