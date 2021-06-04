@@ -154,7 +154,7 @@ namespace Client.Model
             mciSendString("close recsound ", "", 0, 0);
 
 
-            MessageFiles.Add(new DbFile(Path.GetFileName(fileName), File.ReadAllBytes(fileName)));
+            MessageFiles.Add(new MessageFile(Path.GetFileName(fileName), File.ReadAllBytes(fileName)));
             /*ClientServerMessage csMessage = new ClientServerMessage { Content = message };
             csMessage.AdditionalContent = messageFiles.ToArray();
             ClientModel.GetInstance().SendMessageSync(csMessage);*/

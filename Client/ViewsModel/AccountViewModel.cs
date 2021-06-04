@@ -113,7 +113,6 @@ namespace Client.ViewsModel
 
         // Server-commands
 
-
         public ICommand SendMessageCommand
         {
             get
