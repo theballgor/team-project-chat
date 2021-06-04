@@ -56,7 +56,7 @@ namespace Client.ViewsModel
                 RegistrationModel.Username = value;
                 OnPropertyChanged("Username");
             }
-        }  
+        }
         public string VerifyPassword
         {
             get
@@ -70,41 +70,45 @@ namespace Client.ViewsModel
             }
         }
 
-        public ICommand RegisterCommand { get; }
-        public ICommand CloseViewCommand { get; }
+        private ICommand _closeViewCommand;
+        private ICommand _registerCommand;
+
+        public ICommand RegisterCommand
+        {
+            get
+            {
+                return _registerCommand ?? (_registerCommand = new RelayCommand(parameter =>
+                {
+                    RegistrationModel.TryRegister();
+                }));
+            }
+        }
+        public ICommand CloseViewCommand
+        {
+            get
+            {
+                return _closeViewCommand ?? (_closeViewCommand = new RelayCommand(parameter =>
+                {
+                    navigationService.Navigate();
+                }));
+            }
+        }
 
         // Constructor
         public RegistrationViewModel(NavigationStore navigationStore)
         {
             RegistrationModel.RegisterSucces += RegistrationModel_RegistrationSucces;
             navigationService = new NavigationService<LoginViewModel>(navigationStore, () => new LoginViewModel(navigationStore));
-            RegisterCommand = new RegisterCommand(this, navigationService);
-            CloseViewCommand = new CloseViewCommand(this, navigationService);
         }
 
         // Callback
         private void RegistrationModel_RegistrationSucces(object sender, EventArgs e)
         {
-            if ((e as ViewModelEventArgs).Content == null) throw new ArgumentNullException("failed to register");
-            switch ((RegistrationResult)(e as ViewModelEventArgs).Content)
+            if ((bool)(e as ViewModelEventArgs).Content)
             {
-                case RegistrationResult.Success:
-                     Console.WriteLine("user succesfylly refistered");
-                     navigationService.Navigate();
-                     break;
-
-                case RegistrationResult.UserNameAlreadyExists:
-                     Console.WriteLine("user already exist");
-                     break;
-
-                case RegistrationResult.EmailAlreadyExists:
-                     Console.WriteLine("email already exist");
-                     break;
-
-                default:
-                     Console.WriteLine("failed to register");
-                     break;
-            }
+                Console.WriteLine("Succes registration");
+                navigationService.Navigate();
+            }    
         }
     }
 }

@@ -56,8 +56,13 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClientLibrary">
+    <Reference Include="ClientLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ClientLibrary\bin\Debug\ClientLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientServerLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ClientServerLibrary\bin\Debug\ClientServerLibrary.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
@@ -101,14 +106,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\CloseViewCommand.cs" />
     <Compile Include="Commands\CommandBase.cs" />
-    <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
-    <Compile Include="Commands\RegisterCommand.cs" />
-    <Compile Include="Commands\RegistrationCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Model\AccountModel.cs" />
-    <Compile Include="Model\AccountModel.cs" />
+    <Compile Include="Model\ClientModel.cs" />
     <Compile Include="Model\DataWorker.cs" />
     <Compile Include="Model\LoginModel.cs" />
     <Compile Include="Model\RegistrationModel.cs" />
@@ -128,9 +130,6 @@
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RegistrationForm.xaml.cs">
-      <DependentUpon>RegistrationForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RegistrationView.xaml.cs">
       <DependentUpon>RegistrationView.xaml</DependentUpon>
@@ -179,8 +178,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewsModel\Commands\CommandViewModel.cs" />
-    <Compile Include="ViewsModel\Commands\RelayCommand.cs" />
     <Compile Include="ViewsModel\DataManageVM.cs" />
     <Compile Include="ViewsModel\LoginViewModel.cs" />
     <Compile Include="Views\CustomerControls\ChatList.xaml.cs">
@@ -205,17 +202,12 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\RegistrationForm.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\RegistrationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ClientModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -249,12 +241,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Assets\DefaultAvatar.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ClientServerLibrary\ClientServerLibrary.csproj">
-      <Project>{f97bf331-094c-4f93-acca-3d96ace2e01e}</Project>
-      <Name>ClientServerLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
