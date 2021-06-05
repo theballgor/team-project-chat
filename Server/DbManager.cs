@@ -18,6 +18,18 @@ namespace Server
         {
             Repositories.InitializeGenericRepositories();
         }
+        public User[] GetAllUsersByUserName(string username)
+        {
+            try
+            {
+                return Repositories.RUsers.FindAll(User => User.Username.Contains(username)).ToArray();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+           
+        }
         public User CheckLoginByEmail(User user)
         {
             try

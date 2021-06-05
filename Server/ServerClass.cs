@@ -104,29 +104,56 @@ namespace Server
                                 break;
                             case ActionType.FatalError:
 
-                                break;
-                        }
+                            break;
+                        case ActionType.FriendRequestResult:
+                            break;
+                        case ActionType.GetUserFriendRequests:
+                            GetUserFriendRequests();
+                            break;
+                        case ActionType.GetUsersByUsername:
+                            GetUsersByUsername((string)clientServerMessage.Content);
+                            break;
+                        case ActionType.Error:
+                            break;
+                    }
+                    /// <summary>
+                    /// returns Content=User[]
+                    /// </summary>
+                    void GetUserFriendRequests()
+                    {
+                        Friendship[] friendships= dbManager.GetAllUserFriendShips(currentUser);
+                        if(friendships!=null&&friendships.Length!=0)
+                            friendships= friendships.Where(item => item.FriendshipStatus == FriendshipStatus.Pending).ToArray();
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = friendships });
+                    }
+                        /// <summary>
+                        /// returns Content=User[]
+                        /// </summary>
+                        void GetUsersByUsername(string  userName)
+                    {
+                        User[] users = dbManager.GetAllUsersByUserName(userName);
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
+                    }
                         /// <summary>
                         /// returns Content=RegistrationResult
                         /// </summary>
                         void RegisterUser(User user)
+                    {
+                        RegistrationResult registrationResult = RegistrationResult.Success;
+                        User[] users = dbManager.GetAllUsers();
+                        if (users != null)
                         {
-                            RegistrationResult registrationResult;
-                            User[] users = dbManager.GetAllUsers();
-                            if (users != null)
+                            if (users.Where(item => item.Email == user.Email).Count() != 0)
+                                registrationResult = RegistrationResult.EmailAlreadyExists;
+                            else if (users.Where(item => item.Username == user.Username).Count() != 0)
+                                registrationResult = RegistrationResult.UserNameAlreadyExists;
+                            //else if (users.Where(item => item.PhoneNumber == user.PhoneNumber).Count() != 0)
+                            //    registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
+                        }
+                        if (registrationResult == RegistrationResult.Success)
+                        {
+                            if (!dbManager.CreateUser(user))
                             {
-                                if (users.Where(item => item.Email == user.Email) != null)
-                                    registrationResult = RegistrationResult.EmailAlreadyExists;
-                                else if (users.Where(item => item.Username == user.Username) != null)
-                                    registrationResult = RegistrationResult.UserNameAlreadyExists;
-                                else if (users.Where(item => item.PhoneNumber == user.PhoneNumber) != null)
-                                    registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
-                            }
-                            else
-                                registrationResult = RegistrationResult.Success;
-                            if (dbManager.CreateUser(user))
-                                registrationResult = RegistrationResult.Success;
-                            else
                                 registrationResult = RegistrationResult.CreationError;
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
                         }
@@ -179,14 +206,14 @@ namespace Server
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversationConnection });
                         }
 
-                        /// <summary>
-                        /// returns Content=friendship or null
-                        /// </summary>
-                        void AddFriend(int friendId)
-                        {
-                            Friendship friendship = new Friendship() { Inviter = currentUser, Requester = dbManager.GetUserById(friendId), InviteTime = DateTime.Now, FriendshipStatus = FriendshipStatus.Pending };
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = friendship });
-                        }
+                    /// <summary>
+                    /// returns Content=friendship or null
+                    /// </summary>
+                    void AddFriend(int friendId)
+                    {
+                        Friendship friendship = new Friendship() { Inviter = currentUser, Requester = dbManager.GetUserById(friendId), FriendshipStatus = FriendshipStatus.Pending };
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = friendship });
+                    }
 
                         /// <summary>
                         /// returns to user Content=bool and Content=Message to other users in group

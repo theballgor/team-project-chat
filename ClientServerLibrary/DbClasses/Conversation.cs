@@ -40,6 +40,7 @@ namespace ClientServerLibrary.DbClasses
         [NotMapped]
         private string streamingPort;
         [Column("userCreator_id")]
+        [ForeignKey("Creator")]
         public virtual User Creator { get; set; }
         public virtual ICollection<ConversationConnection> ConversationConnections { get; set; }
 

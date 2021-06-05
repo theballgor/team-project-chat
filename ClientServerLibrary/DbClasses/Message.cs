@@ -24,6 +24,7 @@ namespace ClientServerLibrary.DbClasses
         [NotMapped]
         private bool isRead;
         [Column("sender_id")]
+        [ForeignKey("Sender")]
         public virtual User Sender { get; set; }
         [NotMapped]
         public bool isMessageReceived;
