@@ -488,7 +488,7 @@
                     </Border>
 
                     <!--Conversation Messages Body-->
-                    <customcontrols:Conversation Grid.Row="1" Margin="10 8 10 0"/>
+                    <customcontrols:Conversation Grid.Row="1" Margin="10 8 10 0" Loaded="Conversation_Loaded"/>
 
                     <!--D label-->
                     <Label Grid.Row="1" 

@@ -45,8 +45,8 @@ namespace Client.Model
                     AccountModel.User = GetUserInfo(message);
                     break;
 
-                // ???
                 case ActionType.RegisterUser:
+                    RegistrationModel.Notify(Register(message));
                     break;
 
                 // ???
@@ -65,6 +65,11 @@ namespace Client.Model
                 default:
                     break;
             }
+        }
+
+        static RegistrationResult Register(ClientServerMessage message)
+        {
+            return (RegistrationResult)message.Content;
         }
 
         static User GetUserInfo(ClientServerMessage message)

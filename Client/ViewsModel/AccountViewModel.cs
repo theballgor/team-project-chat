@@ -25,8 +25,11 @@ namespace Client.ViewsModel
             NavigateLogOutCommand = new NavigateCommand<LoginViewModel>(new NavigationService<LoginViewModel>(
                 navigationStore, () => new LoginViewModel(navigationStore)));
 
+            AddConversation();
+
         }
 
+ 
 
         // Fields
 
@@ -35,10 +38,10 @@ namespace Client.ViewsModel
         {
             get => AccountModel.Contacts;
         }
-        public ObservableCollection<Conversation> Conversations
-        {
-            get => AccountModel.Conversations;
-        }
+        //public ObservableCollection<Conversation> Conversations
+        //{
+        //    get => AccountModel.Conversations;
+        //}
         public ObservableCollection<ObservableCollection<Message>> Messages
         {
             get => AccountModel.Messages;
@@ -133,5 +136,39 @@ namespace Client.ViewsModel
                 }));
             }
         }
+
+
+
+
+        protected ObservableCollection<Message> mConversations;
+        public ObservableCollection<Message> Conversations
+        {
+            get => mConversations;
+            set
+            {
+                mConversations = value;
+                OnPropertyChanged();
+            }
+        }
+        public void AddConversation()
+        {
+            Conversations = new ObservableCollection<Message>();
+            for (int i = 0; i < 5; i++)
+            {
+                var message = new Message()
+                {
+                    Content = $"Hello_{i}",
+                    SendTime = new DateTime().Date,
+                    IsRead = true
+                };
+                Conversations.Add(message);
+                OnPropertyChanged("Conversations");
+            }
+        }
+
+
+
+
+
     }
 }

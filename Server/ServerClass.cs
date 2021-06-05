@@ -114,8 +114,8 @@ namespace Server
                                 registrationResult = RegistrationResult.EmailAlreadyExists;
                             else if (users.Where(item => item.Username == user.Username).Count() != 0)
                                 registrationResult = RegistrationResult.UserNameAlreadyExists;
-                            else if (users.Where(item => item.PhoneNumber == user.PhoneNumber).Count() != 0)
-                                registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
+                            //else if (users.Where(item => item.PhoneNumber == user.PhoneNumber).Count() != 0)
+                            //    registrationResult = RegistrationResult.PhoneNumberAlreadyExists;
                         }
                         if (registrationResult == RegistrationResult.Success)
                         {
