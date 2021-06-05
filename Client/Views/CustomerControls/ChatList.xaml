@@ -17,9 +17,10 @@
                         <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
                         <Setter Property="MinHeight" Value="80"></Setter>
                         <Setter Property="Padding" Value="6"></Setter>
+                        <Setter Property="Margin" Value="2"></Setter>
                         <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
                         <Setter Property="VerticalAlignment" Value="Center"></Setter>
-                        <Setter Property="Background" Value="Transparent"></Setter>
+                        <Setter Property="Background" Value="#FF393939"></Setter>
                         <Setter Property="Command" Value="{Binding DataContext.OnConversationChanged, ElementName=_Chats, UpdateSourceTrigger=PropertyChanged}"></Setter>
                         <Setter Property="CommandParameter" Value="{Binding Key}"></Setter>
                         <Setter Property="Content" Value="{Binding ContactName}"></Setter>
@@ -137,8 +138,7 @@
                                                     <!--Pin/unPin chat Button-->
                                                     <Button Width="25"
                                                             Height="25"
-                                                            CommandParameter="{Binding}"
-                                                            >
+                                                            CommandParameter="{Binding}">
 
                                                         <Button.Style>
                                                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
