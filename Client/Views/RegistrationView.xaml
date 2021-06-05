@@ -84,6 +84,7 @@
                                     <materialDesign:PackIcon Kind="EmailOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
                                 </Label>
                                 <TextBox Text="{Binding Email}"
+                                         Foreground="#FFE5E5E5"
                                          Style="{StaticResource MaterialDesignTextBox}" Width="180"
                                          materialDesign:HintAssist.Hint="e-mail"/>
                             </StackPanel>
@@ -94,6 +95,7 @@
                                 </Label>
                                 <customercontrols:BindablePasswordBox Password="{Binding Password}" 
                                                                       Width="180" 
+                                                                      Foreground="#FFE5E5E5"
                                                                       materialDesign:HintAssist.Hint="password"/>
                             </StackPanel>
 
@@ -103,6 +105,7 @@
                                 </Label>
                                 <customercontrols:BindablePasswordBox Password="{Binding VerifyPassword}" 
                                                                       Width="180"
+                                                                      Foreground="#FFE5E5E5"
                                                                       materialDesign:HintAssist.Hint="verify password"/>
                             </StackPanel>
 
@@ -113,6 +116,7 @@
                                 </Label>
                                 <TextBox Text="{Binding Username}"
                                           Style="{StaticResource MaterialDesignTextBox}" Width="180"
+                                         Foreground="#FFE5E5E5"
                                           materialDesign:HintAssist.Hint="nickname"/>
                             </StackPanel>
 
@@ -122,7 +126,7 @@
                             <Button Background="{x:Null}"
                                     BorderBrush="{x:Null}"
                                     FontFamily="Fonts/#Titillium"
-                                    Foreground="#828282"
+                                    Foreground="#FFB0B0B0"
                                     FontSize="11"
                                     Command="{Binding RegisterCommand}"
                                     Content="REGISTERING" Height="Auto">

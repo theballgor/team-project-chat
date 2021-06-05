@@ -9,10 +9,10 @@
              d:DataContext="{d:DesignInstance Type=viewsmodel:LoginViewModel}"
              mc:Ignorable="d" 
              MaxWidth="400" 
-             MaxHeight="350" Width="230" Height="280">
+             MaxHeight="350" Width="240" Height="300">
 
     <Grid >
-        <Border Background="#FF2F2F2F" CornerRadius="12 12 0 0" Margin="0 0 0 40">
+        <Border Background="#FF2F2F2F" CornerRadius="12 12 0 0" Margin="0,0,0,44">
             <Grid>
                 <Grid.RowDefinitions>
                     <!--Logo-->
@@ -38,6 +38,7 @@
                         <materialDesign:PackIcon Kind="EmailOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
                     </Label>
                     <TextBox Text="{Binding Email}"
+                             Foreground="#FFE5E5E5"
                          Style="{StaticResource MaterialDesignTextBox}" Width="160"
                          materialDesign:HintAssist.Hint="E-mail"/>
 
@@ -48,6 +49,7 @@
                         <materialDesign:PackIcon Kind="PasswordOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"></materialDesign:PackIcon>
                     </Label>
                     <customercontrols:BindablePasswordBox Password="{Binding Password}" Width="160"
+                                                          Foreground="#FFE5E5E5"
                                                           materialDesign:HintAssist.Hint="Password"/>
                 </StackPanel>
 
@@ -67,7 +69,7 @@
 
         </Border>
 
-        <Border  Background="#FF2F2F2F" CornerRadius="0 0 12 12" Margin="0 244 0 0">
+        <Border  Background="#FF2F2F2F" CornerRadius="0 0 12 12" Margin="0,263,0,0">
             <Button 
                     Background="{x:Null}"
                     BorderBrush="{x:Null}"
