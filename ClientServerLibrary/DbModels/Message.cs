@@ -24,14 +24,18 @@ namespace ClientServerLibrary.DbClasses
         [NotMapped]
         private bool isRead;
         [Column("sender_id")]
+        [ForeignKey("Sender")]
         public virtual User Sender { get; set; }
         [NotMapped]
-        public bool IsMessageReceived { get; set; }
+        public bool isMessageReceived;
+        [NotMapped]
+        public bool IsMessageReceived
+        {
+            get => isMessageReceived;
+            set => isMessageReceived = value;
+        }
         [Column("conversation_id")]
         public virtual Conversation Conversation { get; set; }
-        [NotMapped]
-        public bool IsMessageSend { get; set; }
-        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

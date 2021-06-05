@@ -67,5 +67,10 @@ namespace Client.Views
             var gridContactList = (Border)FindName("ContactList");
             gridContactList.Visibility = Visibility.Hidden;
         }
+
+        private void Conversation_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -8,21 +8,33 @@ using System.Threading.Tasks;
 using ClientServerLibrary.DbClasses;
 using ClientServerLibrary;
 using Server.Database;
+using System.Data.Entity.Validation;
 
 namespace Server
 {
     class DbManager
     {
-
         public DbManager()
         {
             Repositories.InitializeGenericRepositories();
         }
+        public User[] GetAllUsersByUserName(string username)
+        {
+            try
+            {
+                return Repositories.RUsers.FindAll(User => User.Username.Contains(username)).ToArray();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
         public User CheckLoginByEmail(User user)
         {
             try
-            {            
-                User dbUser= Repositories.RUsers.FindAll(User => User.Email == user.Email && User.Password == user.Password).First();
+            {
+                User dbUser = Repositories.RUsers.FindAll(User => User.Email == user.Email && User.Password == user.Password).First();
                 Console.WriteLine("user logined");
                 return dbUser;
             }
@@ -69,7 +81,7 @@ namespace Server
                 return null;
             }
         }
-        public MessageFile[] GetAllMessageFiles (Message message)
+        public MessageFile[] GetAllMessageFiles(Message message)
         {
             try
             {
@@ -121,13 +133,16 @@ namespace Server
         {
             try
             {
-                ConversationConnection[] userConversationConnections = Repositories.RConversationConnections.FindAll(item => item.Conversation.Id == conversation.Id).ToArray();
+                IEnumerable<ConversationConnection> data = Repositories.RConversationConnections.FindAll(item => item.Conversation.Id == conversation.Id);
+                if (data == null)
+                    throw new Exception();
+                ConversationConnection[] userConversationConnections = data.ToArray();
                 List<User> users = new List<User>();
                 foreach (var item in userConversationConnections)
                     users.Add(item.User);
                 return users.ToArray();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }
@@ -143,7 +158,7 @@ namespace Server
             {
                 return null;
             }
-      
+
         }
         public Message[] GetAllConversationMessages(Conversation conversation)
         {
@@ -176,6 +191,7 @@ namespace Server
         {
             try
             {
+                dbFile.Message = Repositories.RMessages.FindById(dbFile.Message.Id);
                 Repositories.RMessageFiles.Add(dbFile);
                 Console.WriteLine("file created");
                 return true;
@@ -190,6 +206,7 @@ namespace Server
         {
             try
             {
+                dbFile.User = Repositories.RUsers.FindById(dbFile.User.Id);
                 Repositories.RUserImages.Add(dbFile);
                 Console.WriteLine("file created");
                 return true;
@@ -204,6 +221,7 @@ namespace Server
         {
             try
             {
+                dbFile.Conversation = Repositories.RConversations.FindById(dbFile.Conversation.Id);
                 Repositories.RConversationImages.Add(dbFile);
                 Console.WriteLine("file created");
                 return true;
@@ -218,6 +236,8 @@ namespace Server
         {
             try
             {
+                conversation.Creator = Repositories.RUsers.FindById(conversation.Creator.Id);
+
                 Repositories.RConversations.Add(conversation);
                 Console.WriteLine("conversation created");
                 return true;
@@ -232,6 +252,8 @@ namespace Server
         {
             try
             {
+                conversationConnection.User = Repositories.RUsers.FindById(conversationConnection.User.Id);
+                conversationConnection.Conversation = Repositories.RConversations.FindById(conversationConnection.Conversation.Id);
                 Repositories.RConversationConnections.Add(conversationConnection);
                 Console.WriteLine("conversationConnection created");
                 return true;
@@ -246,6 +268,8 @@ namespace Server
         {
             try
             {
+                friendship.Inviter = Repositories.RUsers.FindById(friendship.Inviter.Id);
+                friendship.Requester = Repositories.RUsers.FindById(friendship.Requester.Id);
                 Repositories.RFriendShips.Add(friendship);
                 Console.WriteLine("friendship created");
                 return true;
@@ -256,16 +280,18 @@ namespace Server
                 return false;
             }
         }
-  
+
         public bool CreateMessage(Message message)
         {
             try
             {
+                message.Sender = Repositories.RUsers.FindById(message.Sender.Id);
+                message.Conversation = Repositories.RConversations.FindById(message.Conversation.Id);
                 Repositories.RMessages.Add(message);
                 Console.WriteLine("message created");
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Console.WriteLine("Failed to create message");
                 return false;

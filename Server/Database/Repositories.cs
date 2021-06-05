@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Threading.Tasks;
 using ClientServerLibrary.DbClasses;
 
 namespace Server.Database
@@ -28,17 +27,15 @@ namespace Server.Database
             RUserImages = Work.Repository<UserImage>();
             RConversationImages = Work.Repository<ConversationImage>();
 
-                Task.Run(() =>
-                        {
-                            RUsers.GetAll();
-                            RConversationConnections.GetAll();
-                            RMessages.GetAll();
-                            RFriendShips.GetAll();
-                            RConversations.GetAll();
-                            RMessageFiles.GetAll();
-                            RUserImages.GetAll();
-                            RConversationImages.GetAll();
-                        });
+
+            RUsers.GetAll();
+            RConversationConnections.GetAll();
+            RMessages.GetAll();
+            RFriendShips.GetAll();
+            RConversations.GetAll();
+            RMessageFiles.GetAll();
+            RUserImages.GetAll();
+            RConversationImages.GetAll();
         }
     }
 }
