@@ -16,7 +16,9 @@ namespace Server.Database
         public DbSet<ConversationConnection> ConversationConnections { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Friendship> FriendShips { get; set; }
-        public DbSet<Conversation> Conversations { get; set; }
-        public DbSet<DbFile> DbFiles { get; set; }
+        public DbSet<ConversationModel> Conversations { get; set; }
+        public DbSet<MessageFile> MessageFiles { get; set; }
+        public DbSet<UserImage> UserImages { get; set; }
+        public DbSet<ConversationImage> ConversationImages { get; set; }
     }
 }

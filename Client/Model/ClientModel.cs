@@ -77,6 +77,7 @@ namespace Client.Model
             }
             catch (Exception exc)
             {
+                Console.WriteLine(exc.Message);
                 MessageBox.Show("Error: " + exc.Message, "Send error");
             }
         }
@@ -86,7 +87,7 @@ namespace Client.Model
             if (client != null && client.Connected)
                 Task.Run(new Action(() =>
                 {
-                        _sendMessage(message);
+                    _sendMessage(message);
                 }));
         }
 
@@ -119,6 +120,12 @@ namespace Client.Model
         {
             if (client != null && !IsConnected)
                 client.Connect(new IPEndPoint(ipAddress, port));
+        }
+
+        public void Disconnect()
+        {
+            if (client != null && IsConnected)
+                client.Close();
         }
     }
 }

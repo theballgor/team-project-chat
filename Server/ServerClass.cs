@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ClientServerLibrary;
 using ClientServerLibrary.DbClasses;
@@ -15,8 +16,11 @@ namespace Server
     public partial class ServerClass
     {
         private DbManager dbManager;
+
         private TcpListener server;
+
         private List<KeyValuePair<int, TcpClient>> connectedClients;
+
         private readonly object locker;
 
         public ServerClass(IPEndPoint serverIEP)
@@ -40,10 +44,7 @@ namespace Server
                 {
                     TcpClient currentClient = server.AcceptTcpClient();
                     Console.WriteLine("Connnected\t\t" + currentClient.Client.RemoteEndPoint);
-                    Task.Run(() =>
-                    {
-                        ConversationHandler(currentClient);
-                    });
+                    Task.Run(() => ConversationHandler(currentClient));
                 }
             });
         }
@@ -54,55 +55,56 @@ namespace Server
                 User currentUser = null;
                 while (true)
                 {
-
                     byte[] data = ClientServerDataManager.TcpClientDataReader(client);
                     ClientServerMessage clientServerMessage = ClientServerDataManager.Deserialize(data);
-
-                        switch (clientServerMessage.ActionType)
-                        {
-                            case ActionType.SendConversationMessage:
-                                SendConversationMessage((Message)clientServerMessage.Content);
-                                break;
-                            case ActionType.RegisterUser:
-                                RegisterUser((User)clientServerMessage.Content);
-                                break;
-                            case ActionType.LogInUserByEmail:
-                                LoginUserByEmail((User)clientServerMessage.Content);
-                                break;
-                            case ActionType.LogInUserByUsername:
-                                LoginUserByUsername((User)clientServerMessage.Content);
-                                break;
-                            case ActionType.CreateConversation:
-                                CreateConversation((Conversation)clientServerMessage.Content);
-                                break;
-                            case ActionType.JoinConversation:
-                                JoinConversation((int)clientServerMessage.Content);
-                                break;
-                            case ActionType.SendFriendRequest:
-                                AddFriend((int)clientServerMessage.Content);
-                                break;
-                            case ActionType.GetConversationMessages:
-                                GetConversationMessages((Conversation)clientServerMessage.Content);
-                                break;
-                            case ActionType.GetUserConversations:
-                                GetUserConversations((User)clientServerMessage.Content);
-                                Console.WriteLine("SEND CONVERSATIONS");
-                                break;
-                            case ActionType.GetConversationUsers:
-                                GetConversationUsers((int)clientServerMessage.Content);
-                                break;
-                            case ActionType.GetUserFriendships:
-                                GetUserFriendShips();
-                                break;
-                            case ActionType.GetFriendsFromUserFriendships:
-                                GetFriendsFromUserFriendships((User)clientServerMessage.Content);
-                                Console.WriteLine("SEND Friendships");
-
-                                break;
-                            case ActionType.GetUserInfo:
-                                GetUserInfo();
-                                break;
-                            case ActionType.FatalError:
+                    switch (clientServerMessage.ActionType)
+                    {
+                        case ActionType.SendConversationMessage:
+                            SendConversationMessage((Message)clientServerMessage.Content);
+                            break;
+                        case ActionType.RegisterUser:
+                            RegisterUser((User)clientServerMessage.Content);
+                            break;
+                        case ActionType.LogInUserByEmail:
+                            LoginUserByEmail((User)clientServerMessage.Content);
+                            break;
+                        //case ActionType.LogInUserByUsername:
+                        //    LoginUserByUsername((User)clientServerMessage.Content);
+                        //    break;
+                        case ActionType.CreateConversation:
+                            CreateConversation((ConversationModel)clientServerMessage.Content);
+                            break;
+                        case ActionType.JoinConversation:
+                            JoinConversation((int)clientServerMessage.Content);
+                            break;
+                        case ActionType.SendFriendRequest:
+                            AddFriend((int)clientServerMessage.Content);
+                            break;
+                        case ActionType.GetConversationMessages:
+                            GetConversationMessages((ConversationModel)clientServerMessage.Content);
+                            break;
+                        case ActionType.GetUserConversations:
+                            GetUserConversations();
+                            break;
+                        case ActionType.GetConversationUsers:
+                            GetConversationUsers((int)clientServerMessage.Content);
+                            break;
+                        case ActionType.GetUserFriendships:
+                            GetUserFriendShips();
+                            break;
+                        case ActionType.GetFriendsFromUserFriendships:
+                            GetFriendsFromUserFriendships();
+                            break;
+                        case ActionType.GetUserInfo:
+                            GetUserInfo();
+                            break;
+                        //case ActionType.UpdateUserInfo:
+                        //    UpdateUserInfo((User)clientServerMessage.Content);
+                        //    break;
+                        //case ActionType.UpdateConversationInfo:
+                        //    UpdateConversationInfo((Conversation)clientServerMessage.Content);
+                        //    break;
+                        case ActionType.FatalError:
 
                             break;
                         case ActionType.FriendRequestResult:
@@ -155,56 +157,63 @@ namespace Server
                             if (!dbManager.CreateUser(user))
                             {
                                 registrationResult = RegistrationResult.CreationError;
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
-                        }
 
-                        /// <summary>
-                        /// returns Content=User or null
-                        /// </summary>
-                        void LoginUserByEmail(User user)
-                        {
-                            user = dbManager.CheckLoginByEmail(user);
-                            if (user != null)
-                                connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
-                            currentUser = user;
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
-                        }
-
-                        /// <summary>
-                        /// returns Content=User or null
-                        /// </summary>
-                        void LoginUserByUsername(User user)
-                        {
-                            user = dbManager.CheckLoginByUsername(user);
-                            if (user != null)
-                                connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
-                            currentUser = user;
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
-                        }
-
-                        /// <summary>
-                        /// returns Content=Conversation or null
-                        /// </summary>
-                        void CreateConversation(Conversation conversation)
-                        {
-                            Conversation dbConversation = dbManager.CreateConversation(conversation);
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = dbConversation });
-                        }
-
-                        /// <summary>
-                        /// returns Content=conversationConnection or null
-                        /// </summary>
-                        void JoinConversation(int conversationId)
-                        {
-                            Conversation conversation = dbManager.GetConversationById(conversationId);
-                            ConversationConnection conversationConnection = null;
-                            if (conversation != null)
-                            {
-                                User user = dbManager.GetUserById(GetUserIdByClient(client));
-                                conversationConnection = dbManager.CreateConversationConnection(new ConversationConnection() { Conversation = conversation, User = user });
                             }
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversationConnection });
                         }
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = registrationResult });
+                    }
+
+                    /// <summary>
+                    /// returns Content=User or null
+                    /// </summary>
+                    void LoginUserByEmail(User user)
+                    {
+                        user = dbManager.CheckLoginByEmail(user);
+                        if (user != null)
+                            connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        currentUser = user;
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
+                    }
+
+                    /// <summary>
+                    /// returns Content=User or null
+                    /// </summary>
+                    void LoginUserByUsername(User user)
+                    {
+                        user = dbManager.CheckLoginByUsername(user);
+                        if (user != null)
+                            connectedClients.Add(new KeyValuePair<int, TcpClient>(user.Id, client));
+                        currentUser = user;
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
+                    }
+
+                    /// <summary>
+                    /// returns Content=Conversation or null
+                    /// </summary>
+                    void CreateConversation(ConversationModel conversation)
+                    {
+                        //not ended 
+                        if (!dbManager.CreateConversation(conversation))
+                            conversation = null;
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversation });
+                    }
+
+                    /// <summary>
+                    /// returns Content=conversationConnection or null
+                    /// </summary>
+                    void JoinConversation(int conversationId)
+                    {
+                        ConversationModel conversation = dbManager.GetConversationById(conversationId);
+                        ConversationConnection conversationConnection = null;
+                        if (conversation != null)
+                        {
+                            User user = dbManager.GetUserById(GetUserIdByClient(client));
+
+                            if (!dbManager.CreateConversationConnection(new ConversationConnection() { Conversation = conversation, User = user }))
+                                conversationConnection = null;
+                        }
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversationConnection });
+                    }
 
                     /// <summary>
                     /// returns Content=friendship or null
@@ -215,133 +224,185 @@ namespace Server
                         SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = friendship });
                     }
 
-                        /// <summary>
-                        /// returns to user Content=bool and Content=Message to other users in group
-                        /// </summary>
-                        void SendConversationMessage(Message message)
+                    /// <summary>
+                    /// returns to user Content=bool and Content=Message to other users in group
+                    /// </summary>
+                    void SendConversationMessage(Message message)
+                    {
+                        object content = null;
+                        try
                         {
-                            object content = null;
                             if (clientServerMessage.AdditionalContent != null)
                             {
-                                List<KeyValuePair<string, byte[]>> files = (List<KeyValuePair<string, byte[]>>)clientServerMessage.AdditionalContent;
-                                string filePath = ConfigurationManager.AppSettings["FilePath"];
-                                string imagePath = ConfigurationManager.AppSettings["ImagePath"];
-                                foreach (var file in files)
+                                MessageFile[] dbFiles = (MessageFile[])clientServerMessage.AdditionalContent;
+                                foreach (var file in dbFiles)
                                 {
-                                    DbFile dbFile = new DbFile() { FileName = file.Key, Message = message };
                                     string newFilePath;
-                                    string extention = Path.GetExtension(file.Key);
-                                    if (ImageCheck(extention))
+                                    if (file.FileExtenction == ".wav")
                                     {
-                                        dbFile.FileType = FileType.Image;
-                                        newFilePath = imagePath;
+                                        file.FileType = FileType.Audio;
+                                        newFilePath = ConfigurationManager.AppSettings["AudioPath"];
+                                    }
+                                    else if (file.ImageCheck())
+                                    {
+                                        file.FileType = FileType.Image;
+                                        newFilePath = ConfigurationManager.AppSettings["ImagePath"];
                                     }
                                     else
                                     {
-                                        dbFile.FileType = FileType.File;
-                                        newFilePath = filePath;
+                                        file.FileType = FileType.File;
+                                        newFilePath = ConfigurationManager.AppSettings["FilePath"];
                                     }
-                                    newFilePath = newFilePath + "\\" + $@"{Guid.NewGuid()}" + extention;
-                                    //newFilePath = newFilePath + "\\" + Path.GetRandomFileName() + extention;
-                                    File.WriteAllBytes(newFilePath, file.Value);
-                                    dbManager.CreateFile(dbFile);
+                                    newFilePath = newFilePath + "\\" + Path.GetRandomFileName() + file.FileExtenction;
+                                    file.FilePath = newFilePath;
+                                    if (!file.SaveFileByPath())
+                                        throw new Exception();
+                                    //file.Message = message;
+                                    dbManager.CreateFile(file);
                                 }
                             }
-                            message.SendTime = DateTime.Now;
-                            message = dbManager.CreateMessage(message);
+                            
+                            Message tmp = message;
+                            tmp.Conversation = dbManager.GetConversationById(message.Conversation.Id);
+                            dbManager.CreateMessage(tmp);
 
-                            List<User> users = dbManager.GetAllUsersFromConversation(message.Conversation).ToList();
+                            List<User> users = dbManager.GetAllUsersFromConversation(tmp.Conversation).ToList();
                             users.Remove(currentUser);
                             List<TcpClient> clients = GetClientsByUsers(users.ToArray());
                             SendMessage(clients, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = content });
                             SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = true });
-
-                            //SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = false });
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = false });
                         }
 
-                        /// <summary>
-                        /// returns Content=List<KeyValuePair<Conversation, Message[]>>
-                        /// </summary>
-                        void GetUserConversations(User user)
-                        {
-                            Conversation[] conversations = dbManager.GetAllUserConversations(user.Id);
 
-                            if (conversations != null)
-                                SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = conversations });
-                            else
-                                SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = null });
-                        }
 
-                        /// <summary>
-                        /// returns Content=Message[]
-                        /// </summary>
-                        void GetConversationMessages(Conversation conversation)
+                    }
+
+                    /// <summary>
+                    /// returns Content=List<KeyValuePair<Conversation, Message[]>>
+                    /// </summary>
+                    void GetUserConversations()
+                    {
+                        while (currentUser == null) { Thread.Sleep(200); } //wait for initialization currentUser
+                        ConversationModel[] conversations = dbManager.GetAllUserConversations(currentUser.Id);
+                        if (conversations != null)
                         {
-                            Message[] messages = dbManager.GetAllConversationMessages(conversation);
-                            if (messages != null)
+                            List<KeyValuePair<ConversationModel, Message>> ConversationMessagesValuePairs = new List<KeyValuePair<ConversationModel, Message>>();
+                            foreach (var conversation in conversations)
                             {
-                                //work with files
+                                Message message = null;
+                                Message[] messages = dbManager.GetAllConversationMessages(conversation);
+                                if (messages.Length != 0)
+                                    message = messages.OrderBy(item => item.SendTime).Last();
+                                ConversationMessagesValuePairs.Add(new KeyValuePair<ConversationModel, Message>(conversation, message));
                             }
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = messages });
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = ConversationMessagesValuePairs.ToArray() });
                         }
-
-                        /// <summary>
-                        /// returns Content=User[]
-                        /// </summary>
-                        void GetConversationUsers(int conversationId)
+                        else
                         {
-                            Conversation conversation = dbManager.GetConversationById(conversationId);
-                            User[] users = null;
-                            if (conversation != null)
-                                users = dbManager.GetAllUsersFromConversation(conversation);
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
+                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = null });
                         }
+                    }
 
-                        /// <summary>
-                        /// returns Content=Friendship[]
-                        /// </summary>
-                        void GetUserFriendShips()
-                        {
-                            Friendship[] friendships = dbManager.GetAllUserFriendShips(currentUser);
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = friendships });
-                        }
+                    /// <summary>
+                    /// returns List<KeyValuePair<Message, DbFile[]>>
+                    /// </summary>
+                    void GetConversationMessages(ConversationModel conversation)
+                    {
+                        Message[] messages = dbManager.GetAllConversationMessages(conversation);
 
-                        /// <summary>
-                        /// returns Content=User[]
-                        /// </summary>
-                        void GetFriendsFromUserFriendships(User user)
+                        List<KeyValuePair<Message, MessageFile[]>> messageFilePair = null;
+                        if (messages != null)
                         {
-                            Friendship[] friendships = dbManager.GetAllUserFriendShips(user);
-                            User[] users = null;
-                            if (friendships != null)
+                            messageFilePair = new List<KeyValuePair<Message, MessageFile[]>>();
+                            foreach (Message message in messages)
                             {
-                                users = new User[friendships.Length];
-                                for (int i = 0; i < friendships.Length; i++)
+                                MessageFile[] dbFiles = dbManager.GetAllMessageFiles(message);
+                                foreach (var dbFile in dbFiles)
                                 {
-                                    if (friendships[i].Requester == currentUser)
-                                        users[i] = friendships[i].Inviter;
+                                    if (dbFile.GetFileFromPath())
+                                    {
+                                        Console.WriteLine("File read");
+                                    }
                                     else
-                                        users[i] = friendships[i].Requester;
+                                    {
+                                        Console.WriteLine("Faile to read file");
+                                    }
                                 }
+                                messageFilePair.Add(new KeyValuePair<Message, MessageFile[]>(message, dbFiles));
                             }
-
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
                         }
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = messageFilePair.ToArray() });
+                    }
 
-                        /// <summary>
-                        /// returns Content=user
-                        /// </summary>
-                        void GetUserInfo()
+                    /// <summary>
+                    /// returns Content=User[]
+                    /// </summary>
+                    void GetConversationUsers(int conversationId)
+                    {
+                        ConversationModel conversation = dbManager.GetConversationById(conversationId);
+                        User[] users = null;
+                        if (conversation != null)
+                            users = dbManager.GetAllUsersFromConversation(conversation);
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
+                    }
+
+                    /// <summary>
+                    /// returns Content=Friendship[]
+                    /// </summary>
+                    void GetUserFriendShips()
+                    {
+                        Friendship[] friendships = dbManager.GetAllUserFriendShips(currentUser);
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = friendships });
+                    }
+
+                    /// <summary>
+                    /// returns Content=User[]
+                    /// </summary>
+                    void GetFriendsFromUserFriendships()
+                    {
+                        Friendship[] friendships = dbManager.GetAllUserFriendShips(currentUser);
+                        User[] users = null;
+                        if (friendships != null)
                         {
-                            User user = dbManager.GetUserById(currentUser.Id);
-                            currentUser = user;
-                            SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
+                            users = new User[friendships.Length];
+                            for (int i = 0; i < friendships.Length; i++)
+                            {
+                                if (friendships[i].Requester == currentUser)
+                                    users[i] = friendships[i].Inviter;
+                                else
+                                    users[i] = friendships[i].Requester;
+                            }
                         }
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = users });
+                    }
 
+                    /// <summary>
+                    /// returns Content=user
+                    /// </summary>
+                    void GetUserInfo()
+                    {
+                        User user = dbManager.GetUserById(currentUser.Id);
+                        currentUser = user;
+                        SendMessage(client, new ClientServerMessage() { ActionType = clientServerMessage.ActionType, Content = user });
+                    }
+
+                    void UpdateUserInfo(User user)
+                    {
+
+                    }
+
+                    void UpdateConversationInfo(ConversationModel conversation)
+                    {
+
+                    }
                 }
-
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 try
                 {

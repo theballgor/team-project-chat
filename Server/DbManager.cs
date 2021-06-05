@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 using ClientServerLibrary.DbClasses;
 using ClientServerLibrary;
 using Server.Database;
+using System.Data.Entity.Validation;
 
 namespace Server
 {
     class DbManager
     {
-
         public DbManager()
         {
             Repositories.InitializeGenericRepositories();
@@ -70,11 +70,22 @@ namespace Server
                 return null;
             }
         }
-        public Conversation GetConversationById(int conversationId)
+        public ConversationModel GetConversationById(int conversationId)
         {
             try
             {
                 return Repositories.RConversations.FindById(conversationId);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public MessageFile[] GetAllMessageFiles (Message message)
+        {
+            try
+            {
+                return Repositories.RMessageFiles.FindAll(item => item.Message.Id == message.Id).ToArray();
             }
             catch (Exception)
             {
@@ -103,12 +114,12 @@ namespace Server
                 return null;
             }
         }
-        public Conversation[] GetAllUserConversations(int userId)
+        public ConversationModel[] GetAllUserConversations(int userId)
         {
             try
             {
                 ConversationConnection[] userConversationConnections = Repositories.RConversationConnections.FindAll(item => item.User.Id == userId).ToArray();
-                List<Conversation> conversations = new List<Conversation>();
+                List<ConversationModel> conversations = new List<ConversationModel>();
                 foreach (var item in userConversationConnections)
                     conversations.Add(item.Conversation);
                 return conversations.ToArray();
@@ -118,7 +129,7 @@ namespace Server
                 return null;
             }
         }
-        public User[] GetAllUsersFromConversation(Conversation conversation)
+        public User[] GetAllUsersFromConversation(ConversationModel conversation)
         {
             try
             {
@@ -146,7 +157,7 @@ namespace Server
             }
       
         }
-        public Message[] GetAllConversationMessages(Conversation conversation)
+        public Message[] GetAllConversationMessages(ConversationModel conversation)
         {
             try
             {
@@ -173,11 +184,11 @@ namespace Server
                 return false;
             }
         }
-        public bool CreateFile(DbFile dbFile)
+        public bool CreateFile(MessageFile dbFile)
         {
             try
             {
-                Repositories.RDbFiles.Add(dbFile);
+                Repositories.RMessageFiles.Add(dbFile);
                 Console.WriteLine("file created");
                 return true;
             }
@@ -187,104 +198,160 @@ namespace Server
                 return false;
             }
         }
-        public Conversation CreateConversation(Conversation conversation)
+        public bool CreateFile(UserImage dbFile)
+        {
+            try
+            {
+                Repositories.RUserImages.Add(dbFile);
+                Console.WriteLine("file created");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create file");
+                return false;
+            }
+        }
+        public bool CreateFile(ConversationImage dbFile)
+        {
+            try
+            {
+                Repositories.RConversationImages.Add(dbFile);
+                Console.WriteLine("file created");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to create file");
+                return false;
+            }
+        }
+        public bool CreateConversation(ConversationModel conversation)
         {
             try
             {
                 Repositories.RConversations.Add(conversation);
                 Console.WriteLine("conversation created");
-                return conversation;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to create conversation");
-                return null;
+                return false;
             }
         }
-        public ConversationConnection CreateConversationConnection(ConversationConnection conversationConnection)
+        public bool CreateConversationConnection(ConversationConnection conversationConnection)
         {
             try
             {
                 Repositories.RConversationConnections.Add(conversationConnection);
                 Console.WriteLine("conversationConnection created");
-                return conversationConnection;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to create conversationConnection");
-                return null;
+                return false;
             }
         }
-        public Friendship CreateFriendship(Friendship friendship)
+        public bool CreateFriendship(Friendship friendship)
         {
             try
             {
                 Repositories.RFriendShips.Add(friendship);
                 Console.WriteLine("friendship created");
-                return friendship;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to create friendship");
-                return null;
+                return false;
             }
         }
   
-        public Message CreateMessage(Message message)
+        public bool CreateMessage(Message message)
         {
             try
             {
                 Repositories.RMessages.Add(message);
                 Console.WriteLine("message created");
-                return message;
+                return true;
             }
-            catch (Exception)
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("Failed to create message");
-                return null;
+                return false;
             }
         }
         // update
-        public Friendship ChangeFriendshipStatus(Friendship friendship)
+        public bool UpdateFriendship(Friendship friendship)
         {
             try
             {
                 Repositories.RFriendShips.Update(friendship);
                 Console.WriteLine("friendship updated");
-                return friendship;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to update friendship");
-                return null;
+                return false;
             }
         }
-        public User ChangeUserStatus(User user)
+        public bool UpdateUser(User user)
         {
             try
             {
                 Repositories.RUsers.Update(user);
                 Console.WriteLine("user updated");
-                return user;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to update user");
-                return null;
+                return false;
             }
         }
-        public Conversation ChangeConversationStatus(Conversation conversation)
+        public bool UpdateConversation(ConversationModel conversation)
         {
             try
             {
                 Repositories.RConversations.Update(conversation);
                 Console.WriteLine("conversation updated");
-                return conversation;
+                return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("Failed to update conversation");
-                return null;
+                return false;
+            }
+        }
+        public bool UpdateConverвsation(ConversationModel conversation)
+        {
+            try
+            {
+                //Repositories.R.Update(conversation);
+                Console.WriteLine("conversation updated");
+                return true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to update conversation");
+                return false;
             }
         }
     }
