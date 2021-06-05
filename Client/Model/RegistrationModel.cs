@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ClientServerLibrary.DbClasses;
 using ClientServerLibrary;
 using ClientLibrary;
-
+using System.Windows;
 
 namespace Client.Model
 {
@@ -49,7 +49,18 @@ namespace Client.Model
         // Notyfier
         public static void Notify(object result)
         {
-            RegisterSucces(null, new ViewModelEventArgs { Content = result });
+            RegistrationResult registrationResult = (RegistrationResult)result;
+            switch (registrationResult)
+            {
+                case RegistrationResult.Success:
+                    RegisterSucces(null, new ViewModelEventArgs { Content = result });
+                    break;
+   
+                default:
+                    MessageBox.Show(registrationResult.ToString());
+                    break;
+            }
+            
         }
 
         public static void TryRegister()
@@ -79,7 +90,7 @@ namespace Client.Model
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.Message);
+                    MessageBox.Show(ex.Message);
                 }
             });
         }

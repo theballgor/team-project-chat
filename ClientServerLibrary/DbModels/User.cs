@@ -48,10 +48,8 @@ namespace ClientServerLibrary.DbClasses
         [NotMapped]
         private UserStatus status;
 
-        public virtual ICollection<Conversation> Conversation { get; set; }
-        public virtual ICollection<Message> Messages { get; set; }
         public virtual ICollection<ConversationConnection> ConversationConnections { get; set; }
-        [field: NonSerialized]
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
