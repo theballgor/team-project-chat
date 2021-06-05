@@ -79,7 +79,7 @@
                                                     </Grid.RowDefinitions>
 
                                                     <TextBlock Text="{Binding Key.Name}"
-                                                               FontSize="13">
+                                                               FontSize="14">
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">
                                                                 <Setter Property="FontWeight" Value="SemiBold"></Setter>
@@ -94,8 +94,9 @@
                                                     </TextBlock>
 
                                                     <TextBlock Text="{Binding Value.Content}"
-                                                               FontSize="11"
-                                                               Grid.Row="1">
+                                                               FontSize="10"
+                                                               Grid.Row="1"
+                                                               Foreground="White">
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">
                                                                 <Setter Property="FontWeight" Value="SemiBold"></Setter>
@@ -112,8 +113,9 @@
 
                                                 <!--Last massage time-->
                                                 <Grid Grid.Column="2">
-                                                    <TextBlock Text="{Binding LastMessageTime}"
-                                                               FontSize="9"
+                                                    <TextBlock Text="{Binding SendTime}"
+                                                               FontSize="10"
+                                                               Foreground="White"
                                                                HorizontalAlignment="Right">
                                                     </TextBlock>
                                                 </Grid>
@@ -124,13 +126,13 @@
                                             <Grid Grid.Row="1"
                                                   Height="Auto">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="130"></ColumnDefinition>
-                                                    <ColumnDefinition></ColumnDefinition>
+                                                    <ColumnDefinition MaxWidth="160"></ColumnDefinition>
+                                                    <ColumnDefinition ></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
 
                                                 <UniformGrid Grid.Column="1" 
-                                                             Columns="4" 
-                                                             Margin="5">
+                                                             Columns="3" 
+                                                             Margin="42 5 5 5">
 
                                                     <!--Pin/unPin chat Button-->
                                                     <Button Width="25"
@@ -175,7 +177,7 @@
                                                     <Button Width="25"
                                                             Height="25"
                                                             Style="{StaticResource MaterialDesignFloatingActionMiniButton}">
-                                                        <materialDesign:PackIcon Kind="Delete" ></materialDesign:PackIcon>
+                                                        <materialDesign:PackIcon Kind="Archive" ></materialDesign:PackIcon>
                                                         <!--TODO Binding-->
                                                     </Button>
 
