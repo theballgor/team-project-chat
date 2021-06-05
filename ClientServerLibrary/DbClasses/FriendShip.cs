@@ -9,7 +9,8 @@ namespace ClientServerLibrary.DbClasses
     {
         Pending,
         Confirmed,
-        Declined,
+        Blocked,
+        Declined
     }
     [Table("FriendShips")]
     [Serializable]

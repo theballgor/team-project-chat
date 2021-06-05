@@ -19,10 +19,10 @@ namespace Client.Model
         /// Constructor
         static AccountModel()
         {
-            conversations = new ObservableCollection<KeyValuePair<ConversationModel, Message>>();
+            conversations = new ObservableCollection<KeyValuePair<Conversation, Message>>();
             contacts = new ObservableCollection<User>();
             activeMessages = new ObservableCollection<KeyValuePair<Message, ObservableCollection<MessageFile>>>();
-            activeConversation = new ConversationModel();
+            activeConversation = new Conversation();
 
             Task.Run(() =>
             {
@@ -60,8 +60,8 @@ namespace Client.Model
 
         /// All conversations
         /// Колекція KeyValuePair з усіма чатами та останнім повідомленням у них
-        private static ObservableCollection<KeyValuePair<ConversationModel, Message>> conversations;
-        public static ObservableCollection<KeyValuePair<ConversationModel, Message>> Conversations
+        private static ObservableCollection<KeyValuePair<Conversation, Message>> conversations;
+        public static ObservableCollection<KeyValuePair<Conversation, Message>> Conversations
         {
             get
             {
@@ -75,8 +75,8 @@ namespace Client.Model
 
         /// All messages
         /// KeyValuePair з вибраним чатом та усі повідомлення у ньому
-        private static ConversationModel activeConversation;
-        public static ConversationModel ActiveConversation
+        private static Conversation activeConversation;
+        public static Conversation ActiveConversation
         {
             get
             {
@@ -175,12 +175,10 @@ namespace Client.Model
 
             if (messageFiles != null)
                 clientMessage.AdditionalContent = messageFiles.ToArray();
-            messageFiles = null;
-
             ActiveMessages.Add(new KeyValuePair<Message, ObservableCollection<MessageFile>>(message, messageFiles));
 
-
-            Conversations[Conversations.Count - 1] = new KeyValuePair<ConversationModel, Message>(Conversations[Conversations.Count - 1].Key, message);
+            messageFiles = null;
+            Conversations[Conversations.Count - 1] = new KeyValuePair<Conversation, Message>(Conversations[Conversations.Count - 1].Key, message);
             ClientModel.GetInstance().SendMessageAsync(clientMessage);
         }
 
@@ -250,7 +248,7 @@ namespace Client.Model
 
         public static void CreateConversation()
         {
-            ConversationModel conversation = new ConversationModel
+            Conversation conversation = new Conversation
             {
                 Creator = User,
                 Name = "TEST CONVERSATION",
