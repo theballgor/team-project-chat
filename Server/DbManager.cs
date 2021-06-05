@@ -70,7 +70,7 @@ namespace Server
                 return null;
             }
         }
-        public ConversationModel GetConversationById(int conversationId)
+        public Conversation GetConversationById(int conversationId)
         {
             try
             {
@@ -114,12 +114,12 @@ namespace Server
                 return null;
             }
         }
-        public ConversationModel[] GetAllUserConversations(int userId)
+        public Conversation[] GetAllUserConversations(int userId)
         {
             try
             {
                 ConversationConnection[] userConversationConnections = Repositories.RConversationConnections.FindAll(item => item.User.Id == userId).ToArray();
-                List<ConversationModel> conversations = new List<ConversationModel>();
+                List<Conversation> conversations = new List<Conversation>();
                 foreach (var item in userConversationConnections)
                     conversations.Add(item.Conversation);
                 return conversations.ToArray();
@@ -129,7 +129,7 @@ namespace Server
                 return null;
             }
         }
-        public User[] GetAllUsersFromConversation(ConversationModel conversation)
+        public User[] GetAllUsersFromConversation(Conversation conversation)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace Server
             }
       
         }
-        public Message[] GetAllConversationMessages(ConversationModel conversation)
+        public Message[] GetAllConversationMessages(Conversation conversation)
         {
             try
             {
@@ -226,7 +226,7 @@ namespace Server
                 return false;
             }
         }
-        public bool CreateConversation(ConversationModel conversation)
+        public bool CreateConversation(Conversation conversation)
         {
             try
             {
@@ -277,20 +277,6 @@ namespace Server
                 Console.WriteLine("message created");
                 return true;
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
-            }
             catch (Exception e)
             {
                 Console.WriteLine("Failed to create message");
@@ -326,7 +312,7 @@ namespace Server
                 return false;
             }
         }
-        public bool UpdateConversation(ConversationModel conversation)
+        public bool UpdateConversation(Conversation conversation)
         {
             try
             {
@@ -340,7 +326,7 @@ namespace Server
                 return false;
             }
         }
-        public bool UpdateConverвsation(ConversationModel conversation)
+        public bool UpdateConverвsation(Conversation conversation)
         {
             try
             {

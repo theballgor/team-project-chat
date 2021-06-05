@@ -32,7 +32,7 @@ namespace Client.Model
                     GetConversationMessages(message);
                     break;
                 case ActionType.CreateConversation:
-                    AccountModel.Conversations.Add(new KeyValuePair<ConversationModel, Message>(CreateConversation(message), null));
+                    AccountModel.Conversations.Add(new KeyValuePair<Conversation, Message>(CreateConversation(message), null));
                     break;
 
                 case ActionType.GetUsersByUsername:
@@ -115,7 +115,7 @@ namespace Client.Model
 
         static void GetUserConversations(ClientServerMessage message)
         {
-            KeyValuePair<ConversationModel, Message>[] messageList = message.Content as KeyValuePair<ConversationModel, Message>[];
+            KeyValuePair<Conversation, Message>[] messageList = message.Content as KeyValuePair<Conversation, Message>[];
 
 
             App.Current.Dispatcher.Invoke(() =>
@@ -139,7 +139,7 @@ namespace Client.Model
                         foreach (var item_file in item.Value)
                             files.Add(item_file);
 
-                        item.Key.IsSend = (item.Key.Sender.Id != AccountModel.User.Id);
+                        item.Key.IsMessageSend = (item.Key.Sender.Id != AccountModel.User.Id);
 
                         AccountModel.ActiveMessages.Add(new KeyValuePair<Message, ObservableCollection<MessageFile>>(item.Key, files));
                     }
@@ -152,7 +152,8 @@ namespace Client.Model
 
             App.Current.Dispatcher.Invoke(() =>
             {
-                foreach (var item in userList)
+                if (userList != null)
+                    foreach (var item in userList)
                 {
                     AccountModel.FindFriends.Add(item);
                     System.Console.WriteLine(item.Username);
@@ -160,10 +161,10 @@ namespace Client.Model
             });
         }
 
-        static ConversationModel CreateConversation(ClientServerMessage message)
+        static Conversation CreateConversation(ClientServerMessage message)
         {
             if (message.Content != null)
-                return message.Content as ConversationModel;
+                return message.Content as Conversation;
             else
                 return null;
         }
@@ -175,6 +176,7 @@ namespace Client.Model
 
             App.Current.Dispatcher.Invoke(() =>
             {
+                if(userList!=null)
                 foreach (var item in userList)
                 {
                     AccountModel.FriendRequests.Add(item);

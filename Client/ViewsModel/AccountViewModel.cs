@@ -38,14 +38,14 @@ namespace Client.ViewsModel
 
         /// Список чатів та останніх повідомлень в цих чатах
         /// Прив"язка до форми
-        public ObservableCollection<KeyValuePair<ConversationModel, Message>> Conversations
+        public ObservableCollection<KeyValuePair<Conversation, Message>> Conversations
         {
             get => AccountModel.Conversations;
             /// Список контаків
         }
 
         /// Активний чат
-        public ConversationModel ActiveConversation
+        public Conversation ActiveConversation
         {
             get => AccountModel.ActiveConversation;
         }
@@ -150,7 +150,7 @@ namespace Client.ViewsModel
                 return _onConversationChanged ?? (_onConversationChanged = new RelayCommand(parameter =>
                 {
 
-                    if (parameter is ConversationModel currentConversation && currentConversation != AccountModel.ActiveConversation)
+                    if (parameter is Conversation currentConversation && currentConversation != AccountModel.ActiveConversation)
                     {
                         AccountModel.ActiveMessages.Clear();
                         AccountModel.ActiveConversation = currentConversation;
@@ -260,7 +260,7 @@ namespace Client.ViewsModel
                 {
                     if (parameter is User userToChat)
                     {
-                        AccountModel.ActiveConversation = new ConversationModel { Name = userToChat.Username, Creator = AccountModel.User };
+                        AccountModel.ActiveConversation = new Conversation { Name = userToChat.Username, Creator = AccountModel.User };
                     }
                 }));
             }
