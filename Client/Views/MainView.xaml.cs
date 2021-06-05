@@ -68,5 +68,9 @@ namespace Client.Views
             gridContactList.Visibility = Visibility.Hidden;
         }
 
+        private void Conversation_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

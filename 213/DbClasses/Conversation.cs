@@ -43,7 +43,6 @@ namespace ClientServerLibrary.DbClasses
 
         [Column("userCreator_id")]
         public virtual User Creator { get; set; }
-        public virtual ICollection<Message> Messages { get; set; }
         public virtual ICollection<ConversationConnection> ConversationConnections { get; set; }
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
@@ -54,5 +53,4 @@ namespace ClientServerLibrary.DbClasses
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
 }

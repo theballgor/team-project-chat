@@ -26,7 +26,7 @@ namespace Client.Model
         /// </summary>
         /// 
         //закрите поле класу 
-        private static ClientModel instance; 
+        private static ClientModel instance;
         //закритий конструктор singelton
         private ClientModel() { }
         //відкритий статичний метод який відіграє роль конструктора
@@ -67,7 +67,7 @@ namespace Client.Model
             });
         }
 
-        private void _sendMessage(ClientServerMessage message) 
+        private void _sendMessage(ClientServerMessage message)
         {
             try
             {
@@ -77,6 +77,7 @@ namespace Client.Model
             }
             catch (Exception exc)
             {
+                Console.WriteLine(exc.Message);
                 MessageBox.Show("Error: " + exc.Message, "Send error");
             }
         }
@@ -89,12 +90,12 @@ namespace Client.Model
                     _sendMessage(message);
                 }));
         }
+
         public void SendMessageSync(ClientServerMessage message)
         {
             if (client != null && client.Connected)
                 _sendMessage(message);
         }
-
 
         public int GetFreeTcpPort()
         {
@@ -119,6 +120,12 @@ namespace Client.Model
         {
             if (client != null && !IsConnected)
                 client.Connect(new IPEndPoint(ipAddress, port));
+        }
+
+        public void Disconnect()
+        {
+            if (client != null && IsConnected)
+                client.Close();
         }
     }
 }

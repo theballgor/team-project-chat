@@ -73,6 +73,7 @@ namespace Client.Model
                     ClientServerMessage message = new ClientServerMessage { Content = user };
                     message.ActionType = ActionType.LogInUserByEmail;
 
+
                     ClientModel.GetInstance().SendMessageAsync(message);
 
                 }

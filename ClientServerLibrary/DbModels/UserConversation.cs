@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace ClientServerLibrary.DbClasses
 {
@@ -8,7 +7,7 @@ namespace ClientServerLibrary.DbClasses
         public int Id { get; set; }
         public virtual Conversation Conversation { get; set; }
         public virtual User User { get; set; }
-        [field: NonSerialized]
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

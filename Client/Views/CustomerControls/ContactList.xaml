@@ -20,7 +20,7 @@
                         <Setter Property="VerticalAlignment" Value="Center"></Setter>
                         <Setter Property="Padding" Value="6"></Setter>
                         <Setter Property="MinHeight" Value="50"></Setter>
-                        <Setter Property="Command" Value="{Binding DataContext.GetSelectedContactCommand, ElementName=_Contacts, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                        <Setter Property="Command" Value="{Binding DataContext.StartConversation, ElementName=_Contacts, UpdateSourceTrigger=PropertyChanged}"></Setter>
                         <Setter Property="CommandParameter" Value="{Binding}"></Setter>
                         <Setter Property="Content" Value="{Binding UserName}"></Setter>
 
@@ -79,7 +79,7 @@
 
                                                     <!--Name-->
                                                     <TextBlock Grid.Column="0" 
-                                                               Text="{Binding UserName}"
+                                                               Text="{Binding Username}"
                                                                FontSize="12">
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">

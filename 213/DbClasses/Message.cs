@@ -23,14 +23,14 @@ namespace ClientServerLibrary.DbClasses
         public bool IsRead { get { return isRead; } set { isRead = value; OnPropertyChanged("IsRead"); } }
         [NotMapped]
         private bool isRead;
+
         [Column("sender_id")]
         public virtual User Sender { get; set; }
+
         [NotMapped]
         public bool IsMessageReceived { get; set; }
         [Column("conversation_id")]
         public virtual Conversation Conversation { get; set; }
-        [NotMapped]
-        public bool IsMessageSend { get; set; }
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)

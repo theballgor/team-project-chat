@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Threading.Tasks;
 using ClientServerLibrary.DbClasses;
 
 namespace Server.Database
@@ -12,7 +11,9 @@ namespace Server.Database
         public static IGenericRepository<Message> RMessages { get; set; }
         public static IGenericRepository<Friendship> RFriendShips { get; set; }
         public static IGenericRepository<Conversation> RConversations { get; set; }
-        public static IGenericRepository<DbFile> RDbFiles { get; set; }
+        public static IGenericRepository<MessageFile> RMessageFiles { get; set; }
+        public static IGenericRepository<UserImage> RUserImages { get; set; }
+        public static IGenericRepository<ConversationImage> RConversationImages { get; set; }
 
         public static void InitializeGenericRepositories()
         {
@@ -22,17 +23,19 @@ namespace Server.Database
             RMessages = Work.Repository<Message>();
             RFriendShips = Work.Repository<Friendship>();
             RConversations = Work.Repository<Conversation>();
-            RDbFiles = Work.Repository<DbFile>();
+            RMessageFiles = Work.Repository<MessageFile>();
+            RUserImages = Work.Repository<UserImage>();
+            RConversationImages = Work.Repository<ConversationImage>();
 
-            Task.Run(()=>{
-                RUsers.GetAll();
-                RConversationConnections.GetAll();
-                RMessages.GetAll();
-                RFriendShips.GetAll();
-                RConversations.GetAll();
-                RDbFiles.GetAll();
-            });
 
+            RUsers.GetAll();
+            RConversationConnections.GetAll();
+            RMessages.GetAll();
+            RFriendShips.GetAll();
+            RConversations.GetAll();
+            RMessageFiles.GetAll();
+            RUserImages.GetAll();
+            RConversationImages.GetAll();
         }
     }
 }

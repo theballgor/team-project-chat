@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewsmodel="clr-namespace:Client.ViewsModel" d:DataContext="{d:DesignInstance Type=viewsmodel:AccountViewModel}"
              mc:Ignorable="d" 
              x:Name="_Chats"
              MinWidth="320">
@@ -20,8 +20,8 @@
                         <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
                         <Setter Property="VerticalAlignment" Value="Center"></Setter>
                         <Setter Property="Background" Value="Transparent"></Setter>
-                        <Setter Property="Command" Value="{Binding DataContext.GetSelectedChatCommand, ElementName=_Chats, UpdateSourceTrigger=PropertyChanged}"></Setter>
-                        <Setter Property="CommandParameter" Value="{Binding}"></Setter>
+                        <Setter Property="Command" Value="{Binding DataContext.OnConversationChanged, ElementName=_Chats, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                        <Setter Property="CommandParameter" Value="{Binding Key}"></Setter>
                         <Setter Property="Content" Value="{Binding ContactName}"></Setter>
 
                         <Setter Property="Template">
@@ -78,7 +78,7 @@
                                                         <RowDefinition></RowDefinition>
                                                     </Grid.RowDefinitions>
 
-                                                    <TextBlock Text="{Binding ContactName}"
+                                                    <TextBlock Text="{Binding Key.Name}"
                                                                FontSize="13">
                                                         <TextBlock.Style>
                                                             <Style TargetType="{x:Type TextBlock}">
@@ -93,7 +93,7 @@
                                                         </TextBlock.Style>
                                                     </TextBlock>
 
-                                                    <TextBlock Text="{Binding Message}"
+                                                    <TextBlock Text="{Binding Value.Content}"
                                                                FontSize="11"
                                                                Grid.Row="1">
                                                         <TextBlock.Style>
@@ -135,7 +135,8 @@
                                                     <!--Pin/unPin chat Button-->
                                                     <Button Width="25"
                                                             Height="25"
-                                                            CommandParameter="{Binding}">
+                                                            CommandParameter="{Binding}"
+                                                            >
 
                                                         <Button.Style>
                                                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
@@ -229,11 +230,11 @@
                 </StackPanel>
 
                 <ItemsControl 
-                        ItemsSource="{Binding Chats}"
+                        ItemsSource="{Binding Conversations}"
                         ItemTemplate="{StaticResource ChatButtonItemTemplate}"
                         Padding="0 10">
                     <!--<ItemsControl.DataContext>
-                            <viewmodels:ViewModel></viewmodels:ViewModel>
+                            <viewsmodel:AccountViewModel></viewsmodel:AccountViewModel>
                         </ItemsControl.DataContext>-->
                 </ItemsControl>
             </StackPanel>
